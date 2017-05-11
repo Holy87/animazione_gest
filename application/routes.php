@@ -21,6 +21,9 @@
           case 'pages':
               $controller = new PagesController();
               break;
+          case 'account':
+              $controller = new AccountController();
+              break;
       }
 
       // call the action
@@ -28,7 +31,9 @@
   }
 
   // allowed controllers
-  $controllers = array('pages' => ['home', 'error']);
+  $controllers = array(
+      'pages' => ['home', 'error'],
+      'account' => ['login', 'register']);
 
   // check that the requested controller and action are both allowed
 if (isset($controller) and isset($action)) {

@@ -1,1 +1,33 @@
 ErrorDocument 404 /404.html
+RewriteEngine On
+#base
+RewriteRule ^(.+)$ index.php?controller=$1
+
+#pagine
+RewriteRule ^pages/(.+)$ index.php?controller=pages&action=$1
+#account
+RewriteRule ^account/(.+)$ index.php?controller=account&action=$1
+
+
+#RewriteRule  ^(.*)$ index.php?controller=$1&action=$2 [QSA]
+
+
+# generic: ?var=value
+# you can retrieve /something by looking at $_GET['something']
+#RewriteRule ^(.+)$ /?var=$1
+
+# but depending on your current links, you might
+# need to map everything out. Examples:
+
+# /users/1
+# to: ?p=users&userId=1
+#RewriteRule ^users/([0-9]+)$ /?p=users&userId=$1
+
+# /articles/123/asc
+# to: ?p=articles&show=123&sort=asc
+#RewriteRule ^articles/([0-9]+)/(asc|desc)$ /?p=articles&show=$1&sort=$2
+
+# you can add /? at the end to make a trailing slash work as well:
+# /something or /something/
+# to: ?var=something
+#RewriteRule ^(.+)/?$ /?var=$1

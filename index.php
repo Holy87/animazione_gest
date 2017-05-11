@@ -11,12 +11,15 @@ require_once 'config.php';
 require_once 'application/controllers/controller.php';
 require_once 'application/db_connection.php';
 
-if (isset($_GET['controller']) && isset($_GET['action'])) {
+if (isset($_GET['controller'])) {
     $controller = $_GET['controller'];
-    $action     = $_GET['action'];
-  } else {
+    if (isset($_GET['action']))
+        $action     = $_GET['action'];
+    else
+        $action = 'default';
+} else {
     $controller = 'pages';
     $action     = 'home';
-  }
+}
 
 require_once('application/views/main_layout.php');
