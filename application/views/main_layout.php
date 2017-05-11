@@ -1,5 +1,8 @@
 <?php
 require_once ABS_PATH.'/application/views/MainView.php';
+require_once ABS_PATH.'/application/models/Item.php';
+require_once ABS_PATH.'/application/models/PartyTheme.php';
+require_once ABS_PATH.'/application/models/Party.php';
 require_once ABS_PATH.'/application/models/User.php';
 $user = User::getCurrent();
 ?>
