@@ -7,7 +7,7 @@
  */
 class AccountController {
     public function login() {
-
+        require_once 'application/views/pages/login.php';
     }
 
     public function register() {

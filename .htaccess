@@ -1,15 +1,16 @@
-ErrorDocument 404 /404.html
+ErrorDocument 404 pages/error
+Options +FollowSymlinks
 RewriteEngine On
-#base
-RewriteRule ^(.+)$ index.php?controller=$1
-
 #pagine
-RewriteRule ^pages/(.+)$ index.php?controller=pages&action=$1
+RewriteRule pages/(.+) index.php?controller=pages&action=$1 [QSA]
+RewriteRule account/(.+) index.php?controller=account&action=$1 [QSA]
+#RewriteRule application pages/error
+#RewriteRule ^animazione(.+)$ index.php?controller=pages&action=$1
 #account
-RewriteRule ^account/(.+)$ index.php?controller=account&action=$1
+#RewriteRule ^animazione/account(.+)$ index.php?controller=account&action=$1
 
 
-#RewriteRule  ^(.*)$ index.php?controller=$1&action=$2 [QSA]
+#RewriteRule  ^animazione\/(.*)\/(.*)$ index.php?controller=$1&action=$2 [QSA]
 
 
 # generic: ?var=value

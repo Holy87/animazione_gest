@@ -24,6 +24,6 @@ class MainView
     public static function getCustomCss() {
         global $action;
         if(file_exists(ABS_PATH.'/assets/styles/'.$action.'.css'))
-            echo '<link rel="stylesheet" href="assets/styles/'.$action.'.css">';
+            echo '<link rel="stylesheet" href="'.ASSETS.'/styles/'.$action.'.css">';
     }
 }

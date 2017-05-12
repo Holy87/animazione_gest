@@ -7,6 +7,7 @@
  */
 
 // -- DATABASE SETTINGS
+// File di configurazione dell'applicazione
 
 // Database host
 define('DB_HOST', 'localhost');
@@ -17,7 +18,22 @@ define('DB_USER', 'root');
 // User password
 define('DB_PASS', '');
 
+// -- APP SETTINGS
+
+// Author
+define('AUTHOR', 'Francesco Bosso');
+
+// Application name
+define ('APP_NAME', 'Gestionale A.S.P.');
+
+// Favicon
+define('FAVICON', '');
+
+// Web Root
+define('W_ROOT', $_SERVER['SERVER_NAME'].'/animazione');
+
+// Assets folder
+define ('ASSETS', W_ROOT.'/assets');
+
 if ( !defined('ABS_PATH') )
     define('ABS_PATH', dirname(__FILE__) . '/');
-
-define ('APP_NAME', 'Gestionale A.S.P.');
