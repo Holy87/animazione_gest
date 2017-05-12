@@ -1,5 +1,5 @@
 ErrorDocument 404 pages/error
-Options +FollowSymlinks
+#Options +FollowSymlinks
 RewriteEngine On
 #pagine
 RewriteRule pages/(.+) index.php?controller=pages&action=$1 [QSA]
