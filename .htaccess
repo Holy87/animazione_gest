@@ -4,6 +4,7 @@ RewriteEngine On
 #pagine
 RewriteRule pages/(.+) index.php?controller=pages&action=$1 [QSA]
 RewriteRule account/(.+) index.php?controller=account&action=$1 [QSA]
+RewriteRule /assets assets
 #RewriteRule application pages/error
 #RewriteRule ^animazione(.+)$ index.php?controller=pages&action=$1
 #account
