@@ -14,6 +14,7 @@
  **/
   function call($controller = 'pages', $action = 'home') {
       // require the file that matches the controller name
+      /** @noinspection PhpIncludeInspection */
       require_once(ABS_PATH.'/application/controllers/' . $controller . '_controller.php');
 
       // create a new instance of the needed controller
@@ -32,8 +33,9 @@
 
   // allowed controllers
   $controllers = array(
-      'pages' => ['home', 'error'],
-      'account' => ['login', 'register']);
+      'pages' => ['home', 'error', 'login', 'register'],
+      'account' => ['login', 'register']
+    );
 
   // check that the requested controller and action are both allowed
 if (isset($controller) and isset($action)) {
