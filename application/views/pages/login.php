@@ -1,13 +1,46 @@
+<?php /** @noinspection JSUnusedGlobalSymbols */
+$script = '
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#loginform").submit(function(e) {
+            $(".btn").attr(\'disabled\', \'disabled\');
+			$(".btn").html("<i class=\'fa fa-circle-o-notch fa-spin\'></i> Invio in corso...");
+            //var user = $("#inputUser").val();
+            //var password = $("#inputPassword").val();
+            $.ajax({
+                type: "POST",
+                url: "services?action=login",
+                data: $("#loginform").serialize(),
+                dataType: "json",
+                success: function(response) {
+                    if(response.ok) {
+                        $(".btn").html("Login confermato");
+                        window.location.href = "home";
+                    } else {
+                        $(".alert").prop("hidden", false);
+                        $(".btn").html("Entra");
+                        $(".btn").removeAttr(\'disabled\')
+                    }
+                }
+            });
+            $("#errordiv").prop("hidden", false);
+            e.preventDefault();
+        });
+    });
+</script>';
+MainView::push_script($script);
+?>
+
 <!--suppress JSUnusedGlobalSymbols -->
 <div class="container">
 
-    <form id="loginform" class="form-signin" method="post">
+    <form id="loginform" class="form-signin">
         <br>
         <h2 class="form-signin-heading">Effettua il Login</h2>
         <label for="inputUser" class="sr-only">Nome Utente</label>
-        <input id="inputUser" class="form-control" placeholder="Nome utente" required="" autofocus="" type="text">
+        <input id="inputUser" name="user" class="form-control" placeholder="Nome utente" required="" autofocus="" type="text">
         <label for="inputPassword" class="sr-only">Password</label>
-        <input id="inputPassword" class="form-control" placeholder="Password" required="" type="password">
+        <input id="inputPassword" name="password" class="form-control" placeholder="Password" required="" type="password">
         <div class="checkbox">
             <label>
                 <input value="remember-me" type="checkbox"> Ricordami
@@ -19,33 +52,7 @@
             </button>
             <strong>Errore:</strong><br> Nome utente o password errati.
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Entra</button>
+        <button id="sendb" class="btn btn-lg btn-primary btn-block" type="submit" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Verifica...">Entra</button>
     </form>
 
 </div> <!-- /container -->
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        alert("ok");
-        $("#loginform").submit(function(e) {
-            $("#sendb").prop({"disabled":true, "value":"<span class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\">Attendere..."});
-            //var user = $("#inputUser").val();
-            //var password = $("#inputPassword").val();
-            $.ajax({
-                type: "POST",
-                url: "services?action=login",
-                data: $("#loginform").serialize(),
-                dataType: "html",
-                success: function(response) {
-                    if(response.ok) {
-                        $("#sendb").prop("value","Messaggio inviato");
-                    } else {
-                        $("#sendb").prop({"value":"Entra","disabled":false});
-                        $("#errordiv").prop("hidden", false);
-                    }
-                }
-            });
-            e.preventDefault();
-        });
-    });
-</script>

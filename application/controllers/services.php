@@ -12,6 +12,7 @@ if(!isset($action))
 switch($action) {
     case 'login':
         AccountController::login($_POST['user'], $_POST['password']);
+        //AccountController::login('ciao', 'ciccio');
         break;
     case 'logout':
         AccountController::logout();

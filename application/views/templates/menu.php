@@ -40,7 +40,7 @@ function draw_logged_elements() {
     if ($user->can_create_users()) {
         $code.= '<li><a href="#"><i class="fa fa-address-book" aria-hidden="true"></i>&nbsp; Gestione utenti</a></li>';
     }
-    $code.='<li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp; Esci</a></li>';
+    $code.='<li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i>Esci</a></li>';
     echo $code;
 }
 
