@@ -12,6 +12,10 @@ class PagesController {
         require_once ABS_PATH.'/application/views/pages/login.php';
     }
 
+    public function events() {
+        require_once ABS_PATH.'application/views/pages/events.php';
+    }
+
     public function register() {
 
     }

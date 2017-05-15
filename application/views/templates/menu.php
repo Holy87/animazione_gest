@@ -31,15 +31,7 @@ function draw_right_elements() {
 
 function draw_logged_elements() {
     global $user;
-    $code = 'Benvenuto, '.$user->name;
-    $code.= '  <li><a href="#"><i class="fa fa-calendar" aria-hidden="true"></i>Eventi</a></li>';
-    if ($user->access_level > 1) {
-        $code.= '<li><a href="#"><i class="fa fa-film" aria-hidden="true"></i>&nbsp; Temi Feste</a></li>
-        <li><a href="#"><i class="fa fa-archive" aria-hidden="true"></i>&nbsp; Inventario</a></li>';
-    }
-    if ($user->can_create_users()) {
-        $code.= '<li><a href="#"><i class="fa fa-address-book" aria-hidden="true"></i>&nbsp; Gestione utenti</a></li>';
-    }
+    $code = 'Benvenuto, '.$user->friendly_name;
     $code.='<li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i>Esci</a></li>';
     echo $code;
 }

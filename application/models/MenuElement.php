@@ -25,9 +25,7 @@ class MenuElement
 
     public function get_tag() {return $this->tag;}
 
-    public function get_url() {
-        //TODO: implementare
-    }
+    public function get_url() {return $this->url;}
 
     public function get_access() {return 1;}
 }

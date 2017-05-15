@@ -10,6 +10,7 @@ class User
 {
     public $id;
     public $name;
+    public $friendly_name;
     public $mail;
     public $access_level;   //0: non loggato
     
@@ -20,10 +21,11 @@ class User
      * @param string $name
      * @param string $mail
      **/
-    public function __construct($id, $name, $mail, $access)
+    public function __construct($id, $name, $friendly_name, $mail, $access)
     {
         $this->id = $id;
         $this->name = $name;
+        $this->friendly_name = $friendly_name;
         $this->mail = $mail;
         $this->access_level = $access;
     }
@@ -71,7 +73,7 @@ class User
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        return new User($user['user_id'], $user['user_name'], $user['user_mail'], $user['user_access']);
+        return new User($user['user_id'], $user['user_name'], $user['user_friendlyname'], $user['user_mail'], $user['user_access']);
     }
 
     /**
@@ -82,7 +84,7 @@ class User
         if(isset($_SESSION['user_id'])) {
             return self::get_user($_SESSION['user_id']);
         } else {
-            return new User(0,'', '', 0);
+            return new User(0,'', '', '', 0);
         }
     }
 }

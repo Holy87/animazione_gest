@@ -9,10 +9,10 @@ class MenuContainer
     public function __construct()
     {
         $this->menu_elements = [
+            new MenuElement('Home', 'home', 1, 'home', 'fa-home'),
             new MenuElement('Eventi', 'events', 1, 'events', 'fa-calendar'),
             new MenuElement('Temi Feste', 'themes', 1, 'themes', 'fa-film'),
-            new MenuElement('Inventario', 'items', 'items', 'fa-archive'),
-            new MenuElement('Miei giochi', 'games', 1, 'games')
+            new MenuElement('Inventario', 'items', 1,'items', 'fa-archive'),
         ];
     }
 

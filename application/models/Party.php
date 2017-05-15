@@ -28,7 +28,7 @@ class Party
     public function __construct($id, $theme, $date, $time, $customer, $address, $creator) {
         $this->party_id = $id;
         $this->theme_id = $theme;
-        $this->date = $date;
+        $this->date = strtotime($date);
         $this->time = $time;
         $this->customer = $customer;
         $this->address = $address;
@@ -91,6 +91,15 @@ class Party
             $link->rollBack();
             return false;
         }
+    }
+
+    public function get_animators_names() {
+        $names = [];
+        /** @var User $animator */
+        foreach($this->get_animators() as $animator) {
+            array_push($names, $animator->friendly_name);
+        }
+        return implode(", ", $names);
     }
 
     /**
@@ -170,8 +179,28 @@ class Party
         return PartyTheme::getTheme($this->theme_id);
     }
 
+    /**
+     * Restituisce la data come stringa
+     * @return false|string
+     */
+    public function get_printable_date() {
+        return date_format($this->date, "d/m/Y");
+    }
+
+    /**
+     * Restituisce l'ora come stringa
+     * @return false|string
+     */
+    public function get_printable_hour() {
+        return date_format($this->date, "H:i");
+    }
+
+    public function set_date($date_string) {
+        $this->date = strtotime($date_string);
+    }
+
     public function is_done() {
-        // TODO: Se data è minore di data attuale
+        return date_default_timezone_get() > $this->date;
     }
 
     /**
@@ -179,9 +208,15 @@ class Party
      */
     public static function get_all() {
         $link = Db::getInstance();
-        $query = 'SELECT * FROM feste';
+        $user = User::getCurrent();
+        if ($user->access_level > 1)
+            $query = 'SELECT * FROM feste';
+        else
+            $query = 'SELECT * FROM feste INNER JOIN animatori_party ON feste.party_id = animatori_party.party_id
+                      WHERE animatori_party.user_id = :id';
         $list = [];
         $stmt = $link->prepare($query);
+        if($user->access_level < 2){$stmt->bindParam(':id', $user->id);}
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($rows as $row) {

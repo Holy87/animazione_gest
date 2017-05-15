@@ -41,7 +41,7 @@ class MainView
     }
 
     public static function get_scripts() {
-        if (array_count_values(self::$scripts) > 0) {
+        if (isset($scripts) && array_count_values(self::$scripts) > 0) {
             $result = '';
             foreach (self::$scripts as $script) {
                 $result .= $script;

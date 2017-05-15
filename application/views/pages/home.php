@@ -1,21 +1,13 @@
 <!-- Qui ci va il contenuto della Home Page. -->
+
 <div class="container">
-    <h3>Collapsible Navbar</h3>
-    <p>In this example, the navigation bar is hidden on small screens and replaced by a button in the top right corner (try to re-size this window).
-    <p>Only when the button is clicked, the navigation bar will be displayed.</p>
-    <h3>Collapsible Navbar</h3>
-    <p>In this example, the navigation bar is hidden on small screens and replaced by a button in the top right corner (try to re-size this window).
-    <p>Only when the button is clicked, the navigation bar will be displayed.</p>
-    <h3>Collapsible Navbar</h3>
-    <p>In this example, the navigation bar is hidden on small screens and replaced by a button in the top right corner (try to re-size this window).
-    <p>Only when the button is clicked, the navigation bar will be displayed.</p>
-    <h3>Collapsible Navbar</h3>
-    <p>In this example, the navigation bar is hidden on small screens and replaced by a button in the top right corner (try to re-size this window).
-    <p>Only when the button is clicked, the navigation bar will be displayed.</p>
-    <h3>Collapsible Navbar</h3>
-    <p>In this example, the navigation bar is hidden on small screens and replaced by a button in the top right corner (try to re-size this window).
-    <p>Only when the button is clicked, the navigation bar will be displayed.</p>
-    <h3>Collapsible Navbar</h3>
-    <p>In this example, the navigation bar is hidden on small screens and replaced by a button in the top right corner (try to re-size this window).
-    <p>Only when the button is clicked, the navigation bar will be displayed.</p>
+    <div class="jumbotron">
+        <h1 class="display-3">Ciao, <?php echo User::getCurrent()->friendly_name ?></h1>
+        <p class="lead">Programma gestionale per l'Animazione Senza Pensieri</p>
+        <hr class="my-4">
+        <p>Questo programma è ancora in sviluppo, ma puoi utilizzare le funzioni principali. Puoi visualizzare una guida veloce cliccando in basso.</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="#" role="button">Informazioni</a>
+        </p>
+    </div>
 </div>
