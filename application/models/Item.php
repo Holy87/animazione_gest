@@ -65,6 +65,23 @@ class Item
     }
 
     /**
+     * @return array<Item>
+     */
+    public static function get_all() {
+        $items = [];
+        $link = Db::getInstance();
+        $query = 'SELECT item_id, item_name, item_number FROM inventario';
+        $stmt = $link->prepare($query);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach($rows as $row)
+        {
+            $items[] = new Item($row['item_id'], $row['item_name'], $row['item_number']);
+        }
+        return $items;
+    }
+
+    /**
      * Cancella l'oggetto dal database
      * @return bool
      */

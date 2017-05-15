@@ -45,6 +45,7 @@ usort($passed_events, function($a, $b)
       <strong>Attenzione:</strong> Non risultano feste programmate.
         </div>';
     } ?>
+    <a class="btn btn-primary" href="eventdetails"><i class="fa fa-plus" aria-hidden="true"></i>Nuova festa</a>
     <ul class="nav nav-tabs">
         <li class="active"><a href="#menu1">Prossime</a></li>
         <li><a href="#menu2">Passate</a></li>

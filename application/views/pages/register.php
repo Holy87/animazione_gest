@@ -1,4 +1,4 @@
-<!--suppress EqualityComparisonWithCoercionJS, JSJQueryEfficiency -->
+x<!--suppress EqualityComparisonWithCoercionJS, JSJQueryEfficiency -->
 <div class="container">
     <title>Registrati</title>
     <form id="regform" method="post" action="application/controllers/register.php">
