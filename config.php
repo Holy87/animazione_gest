@@ -35,5 +35,8 @@ define('W_ROOT', $_SERVER['SERVER_NAME'].'/animazione');
 // Assets folder
 define ('ASSETS', W_ROOT.'/assets');
 
+// Pagine che sono permesse senza effettuare il login
+define ('PUBLIC_PAGES', ['login', 'logout', 'services']);
+
 if ( !defined('ABS_PATH') )
     define('ABS_PATH', dirname(__FILE__) . '/');

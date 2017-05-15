@@ -26,4 +26,10 @@ class MainView
         if(file_exists(ABS_PATH.'/assets/styles/'.$action.'.css'))
             echo '<link rel="stylesheet" href="assets/styles/'.$action.'.css">';
     }
+
+    public static function getCustomJs() {
+        global $action;
+        if(file_exists(ABS_PATH.'/assets/scripts/'.$action.'.js'))
+            echo '<link rel="stylesheet" href="assets/scripts/'.$action.'.js">';
+    }
 }
