@@ -33,7 +33,7 @@
 
   // allowed controllers
   $controllers = array(
-      'pages' => ['home', 'error', 'login', 'register', 'events'],
+      'pages' => ['home', 'error', 'login', 'register', 'events', 'items'],
       'account' => ['login', 'register']
     );
 

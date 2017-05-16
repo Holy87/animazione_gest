@@ -19,4 +19,8 @@ class PagesController {
     public function register() {
 
     }
+
+    public function items() {
+        require_once ABS_PATH.'/application/views/pages/inventory.php';
+    }
 }

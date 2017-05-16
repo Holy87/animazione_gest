@@ -70,7 +70,7 @@ class Item
     public static function get_all() {
         $items = [];
         $link = Db::getInstance();
-        $query = 'SELECT item_id, item_name, item_number FROM inventario';
+        $query = 'SELECT item_id, item_name, item_number FROM inventario ORDER BY item_name';
         $stmt = $link->prepare($query);
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -115,10 +115,10 @@ class Item
         $stmt->bindParam(':name', $name);
         $stmt->bindParam('number', $number);
         try {
-            $link->beginTransaction();
+            //$link->beginTransaction();
             $stmt->execute();
-            $link->commit();
-            return self::get_item($link->lastInsertId());
+            //$link->commit();
+            return self::get_item($link->lastInsertId('item_id'));
         } catch (PDOException $e) {
             echo $e->getMessage();
             $link->rollBack();

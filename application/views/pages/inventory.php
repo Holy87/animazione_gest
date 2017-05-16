@@ -6,50 +6,231 @@
  * Time: 00:13
  */
 
-$items = Item::get_all();
-$user = User::getCurrent();
+/** @noinspection JSUnusedGlobalSymbols */
 
-function print_table($items) {
-    $rows = '';
-    foreach($items as $item) {
-        $rows .= print_row($item);
+function buttonDisabled() {
+    global $user;
+    if($user->can_edit_events())
+        return '';
+    else
+        return 'disabled';
+}
+
+/** @noinspection JSUnusedGlobalSymbols */
+$script = '
+<script type="text/javascript">
+
+function add_row(item) {
+    var table = document.getElementById("itemt");
+    var body = table.getElementsByTagName("tbody")[0];
+    //var tr = document.createElement("tr");
+    var tr = body.insertRow(tr);
+    tr.id = item.id;
+    tr.insertCell(0).innerHTML = item.id;
+    tr.insertCell(1).innerHTML = item.name;
+    tr.insertCell(2).innerHTML = item.number;
+    tr.insertCell(3).innerHTML = editButton(item.id) + " " + deleteButton(item.id, item.name);
+}
+
+function editButton(id) {
+    return \'<button class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-item="\'+id+\'"'.buttonDisabled().'><i class="fa fa-pencil" aria-hidden="true"></i></button>\';
+}
+
+function deleteButton(id, name) {
+    return \'<button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-name="\'+name+\'" data-item="\'+id+\'"'.buttonDisabled().'><i class="fa fa-trash" aria-hidden="true"></i></button>\';
+}
+
+function salvaOggetto() {
+    $("#editModal").modal("hide");
+    $.ajax({
+        type: "POST",
+        url: "services?action=update_item",
+        data: $("#saveform").serialize(),
+        dataType: "json",
+        success: function(response) {
+            if (response.ok) {
+                var row = document.getElementById(response.id);
+                row.cells[1].innerHTML = response.name;
+                row.cells[2].innerHTML = response.number;
+            } else {
+                alert("Impossibile modificare: oggetto non trovato");
+            }
+        }
+    })
+}
+
+function creaOggeto() {
+    $("#editModal").modal("hide");
+    $.ajax({
+        type: "POST",
+        url: "services?action=create_item",
+        data: $("#saveform").serialize(),
+        dataType: "json",
+        success: function(response) {
+            if (response.ok) {
+                add_row(response);
+            } else {
+                alert("Errore: Impossibile creare");
+            }
+        }
+    })
+}
+
+$(document).ready(function() {
+    $.ajax({
+    type: "POST",
+    url: "services?action=get_items",
+    dataType: "json",
+    success: function(response) {
+        $(".alert").hide();
+        response.forEach(add_row);
     }
-    echo $rows;
-}
+    });
+    
+    $(\'#deleteModal\').on(\'show.bs.modal\', function (event) {
+      var button = $(event.relatedTarget);// Button that triggered the modal
+      var recipient = button.data(\'item\');// Extract info from data-* attributes
+      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      // Update the modal\'s content. We\'ll use jQuery here, but you could use a data binding library or other methods instead.
+      
+      
+      
+      var modal = $(this);
+      var value = parseInt(recipient);
+      if (value > 0) {
+        modal.find(\'.modal-title\').text(\'Modifica oggetto\');
+        //modal.find(\'.modal-body input\').val(recipient)
+        $.ajax({
+            type: "POST",
+            url: "services?action=get_item&id="+recipient,
+            dataType: "json",
+            success: function(response) {
+                modal.find("#item-id").val(response.id);
+                modal.find("#item-name").val(response.name);
+                modal.find("#item-number").val(response.number);
+            }
+        })
+      } else {
+            modal.find(\'.modal-title\').text(\'Nuovo oggetto\');
+            modal.find("#item-id").val(0);
+            modal.find("#item-name").val("");
+            modal.find("#item-number").val("");
+      }
+    });
+    
+    $(\'#editModal\').on(\'show.bs.modal\', function (event) {
+      var button = $(event.relatedTarget);// Button that triggered the modal
+      var recipient = button.data(\'item\');// Extract info from data-* attributes
+      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      // Update the modal\'s content. We\'ll use jQuery here, but you could use a data binding library or other methods instead.
+      
+      
+      
+      var modal = $(this);
+      var value = parseInt(recipient);
+      if (value > 0) {
+        modal.find(\'.modal-title\').text(\'Modifica oggetto\');
+        //modal.find(\'.modal-body input\').val(recipient)
+        $.ajax({
+            type: "POST",
+            url: "services?action=get_item&id="+recipient,
+            dataType: "json",
+            success: function(response) {
+                modal.find("#item-id").val(response.id);
+                modal.find("#item-name").val(response.name);
+                modal.find("#item-number").val(response.number);
+            }
+        })
+      } else {
+            modal.find(\'.modal-title\').text(\'Nuovo oggetto\');
+            modal.find("#item-id").val(0);
+            modal.find("#item-name").val("");
+            modal.find("#item-number").val("");
+      }
+    });
+            
+    $("#save_button").on("click", function() {
+        if ($("#item-id").val() > 0)
+            salvaOggetto();
+        else
+            creaOggeto();
+    });
+})
+</script>';
 
-/**
- * @param Item $item
- * @return string
- */
-function print_row($item) {
-    return '';
-}
-
-function edit_button($item) {
-
-}
-
-function delete_button($item) {
-
-}
+MainView::push_script($script);
 ?>
 
 <div class="container">
     <h1>Inventario</h1>
-    <a class="btn btn-primary" href="eventdetails"><i class="fa fa-plus" aria-hidden="true"></i> Nuovo materiale</a>
-    <div class="table-responsive">
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                <tr>
-                    <td>Nome</td>
-                    <td>Quantità</td>
-                </tr>
-                </thead>
-                <tbody>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-item="0" <?php echo buttonDisabled(); ?>><i class="fa fa-plus" aria-hidden="true"></i> Nuovo materiale</button>
 
-                </tbody>
-            </table>
+    <div class="alert alert-info" role="alert">
+        <i class='fa fa-spinner fa-spin '></i> Caricamento in corso...
+    </div>
+    <div class="table-responsive">
+        <table id="itemt" class="table">
+            <thead>
+            <tr>
+                <th>Codice</th>
+                <th>Nome</th>
+                <th>Quantità</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="saveform">
+                    <div class="form-group">
+                        <input type="hidden" name="item-id" id="item-id">
+                        <label for="item-name" class="form-control-label">Nome:</label>
+                        <input placeholder="Nome oggetto" type="text" name="name" class="form-control" id="item-name" required>
+                        <label for="item-number" class="form-control-label">Numero:</label>
+                        <input type="number" name="number" class="form-control" id="item-number" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                <button type="button" id="save_button" class="btn btn-primary">Salva</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Elimina oggetto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2>Sei sicuro di voler eliminare?</h2>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                <button type="button" id="save_button" class="btn btn-danger">Cancella</button>
+            </div>
         </div>
     </div>
 </div>
