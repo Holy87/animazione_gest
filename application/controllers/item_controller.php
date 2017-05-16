@@ -49,12 +49,12 @@ class ItemController
     }
 
     public static function delete_item() {
-        $item_object = Item::get_item($_POST['item_id']);
+        $item_object = Item::get_item($_POST['item-id']);
         if ($item_object == null) {
             echo json_encode(['ok' => false]);
         } else {
             $item_object->delete();
-            echo json_encode(['ok' => true]);
+            echo json_encode(['ok' => true, 'id' => $item_object->id]);
         }
     }
 

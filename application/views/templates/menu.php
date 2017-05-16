@@ -6,6 +6,7 @@ function draw_menu_elements() {
 
     $html = '';
     global $action;
+    global $user;
     $menu_elements = new MenuContainer();
     /** @var MenuElement $menu_element */
     foreach($menu_elements->get_elements() as $menu_element)
@@ -31,8 +32,13 @@ function draw_right_elements() {
 
 function draw_logged_elements() {
     global $user;
-    $code = 'Benvenuto, '.$user->friendly_name;
-    $code.='<li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i>Esci</a></li>';
+    $code = '<li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="http://example.com/" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fa fa-user"></span> '.$user->friendly_name.'</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown02">
+                <a class="dropdown-item" href="#">Profilo</a>
+                <a class="dropdown-item" href="#">Esci</a>
+              </div>
+            </li>';
     echo $code;
 }
 
