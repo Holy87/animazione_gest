@@ -70,7 +70,7 @@ function check_disabled() {
                     <div class="form-group">
                         <label for="profile-image" class="form-control-label">Carica la tua foto</label>
                         <div class="input-group">
-                            <input type="file" accept=".gif,.jpg,.jpeg,.png" id="profile-image" name="profile-image" class="form-control" required>
+                            <input type="file" accept=".gif,.jpg,.jpeg,.png" id="profile-image" name="profile-image" class="file" required>
                             <span class="input-group-btn">
                                 <button class="btn btn-primary" id="imgbtn" type="submit">Carica</button>
                             </span>
