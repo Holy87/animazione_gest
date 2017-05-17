@@ -3,15 +3,10 @@
 /* Padding below the footer and lighter body text */
 
 body {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-  color: #5a5a5a;
-}
-
-h3 {
-  color: blueviolet;
-}
-
+   padding-top: 3rem;
+   padding-bottom: 3rem;
+   color: #5a5a5a;
+ }
 
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
@@ -92,4 +87,9 @@ h3 {
   .featurette-heading {
     margin-top: 7rem;
   }
+}
+
+.low-profile {
+  max-height: 20px;
+    max-width: 20px;
 }

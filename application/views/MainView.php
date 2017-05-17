@@ -31,7 +31,8 @@ class MainView
     public static function getCustomJs() {
         global $action;
         if(file_exists(ABS_PATH.'/assets/scripts/'.$action.'.js'))
-            echo '<script src="assets/scripts/'.$action.'.js">';
+            //echo $action;
+            echo '<script type="text/javascript" src="assets/scripts/'.$action.'.js"></script>';
     }
 
     public static function push_script($script) {

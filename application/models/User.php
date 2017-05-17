@@ -43,7 +43,11 @@ class User
      * @return string
      */
     public function get_avatar_url() {
-        return '';
+        $images = glob("./uploads/image-profiles/".$this->generateFileName().".*");
+        if (count($images) > 0)
+            return $images[0];
+        else
+            return 'assets/images/profile-placeholder.jpg';
     }
 
     /**
@@ -86,5 +90,9 @@ class User
         } else {
             return new User(0,'', '', '', 0);
         }
+    }
+
+    public function generateFileName() {
+        return 'avatar-'.$this->id;
     }
 }

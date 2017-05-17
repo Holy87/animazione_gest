@@ -23,4 +23,8 @@ class PagesController {
     public function items() {
         require_once ABS_PATH.'/application/views/pages/inventory.php';
     }
+
+    public function profile() {
+        require_once ABS_PATH.'/application/views/pages/profile.php';
+    }
 }
