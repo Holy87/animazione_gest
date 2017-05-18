@@ -66,6 +66,66 @@ class User
         return $this->access_level > 2;
     }
 
+    public function save() {
+        $link = Db::getInstance();
+        $query = "UPDATE users SET
+        user_mail = :mail,
+        user_access = :access,
+        user_friendlyname = :name,
+        user_name = :nick
+        WHERE user_id = :id";
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':mail', $this->mail);
+        $stmt->bindParam(':access', $this->access_level);
+        $stmt->bindParam(':name', $this->friendly_name);
+        $stmt->bindParam(':nick', $this->name);
+        $stmt->bindParam(':id', $this->id);
+        $stmt->execute();
+    }
+
+    public function change_friendly_name($new_name) {
+        $this->friendly_name = $new_name;
+        $link = Db::getInstance();
+        $query = "UPDATE users SET
+        user_friendlyname = :name
+        WHERE user_id = :id";
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':name', $this->friendly_name);
+        $stmt->bindParam(':id', $this->id);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+    /**
+     * @param string $old_password
+     * @param string $new_password
+     * @return bool
+     */
+    public function change_password_safe($old_password, $new_password) {
+        $sha1_new_password = sha1($new_password);
+        $sha1_old_password = sha1($old_password);
+        $link = Db::getInstance();
+        $query = "UPDATE users SET user_password = :npass
+        WHERE user_password = :opass AND user_id = :id";
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':npass', $sha1_new_password);
+        $stmt->bindParam(':opass', $sha1_old_password);
+        $stmt->bindParam(':id', $this->id);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+    public function change_password_unsafe($new_password) {
+        $sha1_new_password = sha1($new_password);
+        $link = Db::getInstance();
+        $query = "UPDATE users SET user_password = :npass
+        WHERE user_id = :id";
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':npass', $sha1_new_password);
+        $stmt->bindParam(':id', $this->id);
+        return $stmt->rowCount() > 0;
+    }
+
     /**
      * Ottiene l'oggetto utente
      * @return User

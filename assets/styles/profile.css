@@ -1,6 +1,10 @@
 .img-profile {
-    max-width: 200px;
-    max-height: 200px
+    max-width: 100%;
+    max-height: 100%;
+    height:auto;
+    display:block;
+    /* div height to be the same as width*/
+    padding-top:100%
 }
 
 .jumbotron {

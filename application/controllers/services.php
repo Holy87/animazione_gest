@@ -7,6 +7,8 @@
  */
 require_once ABS_PATH.'/application/controllers/account_controller.php';
 require_once ABS_PATH.'/application/controllers/item_controller.php';
+require_once ABS_PATH.'/application/controllers/user_controller.php';
+require_once ABS_PATH.'/application/controllers/upload_controller.php';
 
 if(!isset($action))
     $action = 'default';
@@ -31,5 +33,23 @@ switch($action) {
         break;
     case 'get_item':
         ItemController::get_item();
+        break;
+    case 'check_mail':
+        echo UserController::checkMail();
+        break;
+    case 'change_mail':
+        echo UserController::changeMail();
+        break;
+    case 'change_password':
+        echo UserController::changePassword();
+        break;
+    case 'change_name':
+        echo UserController::changeName();
+        break;
+    case 'photo-upload':
+        UploadController::profile_image();
+        break;
+    default:
+        echo $action."   ".print_r($_GET);
         break;
 }
