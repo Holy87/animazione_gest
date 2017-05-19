@@ -155,4 +155,15 @@ class User
     public function generateFileName() {
         return 'avatar-'.$this->id;
     }
+
+    public function group_name() {
+        switch ($this->access_level) {
+            case 1:
+                return "Animatore";
+            case 2:
+                return "Segreteria";
+            case 3:
+                return "Amministratore";
+        }
+    }
 }

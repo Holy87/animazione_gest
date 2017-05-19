@@ -4,7 +4,7 @@ class MenuContainer
     private $menu_elements;
 
     /**
-     * MenuContainer constructor.
+     * Creazione delle voci del menu.
      */
     public function __construct()
     {
@@ -13,6 +13,7 @@ class MenuContainer
             new MenuElement('Eventi', 'events', 1, 'events', 'fa-calendar'),
             new MenuElement('Temi Feste', 'themes', 1, 'themes', 'fa-film'),
             new MenuElement('Inventario', 'items', 1,'items', 'fa-archive'),
+            new MenuElement('Utenti', 'users', 3, 'users', 'fa-users')
         ];
     }
 

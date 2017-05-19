@@ -1,30 +1,36 @@
 <?php
-class PagesController {
-    public function home() {
-        require_once ABS_PATH.'/application/views/pages/home.php';
-    }
-
+class NavigationController {
+    /**
+     * Va alla pagina di errore
+     */
     public function error() {
         require_once ABS_PATH.'/application/views/pages/error.php';
     }
 
-    public function login() {
-        require_once ABS_PATH.'/application/views/pages/login.php';
+    /**
+     * Disconnette l'utente
+     */
+    public function logout() {
+        $_SESSION['user_id'] = null;
+        $_SESSION = [];
+        session_destroy();
+        header('location: login');
     }
 
-    public function events() {
-        require_once ABS_PATH.'application/views/pages/events.php';
-    }
-
-    public function register() {
-
-    }
-
-    public function items() {
-        require_once ABS_PATH.'/application/views/pages/inventory.php';
-    }
-
-    public function profile() {
-        require_once ABS_PATH.'/application/views/pages/profile.php';
+    /**
+     * Va ad una pagina specifica
+     * @param string $page
+     */
+    public function go_to($page) {
+        switch ($page) {
+            case 'logout':
+                $this->logout();
+                break;
+            default:
+                if (file_exists(ABS_PATH."/application/views/pages/$page.php"))
+                    require_once(ABS_PATH."/application/views/pages/$page.php");
+                else
+                    $this->error();
+        }
     }
 }

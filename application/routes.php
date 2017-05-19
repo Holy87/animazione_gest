@@ -12,40 +12,21 @@
  * @param string $controller
  * @param string $action
  **/
-  function call($controller = 'pages', $action = 'home') {
-      // require the file that matches the controller name
-      /** @noinspection PhpIncludeInspection */
-      require_once(ABS_PATH.'/application/controllers/' . $controller . '_controller.php');
-
-      // create a new instance of the needed controller
-      switch($controller) {
-          case 'pages':
-              $controller = new PagesController();
-              break;
-          case 'account':
-              $controller = new AccountController();
-              break;
-      }
-
-      // call the action
-      $controller->{ $action }();
+function call($controller = 'pages', $action = 'home') {
+  // require the file that matches the controller name
+  /** @noinspection PhpIncludeInspection */
+  $path = ABS_PATH.'/application/controllers/' . $controller . '_controller.php';
+  if (file_exists($path)) {
+      require_once($path);
+      $controller = new NavigationController();
+      $controller->go_to($action);
+  } else {
+      call('pages', 'error');
   }
+}
 
-  // allowed controllers
-  $controllers = array(
-      'pages' => ['home', 'error', 'login', 'register', 'events', 'items', 'profile'],
-      'account' => ['login', 'register']
-    );
-
-  // check that the requested controller and action are both allowed
-if (isset($controller) and isset($action)) {
-    if (array_key_exists($controller, $controllers)) {
-        if (in_array($action, $controllers[$controller])) {
-            call($controller, $action);
-        } else {
-            call('pages', 'error');
-        }
-    } else {
-        call('pages', 'error');
-    }
+if(isset($controller) and isset($action)) {
+    call($controller, $action);
+} else {
+    call('pages', 'error');
 }

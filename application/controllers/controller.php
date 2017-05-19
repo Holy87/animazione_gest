@@ -24,4 +24,10 @@ class Controller
     function prova($ttesto) {
         echo $ttesto;
     }
+
+    function logout() {
+        $_SESSION['user_id'] = null;
+        $_SESSION = [];
+        session_destroy();
+    }
 }

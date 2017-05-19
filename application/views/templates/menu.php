@@ -34,16 +34,17 @@ function draw_logged_elements() {
     $code = '';
     /** @noinspection HtmlUnknownTarget */
     //<img class="rounded-circle img-fluid low-profile" src="'.$user->get_avatar_url().'">
-    $code .= '<li class="nav-item dropdown">
-              <div class="avatar-little">
-                <div class="circle-avatar" style="background-image:url('.$user->get_avatar_url().'"></div>
-                </div>
-              <a class="nav-link dropdown-toggle" href="profile" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> '.$user->friendly_name.'</a>
-              <div class="dropdown-menu" aria-labelledby="dropdown02">
-                <a class="dropdown-item" href="profile">Profilo</a>
-                <a class="dropdown-item" href="logout">Esci</a>
-              </div>
-            </li>';
+    $code .= '
+<div class="avatar-little">
+    <div class="circle-avatar" style="background-image:url('.$user->get_avatar_url().'"></div>
+</div>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="profile" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> '.$user->friendly_name.'</a>
+    <div class="dropdown-menu" aria-labelledby="dropdown02">
+        <a class="dropdown-item" href="profile">Profilo</a>
+        <a class="dropdown-item" href="logout">Esci</a>
+    </div>
+</li>';
     echo $code;
 }
 
