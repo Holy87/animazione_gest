@@ -10,19 +10,23 @@ function add_row(item) {
     tr.insertCell(0).innerHTML = item.id;
     tr.insertCell(1).innerHTML = item.name;
     tr.insertCell(2).innerHTML = item.number;
-    tr.insertCell(3).innerHTML = editButton(item.id) + " " + deleteButton(item.id, item.name);
+    tr.insertCell(3).innerHTML = '<div class="btn-group" role="group">' + editButton(item.id) + " " + deleteButton(item.id, item.name) + '</div>';
 }
 
 function editButton(id) {
-    return '<button class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-toggle="tooltip" data-placement="top" title="Modifica oggetto" data-item="'+id+'" '+buttonDisabled()+'><i class="fa fa-pencil" aria-hidden="true"></i></button>';
+    return '<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editModal" data-toggle="tooltip" data-placement="top" title="Modifica oggetto" data-item="'+id+'" '+buttonDisabled()+'><i class="fa fa-pencil" aria-hidden="true"></i></button>';
 }
 
 function buttonDisabled() {
     return $("#btn-disabled").val();
 }
 
+function renderButtons(id) {
+    return '<div class="btn-group" role="group">' + editButton(id) + " " + deleteButton(id, "l'oggetto") + '</div>';
+}
+
 function deleteButton(id, name) {
-    return '<button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-toggle="tooltip" data-placement="top" title="Elimina oggetto" data-name="'+name+'" data-item="'+id+'"'+buttonDisabled()+'><i class="fa fa-trash" aria-hidden="true"></i></button>';
+    return '<button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" data-toggle="tooltip" data-placement="top" title="Elimina oggetto" data-name="'+name+'" data-item="'+id+'"'+buttonDisabled()+'><i class="fa fa-trash" aria-hidden="true"></i></button>';
 }
 
 function salvaOggetto() {
@@ -34,9 +38,11 @@ function salvaOggetto() {
         dataType: "json",
         success: function(response) {
             if (response.ok) {
-                var row = document.getElementById(response.id);
-                row.cells[1].innerHTML = response.name;
-                row.cells[2].innerHTML = response.number;
+                //var row = document.getElementById(response.id);
+                //row.cells[1].innerHTML = response.name;
+                //row.cells[2].innerHTML = response.number;
+               // $("#itemt").ajax.reload();
+                $("#itemt").DataTable().ajax.reload();
             } else {
                 alert("Impossibile modificare: oggetto non trovato");
             }
@@ -83,7 +89,9 @@ function creaOggeto() {
         dataType: "json",
         success: function(response) {
             if (response.ok) {
-                add_row(response);
+                //add_row(response);
+                //$("#itemt").ajax.reload();
+                $("#itemt").DataTable().ajax.reload();
             } else {
                 alert("Errore: Impossibile creare");
             }
@@ -100,9 +108,10 @@ function eliminaOggetto() {
         dataType: "json",
         success: function(response) {
             if(response.ok) {
-                var row = document.getElementById(response.id).rowIndex;
-                var table = document.getElementById("itemt");
-                table.deleteRow(row);
+                //var row = document.getElementById(response.id).rowIndex;
+                //var table = document.getElementById("itemt");
+                //table.deleteRow(row);
+                $("#itemt").DataTable().ajax.reload();
             } else {
                 alert("Errore nella eliminazione: oggetto non trovato.");
             }
@@ -111,16 +120,27 @@ function eliminaOggetto() {
 }
 
 $(document).ready(function() {
-    console.log("test");
-    $.ajax({
+    /*$.ajax({
         type: "POST",
         url: "services?action=get_items",
         dataType: "json",
         success: function(response) {
             $("#alert-info").hide();
             response.forEach(add_row);
+            $("#itemt").DataTable();
         }
-    });
+    });*/
+
+    $("#itemt").DataTable({
+       "ajax": "services?action=get_items",
+
+        "columns": [
+            {"data": "id", "searchable": false, "orderable": false},
+            {"data": "name"},
+            {"data": "number"},
+            {"data": "e_id", "searchable": false, "orderable": false, "type": "html", "render": function(data, type, full, meta){return renderButtons(data)}}
+        ]
+    }).order( [ 1, 'asc' ] );
 
     $('#deleteModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);// Button that triggered the modal
@@ -153,7 +173,7 @@ $(document).ready(function() {
                 success: function(response) {
                     modal.find("#item-id").val(response.id);
                     modal.find("#item-name").val(response.name);
-                    modal.find("#item-number").val(response.number);
+                    modal.find("#item-number").val(response.number)
                 }
             })
         } else {
@@ -177,6 +197,6 @@ $(document).ready(function() {
     });
 
     $("#delete_button").on("click", function(){eliminaOggetto()});
-    $("#item-number").on("blur", function(){numFieldCheck()});
-    $("#item-name").on("blur", function() {nameFieldCheck()});
+    $("#item-number").on("change", function(){numFieldCheck()});
+    $("#item-name").on("change", function() {nameFieldCheck()});
 });

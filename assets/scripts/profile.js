@@ -31,7 +31,7 @@ function changeMailAddress(e) {
         data: $("#mailedit").serialize(),
         dataType: "json",
         success: function(response) {
-            console.log("Dati ricevuti: " + response.toString());
+            //console.log("Dati ricevuti: " + response.toString());
             $("#mailbtn").removeAttr("disabled");
             if(!response.ok) {
                 $("#mail-input").addClass("has-danger");
@@ -44,7 +44,7 @@ function changeMailAddress(e) {
                 }, 2000);
                 $("#mail-input").addClass("has-success");
                 $("#mail-state").html("Email salvata.");
-                showMessage("Indirizzo email modificato con successo");
+                //showMessage("Indirizzo email modificato con successo");
             }
         }
     });

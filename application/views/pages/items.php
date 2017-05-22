@@ -16,23 +16,23 @@ function buttonDisabled() {
         return 'disabled';
 }
 ?>
-
+<br>
 <div class="container">
-    <h1>Inventario</h1>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-item="0" <?php echo buttonDisabled(); ?>><i class="fa fa-plus" aria-hidden="true"></i> Nuovo materiale</button>
-
-    <div class="alert alert-info" id="alert-info" role="alert">
+    <h1>Inventario  </h1>
+    <div class="container"><button type="button" class="btn btn-primary btn-sm"" data-toggle="modal" data-target="#editModal" data-item="0" <?php echo buttonDisabled(); ?>><i class="fa fa-plus" aria-hidden="true"></i> Nuovo materiale</button></div>
+    <br>
+    <div class="alert alert-info" id="alert-info" role="alert" hidden>
         <i class='fa fa-spinner fa-spin '></i> Caricamento in corso...
     </div>
     <div class="table-responsive">
         <input type="hidden" value="<?php buttonDisabled() ?>" id="btn-disabled">
-        <table id="itemt" class="table">
+        <table id="itemt" class="table table-striped table-bordered" width="100%" cellspacing="0">
             <thead>
             <tr>
                 <th>Codice</th>
                 <th>Nome</th>
                 <th>Quantità</th>
-                <th></th>
+                <th>Azioni</th>
             </tr>
             </thead>
             <tbody>

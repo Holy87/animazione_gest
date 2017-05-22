@@ -26,9 +26,9 @@ class ItemController
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($rows as $row)
         {
-            $items[] = ['id' => $row['item_id'], 'name' => $row['item_name'], 'number' => $row['item_number']];
+            $items[] = ['id' => $row['item_id'], 'name' => $row['item_name'], 'number' => $row['item_number'], 'e_id' => $row['item_id']];
         }
-        echo json_encode($items);
+        echo json_encode(["data" =>$items]);
     }
 
     public static function save_item() {
