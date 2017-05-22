@@ -28,6 +28,7 @@ function check_disabled() {
             </div>
             <div class="col-md-8">
                 <h1 class="display-3" id="profile-name"><?php echo $user->friendly_name; ?></h1>
+                <h3><?php echo $user->group_name() ?></h3>
                 <p>Panoramica del mio profilo</p>
             </div>
         </div>

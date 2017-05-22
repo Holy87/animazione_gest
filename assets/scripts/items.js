@@ -180,7 +180,7 @@ $(document).ready(function() {
             modal.find('.modal-title').text('Nuovo oggetto');
             modal.find("#item-id").val(0);
             modal.find("#item-name").val("");
-            modal.find("#item-number").val("");
+            modal.find("#item-number").val(1);
         }
     });
 

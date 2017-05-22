@@ -15,7 +15,6 @@ class ItemController
 
     /**
      * Restituisce tutti gli oggetti come codifica json
-     * @return string
      */
     public static function get_all_items() {
         $items = [];

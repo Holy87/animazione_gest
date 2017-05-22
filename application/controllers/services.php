@@ -49,6 +49,9 @@ switch($action) {
     case 'photo-upload':
         UploadController::profile_image();
         break;
+    case 'get_users':
+        echo UserController::get_users();
+        break;
     default:
         echo $action."   ".print_r($_GET);
         break;

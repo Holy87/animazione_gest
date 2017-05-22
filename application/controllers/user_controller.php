@@ -70,4 +70,34 @@ class UserController
             return json_encode(['ok' => false, 'reason' => 'Utente inesistente']);
         }
     }
+
+    public static function get_users() {
+        $user = User::getCurrent();
+        $serialized_users = [];
+        if($user->can_create_users()) {
+            $users = User::get_all();
+            /** @var User $user */
+            foreach($users as $user)
+            {
+                $serialized_users[] = ['id' => $user->id, 'nickname' => $user->name,
+                    'name' => $user->friendly_name, 'access' => $user->access_level,
+                    'mail' => $user->mail, 'role' => $user->group_name(), 'avatar' => $user->get_avatar_url()];
+            }
+        }
+        return json_encode($serialized_users);
+    }
+
+    public static function create_user() {
+        if(!User::getCurrent()->can_create_users())
+        {
+            return json_encode(['ok' => false, 'reason' => 'Diritti insufficienti']);
+        }
+        $user = $_POST['username'];
+        $mail = $_POST['mail'];
+        $pass = $_POST['password'];
+        $role = $_POST['role'];
+        $name = $_POST['userfriendly'];
+        $response = User::create($user, $name, $mail, $pass, $role);
+        return json_encode($response);
+    }
 }

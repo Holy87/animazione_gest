@@ -1,9 +1,9 @@
 <?php
 
-function go_error() {header('location: error');}
+function go_error() {die("Non puoi visualizzare questa pagina");}
 
 function subm_name() {
-    if($_GET['mode'] == 'new')
+    if(!isset($_GET['user_id']))
         echo 'Crea';
     else
         echo 'Aggiorna';
@@ -11,6 +11,8 @@ function subm_name() {
 
 /** @var User $user */
 $user = User::getCurrent();
+$o_user = new User(0, '','', '', 1);
+$mode = 'edit';
 if($user->can_create_users()) {
     if(isset($_GET['user_id'])) {
         $o_user = User::get_user($_GET['user_id']);
@@ -18,14 +20,16 @@ if($user->can_create_users()) {
         if($o_user == null) {
             go_error();
         }
-    } elseif (isset($_GET['mode']) && $_GET['mode'] == 'new') {
+    } else
         $mode = 'new';
-        $o_user = new User(0, '','', '', 1);
-    } else {
-        go_error();
-    }
 } else {
     go_error();
+}
+
+function disable() {
+    if(isset($_GET['user_id'])) {
+        echo 'disabled';
+    }
 }
 
 /**
@@ -45,8 +49,8 @@ function role_selected($role_num, $user) {
             <div class="col-md-6">
                 <div class="form-group-row">
                     <label class="col-2 col-form-label" for="username">Username</label>
-                    <input type="text" name="username" id="username" class="form-control" disabled placeholder="Username" value="<?php /** @var User $o_user */
-                    echo $o_user->name ?>">
+                    <input type="text" name="username" id="username" class="form-control" <?php disable() ?> placeholder="Username" value="<?php /** @var User $o_user */
+                    echo $o_user->name ?>" required>
                 </div>
                 <div class="form-group-row">
                     <label class="col-2 col-form-label" for="userfriendly">Nome</label>
@@ -70,7 +74,7 @@ function role_selected($role_num, $user) {
                     </select>
                 </div>
                 <input type="hidden" value="<?php echo $o_user->id ?>" name="id">
-                <input type="hidden" value="<?php echo $mode ?>" name="mode">
+                <input type="hidden" value="<?php echo $mode ?>" name="mode" id="mode">
                 <br>
                 <button type="submit" class="btn btn-primary" id="actionbtn"><?php subm_name() ?></button>
             </div>

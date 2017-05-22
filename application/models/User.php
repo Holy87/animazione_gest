@@ -152,6 +152,20 @@ class User
         }
     }
 
+    public static function get_all() {
+        $items = [];
+        $link = Db::getInstance();
+        $query = "SELECT * FROM users";
+        $stmt = $link->prepare($query);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach($rows as $row)
+        {
+            $items[] = new User($row['user_id'], $row['user_name'], $row['user_friendlyname'], $row['user_mail'], $row['user_access']);
+        }
+        return $items;
+    }
+
     public function generateFileName() {
         return 'avatar-'.$this->id;
     }
@@ -165,5 +179,30 @@ class User
             case 3:
                 return "Amministratore";
         }
+    }
+
+    /**
+     * @param $user
+     * @param $name
+     * @param $mail
+     * @param $password
+     * @param $access_level
+     * @return array
+     */
+    public static function create($user, $name, $mail, $password, $access_level) {
+        $pass = sha1($password);
+        $query = "INSERT INTO users (user_name, user_mail, user_access, user_password, user_friendlyname)
+                  (:user, :mail, :access, :pass, :name, :accl)";
+        $link = Db::getInstance();
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':user', $user);
+        $stmt->bindParam(':mail', $mail);
+        $stmt->bindParam(':pass', $pass);
+        $stmt->bindParam(':accl', $access_level);
+        $stmt->bindParam(':name', $name);
+        if ($stmt->execute())
+            return ['id' => $link->lastInsertId('user_id'), 'ok' => true];
+        else
+            return ['ok' => false, 'reason' => $stmt->errorCode()];
     }
 }

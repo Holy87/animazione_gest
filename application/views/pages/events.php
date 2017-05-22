@@ -5,14 +5,6 @@
  * Date: 15/05/2017
  * Time: 13:12
  */
-MainView::push_script("<script>
-$(document).ready(function(){
-    $(\".nav-tabs a\").click(function(){
-        $(this).tab('show');
-    });
-});
-</script>");
-
 $events = Party::get_all();
 $active_events = [];
 $passed_events = [];

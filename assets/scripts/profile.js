@@ -109,20 +109,23 @@ function changePassword(e) {
 }
 
 function changeName(e) {
+    var namebtn = $("#namebtn");
     console.log($("#profileedit").serialize());
-    $("#namebtn").prop("disabled", "disabled");
-    $("#namebtn").html('Salvataggio...');
+    namebtn.prop("disabled", "disabled");
+    namebtn.html('Salvataggio...');
     $.ajax({
         type: "POST",
         url: "services?action=change_name",
         data: $("#profileedit").serialize(),
         dataType: "json",
         success: function(response) {
-            $("#namebtn").removeAttr("disabled");
-            $("#namebtn").html("Salva");
+            namebtn.removeAttr("disabled");
+            namebtn.html('<i class="fa fa-check" aria-hidden="true"></i> Salvato');
+            setTimeout(function() {namebtn.html("Salva");}, 2000);
             if(response.ok) {
-                showMessage("Hai cambiato il tuo nome");
+                //showMessage("Hai cambiato il tuo nome");
                 $("#profile-name").html(response.name);
+                $("#dropdown02").html(response.name);
             } else {
                 showMessage("Errore: " + response.reason);
             }
