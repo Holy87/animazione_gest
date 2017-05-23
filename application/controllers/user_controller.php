@@ -100,4 +100,38 @@ class UserController
         $response = User::create($user, $name, $mail, $pass, $role);
         return json_encode($response);
     }
+
+    public static function edit_user() {
+        if(!User::getCurrent()->can_create_users())
+        {
+            return json_encode(['ok' => false, 'reason' => 'Diritti insufficienti']);
+        }
+        $nick = $_POST['username'];
+        $mail = $_POST['mail'];
+        $pass = $_POST['password'];
+        $role = $_POST['role'];
+        $name = $_POST['userfriendly'];
+        $user = User::get_user($_POST['user_id']);
+        $user->name = $nick;
+        $user->mail = $mail;
+        $user->access_level = $role;
+        $user->friendly_name = $name;
+        $user->change_password_unsafe($pass);
+        return json_encode($user->save());
+    }
+
+    public static function delete_user()
+    {
+        if(!User::getCurrent()->can_create_users())
+        {
+            return json_encode(['ok' => false, 'reason' => 'Diritti insufficienti']);
+        }
+        $query = "DELETE FROM users WHERE user_id = :id";
+        $user_id = $_GET['user_id'];
+        $link = Db::getInstance();
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':id', $user_id);
+        $result = $stmt->execute();
+        return json_encode(['ok' => $result, 'code' => $stmt->errorCode(), 'reason' => $stmt->errorInfo()]);
+    }
 }

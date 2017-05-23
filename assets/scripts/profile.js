@@ -21,10 +21,11 @@ function checkMailAlreadyUsed() {
 }
 
 function changeMailAddress(e) {
+    var mailButton = $("#mailbtn");
     $("#mail-input").removeClass("has-danger");
     $("#mail-state").html("");
-    $("#mailbtn").prop("disabled", "disabled");
-    $("#mailbtn").html('Salvataggio...');
+    mailButton.prop("disabled", "disabled");
+    mailButton.html('Salvataggio...');
     $.ajax({
         type: "POST",
         url: "services?action=change_mail",
@@ -32,15 +33,15 @@ function changeMailAddress(e) {
         dataType: "json",
         success: function(response) {
             //console.log("Dati ricevuti: " + response.toString());
-            $("#mailbtn").removeAttr("disabled");
+            mailButton.removeAttr("disabled");
             if(!response.ok) {
                 $("#mail-input").addClass("has-danger");
                 $("#mail-state").html(response.reason);
-                $("#mailbtn").html("Salva");
+                mailButton.html("Salva");
             } else {
-                $("#mailbtn").html('<i class="fa fa-check" aria-hidden="true"></i> Salvato');
+                mailButton.html('<i class="fa fa-check" aria-hidden="true"></i> Salvato');
                 setTimeout(function() {
-                    $("#mailbtn").html("Salva");
+                    mailButton.html("Salva");
                 }, 2000);
                 $("#mail-input").addClass("has-success");
                 $("#mail-state").html("Email salvata.");
@@ -60,36 +61,39 @@ function passwordMatchFilled() {
 }
 
 function checkPasswordMatch() {
-    $("#password-check").removeClass("has-success");
-    $("#password-check").removeClass("has-danger");
-    $("#feedback-pcheck").html("");
+    var passwordCheck = $("#password-check");
+    passwordCheck.removeClass("has-success");
+    passwordCheck.removeClass("has-danger");
+    passwordCheck.html("");
     if(passwordMatchFilled()) {
         if(passwordMatch()) {
-            $("#password-check").addClass("has-success");
+            passwordCheck.addClass("has-success");
             $("#feedback-pcheck").html("Verifica password accettata");
         } else {
-            $("#password-check").addClass("has-danger");
+            passwordCheck.addClass("has-danger");
             $("#feedback-pcheck").html("Le password non corrispondono");
         }
     }
 }
 
 function changePassword(e) {
+    var passwordCheck = $("#password-check");
+    var passwordSave = $("#pwdsave");
     if(passwordMatchFilled() && passwordMatch()) {
         $("#password-div").removeClass("has-danger");
-        $("#password-check").removeClass("has-success");
-        $("#password-check").removeClass("has-danger");
+        passwordCheck.removeClass("has-success");
+        passwordCheck.removeClass("has-danger");
         $("#pwd-state").html("");
         $("#feedback-pcheck").html("");
-        $("#pwdsave").html('<i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i> Salvataggio...');
-        $("#pwdsave").prop("disabled", "disabled");
+        passwordSave.html('<i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i> Salvataggio...');
+        passwordSave.prop("disabled", "disabled");
         $.ajax({
             type: "POST",
             url: "services?action=change_password",
             data: $("#passedit").serialize(),
             dataType: "json",
             success: function(response) {
-                $("#pwdsave").removeAttr("disabled");
+                passwordSave.removeAttr("disabled");
                 if(response.ok) {
                     showMessage("Password modificata");
                     $("#pwdsave").html('<i class="fa fa-check" aria-hidden="true"></i> Salvato');
@@ -110,13 +114,13 @@ function changePassword(e) {
 
 function changeName(e) {
     var namebtn = $("#namebtn");
-    console.log($("#profileedit").serialize());
+    var form = $("#profileedit");
     namebtn.prop("disabled", "disabled");
     namebtn.html('Salvataggio...');
     $.ajax({
         type: "POST",
         url: "services?action=change_name",
-        data: $("#profileedit").serialize(),
+        data: form.serialize(),
         dataType: "json",
         success: function(response) {
             namebtn.removeAttr("disabled");

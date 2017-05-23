@@ -53,6 +53,15 @@ switch($action) {
     case 'get_users':
         echo UserController::get_users();
         break;
+    case 'create_user':
+        echo UserController::create_user();
+        break;
+    case 'edit_user':
+        echo UserController::edit_user();
+        break;
+    case 'delete_user':
+        echo UserController::delete_user();
+        break;
     case 'get_themes':
         echo ThemeController::get_themes();
         break;

@@ -66,6 +66,9 @@ class User
         return $this->access_level > 2;
     }
 
+    /**
+     * @return array
+     */
     public function save() {
         $link = Db::getInstance();
         $query = "UPDATE users SET
@@ -80,7 +83,11 @@ class User
         $stmt->bindParam(':name', $this->friendly_name);
         $stmt->bindParam(':nick', $this->name);
         $stmt->bindParam(':id', $this->id);
-        $stmt->execute();
+        if($stmt->execute())
+        {
+            return ['ok' => true];
+        } else
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
     }
 
     public function change_friendly_name($new_name) {
@@ -115,6 +122,10 @@ class User
         return $stmt->rowCount() > 0;
     }
 
+    /**
+     * @param string $new_password
+     * @return bool
+     */
     public function change_password_unsafe($new_password) {
         $sha1_new_password = sha1($new_password);
         $link = Db::getInstance();
@@ -152,6 +163,9 @@ class User
         }
     }
 
+    /**
+     * @return array
+     */
     public static function get_all() {
         $items = [];
         $link = Db::getInstance();
@@ -166,10 +180,16 @@ class User
         return $items;
     }
 
+    /**
+     * @return string
+     */
     public function generateFileName() {
         return 'avatar-'.$this->id;
     }
 
+    /**
+     * @return string
+     */
     public function group_name() {
         switch ($this->access_level) {
             case 1:
@@ -178,6 +198,8 @@ class User
                 return "Segreteria";
             case 3:
                 return "Amministratore";
+            default:
+                return "Bloccato";
         }
     }
 
@@ -191,8 +213,7 @@ class User
      */
     public static function create($user, $name, $mail, $password, $access_level) {
         $pass = sha1($password);
-        $query = "INSERT INTO users (user_name, user_mail, user_access, user_password, user_friendlyname)
-                  (:user, :mail, :access, :pass, :name, :accl)";
+        $query = "INSERT INTO users (user_name, user_mail, user_access, user_password, user_friendlyname) VALUES (:user, :mail, :access, :pass, :name)";
         $link = Db::getInstance();
         $stmt = $link->prepare($query);
         $stmt->bindParam(':user', $user);
@@ -203,6 +224,6 @@ class User
         if ($stmt->execute())
             return ['id' => $link->lastInsertId('user_id'), 'ok' => true];
         else
-            return ['ok' => false, 'reason' => $stmt->errorCode()];
+            return ['ok' => false, 'code' => $stmt->errorCode(), 'reason' => $stmt->errorInfo()];
     }
 }
