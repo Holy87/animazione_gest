@@ -18,7 +18,7 @@ function buttonDisabled() {
 ?>
 <br>
 <div class="container">
-    <h1>Inventario  </h1>
+    <h1>Inventario</h1>
     <div class="container"><button type="button" class="btn btn-primary btn-sm"" data-toggle="modal" data-target="#editModal" data-item="0" <?php echo buttonDisabled(); ?>><i class="fa fa-plus" aria-hidden="true"></i> Nuovo materiale</button></div>
     <br>
     <div class="alert alert-info" id="alert-info" role="alert" hidden>

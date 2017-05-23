@@ -27,6 +27,10 @@ if(isset($_GET['theme_id']))
                 <input type="text" class="form-control form-control-lg" id="theme-name" name="name" placeholder="Inserisci un nome nel tema" value="<?php echo $theme->name ?>">
             </div>
             <div class="form-group">
+                <label for="theme-description">Descrizione</label>
+                <textarea placeholder="Inserisci una descrizione che possa ricordare il testo" class="form-control" name="theme-description" id="theme-description"><?php echo $theme->description ?></textarea>
+            </div>
+            <div class="form-group">
                 <label for="theme-price">Prezzo (Euro)</label>
                 <input type="number" class="form-control" id="theme-price" name="price" placeholder="100" value="<?php echo $theme->price ?>">
             </div>

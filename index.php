@@ -10,6 +10,7 @@ session_start();
 require_once 'config.php';
 require_once 'application/controllers/controller.php';
 require_once 'application/db_connection.php';
+require_once 'application/routes.php';
 
 if(isset($_SESSION['user_id']) || in_array($_GET['page'], PUBLIC_PAGES))
 {
@@ -25,7 +26,10 @@ if(isset($_SESSION['user_id']) || in_array($_GET['page'], PUBLIC_PAGES))
         else {
             $controller = 'pages';
             $action = $_GET['page'];
-            require_once('application/views/main_layout.php');
+            if($action == 'logout')
+                load_page($user);
+            else
+                require_once('application/views/main_layout.php');
         }
     } else {
         header('location:home');

@@ -11,6 +11,7 @@ class PartyTheme
     public $id;
     public $name;
     public $price;
+    public $description;
 
     /**
      * PartyTheme constructor.
@@ -18,11 +19,12 @@ class PartyTheme
      * @param string $name
      * @param float $price
      */
-    public function __construct($id, $name, $price)
+    public function __construct($id, $name, $price, $description)
     {
         $this->id = $id;
         $this->name = $name;
         $this->price = $price;
+        $this->description = $description;
     }
 
     /**
@@ -43,8 +45,29 @@ class PartyTheme
     }
 
     /**
+     * @return int
+     */
+    public function intem_number() {
+        return count($this->get_items());
+    }
+
+    /**
+     * @param Item $item
+     */
+    function item_name($item) {
+        return $item->name;
+    }
+
+    public function item_names() {
+        $items = $this->get_items();
+        $array = array_map(array($this, "item_name"), $items);
+        return implode(', ', $array);
+    }
+
+    /**
      * @param Item $item
      * @param int $item_number
+     * @return bool
      */
     public function add_item($item, $item_number = 1) {
         $link = Db::getInstance();
@@ -53,7 +76,7 @@ class PartyTheme
         $stmt->bindParam(':iid', $item->id);
         $stmt->bindParam(':tid', $this->id);
         $stmt->bindParam(':num', $item_number);
-        $stmt->execute();
+        return $stmt->execute();
     }
 
     public function delete_item($item) {
@@ -96,31 +119,32 @@ class PartyTheme
 
     /**
      * Salva le modifiche del tema nel database.
-     * @return bool
+     * @return array
      */
     public function save() {
         $link = Db::getInstance();
-        $query = 'UPDATE temi SET theme_name = :name, theme_price = :price
+        $query = 'UPDATE temi SET theme_name = :name, theme_price = :price, theme_description = :desc
                   WHERE theme_id = :id';
         $stmt = $link->prepare($query);
         $stmt->bindParam(':name', $this->name);
+        $stmt->bindParam(':desc', $this->description);
         $stmt->bindParam(':price', $this->price);
         $stmt->bindParam(':id', $this->id);
         try {
             $link->beginTransaction();
             $stmt->execute();
             $link->commit();
-            return true;
+            return ['ok' => true];
         } catch (PDOException $e) {
             echo $e->getMessage();
             $link->rollBack();
-            return false;
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
         }
     }
 
     /**
      * Cancella un tema dal database
-     * @return bool
+     * @return array
      */
     public function delete() {
         $link = Db::getInstance();
@@ -131,11 +155,11 @@ class PartyTheme
             $link->beginTransaction();
             $stmt->execute();
             $link->commit();
-            return true;
+            return ['ok' => true];
         } catch (PDOException $e) {
             echo $e->getMessage();
             $link->rollBack();
-            return false;
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
         }
     }
 
@@ -151,7 +175,7 @@ class PartyTheme
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($rows as $row) {
-            $elem = new PartyTheme($row['theme_id'], $row['theme_name'], $row['theme_price']);
+            $elem = new PartyTheme($row['theme_id'], $row['theme_name'], $row['theme_price'], $row['theme_description']);
             array_push($list, $elem);
         }
         return $list;
@@ -169,6 +193,20 @@ class PartyTheme
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $theme = $stmt->fetch(PDO::FETCH_ASSOC);
-        return new PartyTheme($theme['theme_id'], $theme['theme_name'], $theme['theme_price']);
+        return new PartyTheme($theme['theme_id'], $theme['theme_name'], $theme['theme_price'], $theme['theme_description']);
+    }
+
+    public static function create($name, $description, $price) {
+        $link = Db::getInstance();
+        $query = "INSERT INTO temi (theme_name, theme_description, theme_price) VALUES (:name, :desc, :price)";
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':desc', $description);
+        $stmt->bindParam(':price', $price);
+        $result = $stmt->execute();
+        if($result)
+            return ['ok' => true, 'id' => $link->lastInsertId('theme_id')];
+        else
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
     }
 }

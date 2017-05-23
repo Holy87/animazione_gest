@@ -46,7 +46,7 @@ $user = User::getCurrent();
 <?php require_once  ABS_PATH.'/application/views/templates/navbar.php'; ?>
 
 <!-- MAIN DYNAMIC CONTNET -->
-<?php require_once  ABS_PATH.'/application/routes.php'; ?>
+<?php load_page($user); ?>
 
 <!-- FOOTER -->
 <?php require_once  ABS_PATH.'/application/views/templates/footer.php'; ?>

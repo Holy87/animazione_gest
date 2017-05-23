@@ -86,6 +86,8 @@ class Item
      * @return bool
      */
     public function delete() {
+        if (!$this->can_delete())
+            return false;
         $link = Db::getInstance();
         $query = 'DELETE FROM inventario WHERE item_id = :id';
         $stmt = $link->prepare($query);
@@ -100,6 +102,28 @@ class Item
             $link->rollBack();
             return false;
         }
+    }
+
+    public function in_feste() {
+        $link = Db::getInstance();
+        $query = "SELECT COUNT(item_id) FROM oggetti_party WHERE item_id = :id";
+        $stmt = $link->prepare($query);
+        $stmt->bindParam('id', $this->id);
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
+
+    public function in_temi() {
+        $link = Db::getInstance();
+        $query = "SELECT COUNT(item_id) FROM oggetti_temi WHERE item_id = :id";
+        $stmt = $link->prepare($query);
+        $stmt->bindParam('id', $this->id);
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
+
+    public function can_delete() {
+        return $this->in_temi() + $this->in_feste() == 0;
     }
 
     /**

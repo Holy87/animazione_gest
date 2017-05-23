@@ -21,5 +21,6 @@
         </div>
         <button id="sendb" class="btn btn-lg btn-primary btn-block" type="submit" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Verifica...">Entra</button>
     </form>
-
+    <!-- Per precaricare la ruota di attesa -->
+    <p hidden><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></p>
 </div> <!-- /container -->
