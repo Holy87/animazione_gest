@@ -4,6 +4,7 @@ require_once ABS_PATH.'/application/models/Item.php';
 require_once ABS_PATH.'/application/models/PartyTheme.php';
 require_once ABS_PATH.'/application/models/Party.php';
 require_once ABS_PATH.'/application/models/User.php';
+
 $user = User::getCurrent();
 ?>
 <!DOCTYPE html>
@@ -46,7 +47,7 @@ $user = User::getCurrent();
 <?php require_once  ABS_PATH.'/application/views/templates/navbar.php'; ?>
 
 <!-- MAIN DYNAMIC CONTNET -->
-<?php load_page($user); ?>
+<?php load_page($user) ?>
 
 <!-- FOOTER -->
 <?php require_once  ABS_PATH.'/application/views/templates/footer.php'; ?>

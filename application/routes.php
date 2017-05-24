@@ -66,6 +66,3 @@ function permit_access($action, $user) {
     }
     return $user->access_level >= $access_required[$action];
 }
-
-$user = User::getCurrent();
-load_page($user);

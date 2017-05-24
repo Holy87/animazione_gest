@@ -42,6 +42,8 @@ function draw_logged_elements() {
 }
 
 function logged_options() {
+    global $user;
+    /** @noinspection HtmlUnknownTarget */
     return '
 <div class="avatar-little">
     <div class="circle-avatar" style="background-image:url('.$user->get_avatar_url().'"></div>

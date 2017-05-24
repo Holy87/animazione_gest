@@ -33,7 +33,7 @@ CREATE TABLE `feste` (
   `ora` time NOT NULL,
   `creatore` int(11) DEFAULT NULL,
   `prezzo` float NOT NULL,
-  `tema` int(11) NOT NULL
+  `theme_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -46,18 +46,19 @@ CREATE TABLE `inventario` (
   `item_id` int(11) NOT NULL,
   `item_name` varchar(100) NOT NULL,
   `item_number` int(11) NOT NULL DEFAULT '1',
-  `item_ward` int(11) NOT NULL DEFAULT '0'
+  `item_ward` int(11) NOT NULL DEFAULT '0',
+  `item_consumable` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dump dei dati per la tabella `inventario`
 --
 
-INSERT INTO `inventario` (`item_id`, `item_name`, `item_number`, `item_ward`) VALUES
-(1, 'Macchina per zucchero filato', 3, 0),
-(3, 'Computer portatile', 2, 0),
-(4, 'Costume di Peter Pan', 4, 0),
-(5, 'Costume di Bianca Neve', 3, 0);
+INSERT INTO `inventario` (`item_id`, `item_name`, `item_number`, `item_ward`, `item_consumable`) VALUES
+  (1, 'Macchina per zucchero filato', 3, 0, 0),
+  (3, 'Computer portatile', 2, 0, 0),
+  (4, 'Costume di Peter Pan', 4, 0, 0),
+  (5, 'Costume di Bianca Neve', 3, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -90,11 +91,11 @@ CREATE TABLE `oggetti_temi` (
 --
 
 INSERT INTO `oggetti_temi` (`id`, `item_id`, `theme_id`, `item_number`) VALUES
-(1, 1, 1, 1),
-(2, 4, 1, 1),
-(3, 1, 2, 1),
-(4, 3, 2, 2),
-(5, 5, 2, 2);
+  (1, 1, 1, 1),
+  (2, 4, 1, 1),
+  (3, 1, 2, 1),
+  (4, 3, 2, 2),
+  (5, 5, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -114,8 +115,8 @@ CREATE TABLE `temi` (
 --
 
 INSERT INTO `temi` (`theme_id`, `theme_name`, `theme_description`, `theme_price`) VALUES
-(1, 'Spiderman', 'Tema con i costumi e le ragnatele dell\'uomo ragno', 80),
-(2, 'Disney', 'Tema con i personaggi dei classici Disney', 70);
+  (1, 'Spiderman', 'Tema con i costumi e le ragnatele dell\'uomo ragno', 80),
+  (2, 'Disney', 'Tema con i personaggi dei classici Disney', 70);
 
 -- --------------------------------------------------------
 
@@ -137,8 +138,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `user_name`, `user_friendlyname`, `user_mail`, `user_access`, `user_password`) VALUES
-(1, 'admin', 'Francesco Bosso', 'francesco@outlook.it', 3, 'd033e22ae348aeb5660fc2140aec35850c4da997'),
-(2, 'test', 'Mario Rossi', 'rossimario@gmail.com', 1, '250e77f12a5ab6972a0895d290c4792f0a326ea8');
+  (1, 'admin', 'Francesco Bosso', 'francesco@outlook.ita', 3, 'd033e22ae348aeb5660fc2140aec35850c4da997'),
+  (2, 'test', 'Mario Rossi', 'rossimario@gmail.com', 1, '250e77f12a5ab6972a0895d290c4792f0a326ea8');
 
 --
 -- Indici per le tabelle scaricate
@@ -150,13 +151,16 @@ INSERT INTO `users` (`user_id`, `user_name`, `user_friendlyname`, `user_mail`, `
 ALTER TABLE `animatori_party`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id_2` (`id`),
-  ADD KEY `id` (`id`);
+  ADD KEY `id` (`id`),
+  ADD KEY `party_id` (`party_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indici per le tabelle `feste`
 --
 ALTER TABLE `feste`
-  ADD PRIMARY KEY (`party_id`);
+  ADD PRIMARY KEY (`party_id`),
+  ADD KEY `tema` (`theme_id`);
 
 --
 -- Indici per le tabelle `inventario`
@@ -169,13 +173,17 @@ ALTER TABLE `inventario`
 -- Indici per le tabelle `oggetti_party`
 --
 ALTER TABLE `oggetti_party`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `party_id` (`party_id`),
+  ADD KEY `item_id` (`item_id`);
 
 --
 -- Indici per le tabelle `oggetti_temi`
 --
 ALTER TABLE `oggetti_temi`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `theme_id` (`theme_id`),
+  ADD KEY `item_id` (`item_id`);
 
 --
 -- Indici per le tabelle `temi`
@@ -209,7 +217,7 @@ ALTER TABLE `feste`
 -- AUTO_INCREMENT per la tabella `inventario`
 --
 ALTER TABLE `inventario`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT per la tabella `oggetti_party`
 --
@@ -230,6 +238,37 @@ ALTER TABLE `temi`
 --
 ALTER TABLE `users`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- Limiti per le tabelle scaricate
+--
+
+--
+-- Limiti per la tabella `animatori_party`
+--
+ALTER TABLE `animatori_party`
+  ADD CONSTRAINT `animatori_party_ibfk_1` FOREIGN KEY (`party_id`) REFERENCES `feste` (`party_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `animatori_party_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `feste`
+--
+ALTER TABLE `feste`
+  ADD CONSTRAINT `feste_ibfk_1` FOREIGN KEY (`theme_id`) REFERENCES `temi` (`theme_id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+--
+-- Limiti per la tabella `oggetti_party`
+--
+ALTER TABLE `oggetti_party`
+  ADD CONSTRAINT `oggetti_party_ibfk_1` FOREIGN KEY (`party_id`) REFERENCES `feste` (`party_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `oggetti_party_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `inventario` (`item_id`) ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `oggetti_temi`
+--
+ALTER TABLE `oggetti_temi`
+  ADD CONSTRAINT `oggetti_temi_ibfk_1` FOREIGN KEY (`theme_id`) REFERENCES `temi` (`theme_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `oggetti_temi_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `inventario` (`item_id`);
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

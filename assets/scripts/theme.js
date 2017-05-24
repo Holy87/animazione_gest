@@ -6,6 +6,7 @@ function aggiornaNome() {
 }
 
 $(document).ready(function(){
-    $("#theme-name").on("change", aggiornaNome);
-    $("#theme-name").on("keyup", aggiornaNome);
+    var themeName = $("#theme-name");
+    themeName.on("change", aggiornaNome);
+    themeName.on("keyup", aggiornaNome);
 });
