@@ -37,7 +37,10 @@ function load_page($user) {
         else
             call('pages', 'error');
     } else {
-        call('pages', 'error');
+        if($user->access_level > 0)
+            call('pages', 'error');
+        else
+            call('pages', 'login');
     }
 }
 
@@ -48,8 +51,10 @@ function load_page($user) {
  */
 function permit_access($action, $user) {
     $access_required = [
+        'home' => 1,
+        'profile' => 1,
+        'events' => 1,
         'account' => 3,
-        'events' => 2,
         'items' => 2,
         'theme' => 2,
         'themes' => 2,
@@ -61,3 +66,6 @@ function permit_access($action, $user) {
     }
     return $user->access_level >= $access_required[$action];
 }
+
+$user = User::getCurrent();
+load_page($user);

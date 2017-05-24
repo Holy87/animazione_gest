@@ -159,7 +159,7 @@ class User
         if(isset($_SESSION['user_id'])) {
             return self::get_user($_SESSION['user_id']);
         } else {
-            return new User(0,'', '', '', 0);
+            return new User(0,'guest', 'Ospite', '', 0);
         }
     }
 

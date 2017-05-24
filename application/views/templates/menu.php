@@ -34,7 +34,15 @@ function draw_logged_elements() {
     $code = '';
     /** @noinspection HtmlUnknownTarget */
     //<img class="rounded-circle img-fluid low-profile" src="'.$user->get_avatar_url().'">
-    $code .= '
+    if($user->access_level > 0)
+        $code .= logged_options();
+    else
+        $code .= login_button();
+    echo $code;
+}
+
+function logged_options() {
+    return '
 <div class="avatar-little">
     <div class="circle-avatar" style="background-image:url('.$user->get_avatar_url().'"></div>
 </div>
@@ -45,7 +53,10 @@ function draw_logged_elements() {
         <a class="dropdown-item" href="logout">Esci</a>
     </div>
 </li>';
-    echo $code;
+}
+
+function login_button() {
+    return '<button class="btn btn-danger navbar-btn">Entra</button>';
 }
 
 function draw_login_elements() {
