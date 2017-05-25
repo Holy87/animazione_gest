@@ -11,18 +11,24 @@ class Item
     public $id;
     public $name;
     public $number;
+    public $ward;
+    public $consumable;
 
     /**
      * Item constructor.
-     * @param $id
-     * @param $name
-     * @param $number
+     * @param int $id
+     * @param string $name
+     * @param int $number
+     * @param int $ward
+     * @param int $consumable
      */
-    public function __construct($id, $name, $number)
+    public function __construct($id, $name, $number, $ward = 1, $consumable = 0)
     {
         $this->name = $name;
         $this->id = $id;
         $this->number = $number;
+        $this->consumable = $consumable;
+        $this->ward = $ward;
     }
 
     /**
@@ -31,12 +37,14 @@ class Item
      */
     public function save() {
         $link = Db::getInstance();
-        $query = 'UPDATE inventario SET item_name = :name, item_number = :num
+        $query = 'UPDATE inventario SET item_name = :name, item_number = :num, item_ward = :ward, item_consumable = :cons
             WHERE item_id = :id';
         $stmt = $link->prepare($query);
         $stmt->bindParam(':id', $this->id);
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':num', $this->number);
+        $stmt->bindParam(':ward', $this->ward);
+        $stmt->bindParam(':cons', $this->consumable);
         try {
             $link->beginTransaction();
             $stmt->execute();
@@ -61,7 +69,7 @@ class Item
         $stmt->bindParam(':id', $item_id);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return new Item($row['item_id'], $row['item_name'], $row['item_number']);
+        return new Item($row['item_id'], $row['item_name'], $row['item_number'], $row['item_ward'], $row['item_consumable']);
     }
 
     /**
@@ -76,7 +84,7 @@ class Item
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($rows as $row)
         {
-            $items[] = new Item($row['item_id'], $row['item_name'], $row['item_number']);
+            $items[] = new Item($row['item_id'], $row['item_name'], $row['item_number'], $row['item_ward'], $row['item_consumable']);
         }
         return $items;
     }
@@ -128,16 +136,20 @@ class Item
 
     /**
      * Crea un oggetto
-     * @param $name
+     * @param string $name
      * @param int $number
+     * @param int $ward
+     * @param int $consumable
      * @return Item|null
      */
-    public static function create($name, $number = 1) {
+    public static function create($name, $number = 1, $ward = 1, $consumable = 0) {
         $link = Db::getInstance();
-        $query = 'INSERT INTO inventario (item_name, item_number) VALUES (:name, :number)';
+        $query = 'INSERT INTO inventario (item_name, item_number, item_ward, item_consumable) VALUES (:name, :number, :ward, :consumable)';
         $stmt = $link->prepare($query);
         $stmt->bindParam(':name', $name);
         $stmt->bindParam('number', $number);
+        $stmt->bindParam(':ward', $ward);
+        $stmt->bindParam(':consumable', $consumable);
         try {
             //$link->beginTransaction();
             $stmt->execute();

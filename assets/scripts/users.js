@@ -7,6 +7,8 @@ function add_row(item) {
     //var tr = document.createElement("tr");
     var tr = body.insertRow();
     tr.id = item.id;
+    if(item.access === "0")
+        tr.className = "table-danger";
     console.log(item.name);
     var userId = parseInt(document.getElementById("user-id").value);
     tr.insertCell(0).innerHTML = '<div class="avatar-little"> <div class="circle-avatar" style="background-image:url('+item.avatar+')"></div></div>';

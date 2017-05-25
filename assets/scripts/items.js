@@ -1,6 +1,8 @@
 /**
  * Created by Gold Service on 19/05/2017.
  */
+
+/*
 function add_row(item) {
     var table = document.getElementById("itemt");
     var body = table.getElementsByTagName("tbody")[0];
@@ -12,6 +14,7 @@ function add_row(item) {
     tr.insertCell(2).innerHTML = item.number;
     tr.insertCell(3).innerHTML = '<div class="btn-group" role="group">' + editButton(item.id) + " " + deleteButton(item.id, item.name) + '</div>';
 }
+*/
 
 function editButton(id) {
     return '<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editModal" data-toggle="tooltip" data-placement="top" title="Modifica oggetto" data-item="'+id+'" '+buttonDisabled()+'><i class="fa fa-pencil" aria-hidden="true"></i></button>';
@@ -119,6 +122,19 @@ function eliminaOggetto() {
     })
 }
 
+function addNum() {
+    var modal = $('#editModal');
+    var inp = modal.find("#item-number");
+    inp.val(parseInt(inp.val())+1);
+}
+
+function subNum() {
+    var modal = $('#editModal');
+    var inp = modal.find("#item-number");
+    if(parseInt(inp.val()) > 0)
+        inp.val(parseInt(inp.val())-1);
+}
+
 $(document).ready(function() {
     /*$.ajax({
         type: "POST",
@@ -138,7 +154,8 @@ $(document).ready(function() {
             {"data": "id", "searchable": false, "orderable": false},
             {"data": "name"},
             {"data": "number"},
-            {"data": "e_id", "searchable": false, "orderable": false, "type": "html", "render": function(data, type, full, meta){return renderButtons(data)}}
+            {"data": "ward"},
+            {"data": "e_id", "searchable": false, "orderable": false, "type": "html", "render": function(data){return renderButtons(data)}}
         ]
     }).order( [ 1, 'asc' ] );
 
@@ -173,7 +190,9 @@ $(document).ready(function() {
                 success: function(response) {
                     modal.find("#item-id").val(response.id);
                     modal.find("#item-name").val(response.name);
-                    modal.find("#item-number").val(response.number)
+                    modal.find("#item-number").val(response.number);
+                    $("div.optioner select").val(response.ward);
+                    $("#consumable").prop('checked', parseInt(response.consumable) === 1);
                 }
             })
         } else {
@@ -181,6 +200,8 @@ $(document).ready(function() {
             modal.find("#item-id").val(0);
             modal.find("#item-name").val("");
             modal.find("#item-number").val(1);
+            $("div.optioner select").val("1");
+            $("#consumable").prop('checked', false);
         }
     });
 
@@ -199,4 +220,6 @@ $(document).ready(function() {
     $("#delete_button").on("click", function(){eliminaOggetto()});
     $("#item-number").on("change", function(){numFieldCheck()});
     $("#item-name").on("change", function() {nameFieldCheck()});
+    $("#plus-btn").on("click", function(){addNum()});
+    $("#minus-btn").on("click", function(){subNum()});
 });

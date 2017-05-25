@@ -138,7 +138,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `user_name`, `user_friendlyname`, `user_mail`, `user_access`, `user_password`) VALUES
-  (1, 'admin', 'Francesco Bosso', 'francesco@outlook.ita', 3, 'd033e22ae348aeb5660fc2140aec35850c4da997'),
+  (1, 'admin', 'John Doe', 'doejohn@email.com', 3, 'd033e22ae348aeb5660fc2140aec35850c4da997'),
   (2, 'test', 'Mario Rossi', 'rossimario@gmail.com', 1, '250e77f12a5ab6972a0895d290c4792f0a326ea8');
 
 --

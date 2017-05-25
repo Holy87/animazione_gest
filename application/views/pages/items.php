@@ -19,7 +19,7 @@ function buttonDisabled() {
 <br>
 <div class="container">
     <h1>Inventario</h1>
-    <div class="container"><button type="button" class="btn btn-primary btn-sm"" data-toggle="modal" data-target="#editModal" data-item="0" <?php echo buttonDisabled(); ?>><i class="fa fa-plus" aria-hidden="true"></i> Nuovo materiale</button></div>
+    <div class="container"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editModal" data-item="0" <?php echo buttonDisabled(); ?>><i class="fa fa-plus" aria-hidden="true"></i> Nuovo materiale</button></div>
     <br>
     <div class="alert alert-info" id="alert-info" role="alert" hidden>
         <i class='fa fa-spinner fa-spin '></i> Caricamento in corso...
@@ -32,6 +32,7 @@ function buttonDisabled() {
                 <th>Codice</th>
                 <th>Nome</th>
                 <th>Quantità</th>
+                <th>Reparto</th>
                 <th>Azioni</th>
             </tr>
             </thead>
@@ -58,9 +59,40 @@ function buttonDisabled() {
                         <input type="hidden" name="item-id" id="item-id">
                         <label for="item-name" class="form-control-label">Nome:</label>
                         <input placeholder="Nome oggetto" type="text" name="name" class="form-control" id="item-name" required>
-                    </div><div class="form-group" id="num-form">
-                        <label for="item-number" class="form-control-label">Numero:</label>
-                        <input type="number" name="number" class="form-control" id="item-number" required>
+                    </div>
+                    <div class="form-group" id="num-form">
+                        <div class="row">
+                            <label for="item-number" class="form-control-label">Numero:</label>
+                            <div class="col-lg-offset-3 col-lg-6">
+                                <div class="input-group">
+                                    <input type="number" name="number" class="form-control" id="item-number" required>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-secondary" id="plus-btn" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                    </span>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-secondary" id="minus-btn" type="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 optioner">
+                        <div class="form-group">
+                            <label for="ward" class="form-control-label">Posizione:</label>
+                            <select class="custom-select" name="ward" id="ward" required>
+                                <option value="1">Reparto 1</option>
+                                <option value="2">Reparto 2</option>
+                                <option value="3">Reparto 3</option>
+                                <option value="4">Reparto 4</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" name="consumable" value="consumable" id="consumable" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">È un oggetto che si consuma</span>
+                        </label>
                     </div>
                 </form>
                 <div class="alert alert-warning" id="num-alert" role="alert" hidden>

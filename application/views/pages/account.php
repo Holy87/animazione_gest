@@ -28,7 +28,7 @@ if($user->can_create_users()) {
 
 function disable() {
     if(isset($_GET['user_id'])) {
-        echo 'disabled';
+        echo 'readonly';
     }
 }
 

@@ -5,7 +5,7 @@
 <div class="container">
     <button type="button" onclick="createUser()" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Aggiungi utente</button>
     <div class="table-responsive">
-        <table class="table" id="users-table">
+        <table class="table table-hover" id="users-table">
             <thead>
             <tr>
                 <td></td>
