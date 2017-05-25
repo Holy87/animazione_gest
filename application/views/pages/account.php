@@ -87,7 +87,7 @@ function hidden_button() {
                 <br>
                 <button type="submit" class="btn btn-primary btn-block" id="actionbtn"><?php subm_name() ?></button>
                 <button type="button" class="btn btn-danger btn-block" id="deletebtn" data-toggle="modal" data-target="#deleteModal" <?php hidden_button() ?>>Elimina</button>
-                <button type="button" class="btn btn-secondary btn-block">Indietro</button>
+                <a href="users" class="btn btn-secondary btn-block">Indietro</a>
             </div>
         </div>
     </form>
