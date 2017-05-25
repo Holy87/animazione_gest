@@ -134,6 +134,7 @@ class User
         $stmt = $link->prepare($query);
         $stmt->bindParam(':npass', $sha1_new_password);
         $stmt->bindParam(':id', $this->id);
+        $stmt->execute();
         return $stmt->rowCount() > 0;
     }
 
@@ -219,7 +220,7 @@ class User
         $stmt->bindParam(':user', $user);
         $stmt->bindParam(':mail', $mail);
         $stmt->bindParam(':pass', $pass);
-        $stmt->bindParam(':accl', $access_level);
+        $stmt->bindParam(':access', $access_level);
         $stmt->bindParam(':name', $name);
         if ($stmt->execute())
             return ['id' => $link->lastInsertId('user_id'), 'ok' => true];

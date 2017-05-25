@@ -56,7 +56,7 @@ switch($action) {
     case 'create_user':
         echo UserController::create_user();
         break;
-    case 'edit_user':
+    case 'edit_user_master':
         echo UserController::edit_user();
         break;
     case 'delete_user':

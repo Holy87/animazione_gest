@@ -106,17 +106,18 @@ class UserController
         {
             return json_encode(['ok' => false, 'reason' => 'Diritti insufficienti']);
         }
-        $nick = $_POST['username'];
+        if(isset($_POST['username']))
+            $nick = $_POST['username'];
         $mail = $_POST['mail'];
         $pass = $_POST['password'];
         $role = $_POST['role'];
         $name = $_POST['userfriendly'];
-        $user = User::get_user($_POST['user_id']);
-        $user->name = $nick;
+        $user = User::get_user($_POST['id']);
+        if(isset($_POST['username'])) $user->name = $nick;
         $user->mail = $mail;
         $user->access_level = $role;
         $user->friendly_name = $name;
-        $user->change_password_unsafe($pass);
+        if(strlen($pass) > 0) $user->change_password_unsafe($pass);
         return json_encode($user->save());
     }
 
@@ -127,7 +128,7 @@ class UserController
             return json_encode(['ok' => false, 'reason' => 'Diritti insufficienti']);
         }
         $query = "DELETE FROM users WHERE user_id = :id";
-        $user_id = $_GET['user_id'];
+        $user_id = $_POST['id'];// $_GET['user_id'];
         $link = Db::getInstance();
         $stmt = $link->prepare($query);
         $stmt->bindParam(':id', $user_id);

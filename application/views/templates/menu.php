@@ -36,8 +36,6 @@ function draw_logged_elements() {
     //<img class="rounded-circle img-fluid low-profile" src="'.$user->get_avatar_url().'">
     if($user->access_level > 0)
         $code .= logged_options();
-    else
-        $code .= login_button();
     echo $code;
 }
 
@@ -58,11 +56,12 @@ function logged_options() {
 }
 
 function login_button() {
-    return '<button class="btn btn-danger navbar-btn">Entra</button>';
+    /** @noinspection HtmlUnknownTarget */
+    return '<a class="btn btn-success my-2 my-sm-0" href="login">Entra</a>';
 }
 
 function draw_login_elements() {
-    
+    echo login_button();
 }
 ?> 
 
