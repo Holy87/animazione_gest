@@ -47,6 +47,17 @@ if(isset($_GET['theme_id']))
                 <p>Nella creazione del tema non puoi aggiungere oggetti.</p>
                 <p class="mb-0">Crea il tema, quindi riaprilo in modifica e potrai inserire gli oggetti del tema per la festa.</p>
             </div>
-        </div>
+            <div class="table-responsive">
+                <table class="table" id="items-table" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Oggetto</th>
+                            <th>Quantità</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
     </div>
 </div>

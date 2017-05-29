@@ -7,6 +7,7 @@
  * Time: 07:23
  */
 require_once ABS_PATH.'/application/models/Item.php';
+require_once ABS_PATH.'/application/models/User.php';
 
 class ItemController
 {
@@ -31,6 +32,8 @@ class ItemController
     }
 
     public static function save_item() {
+        if(!User::getCurrent()->can_edit_events())
+            return json_encode(['ok' => false, 'reason' => 'Permessi insufficienti']);
         if(isset($_POST['item-id'])) {
             if(isset($_POST['consumable']))
                 $consumable = 1;
@@ -43,27 +46,40 @@ class ItemController
                 $item->consumable = $consumable;
                 $item->ward = $_POST['ward'];
                 $item->save();
-                echo json_encode(['ok' => true, 'id' => $item->id, 'name' => $item->name, 'number' => $item->number, 'ward' => $item->ward, 'consumable' => $consumable]);
+                return json_encode(['ok' => true, 'id' => $item->id, 'name' => $item->name, 'number' => $item->number, 'ward' => $item->ward, 'consumable' => $consumable]);
             } else {
-                echo json_encode(['ok' => false]);
+                return json_encode(['ok' => false]);
             }
         } else {
-            echo json_encode(['ok' => false]);
+            return json_encode(['ok' => false]);
         }
-
     }
 
     public static function delete_item() {
+        if(!User::getCurrent()->can_edit_events())
+            return json_encode(['ok' => false, 'reason' => 'Permessi insufficienti']);
         $item_object = Item::get_item($_POST['item-id']);
         if ($item_object == null) {
-            echo json_encode(['ok' => false]);
+            return json_encode(['ok' => false, 'reason' => 'Oggetto non trovato', 'code' => -1]);
         } else {
-            $item_object->delete();
-            echo json_encode(['ok' => true, 'id' => $item_object->id]);
+            return json_encode($item_object->delete());
+        }
+    }
+
+    public static function force_delete_item() {
+        if(!User::getCurrent()->can_edit_events())
+            return json_encode(['ok' => false, 'reason' => 'Permessi insufficienti']);
+        $item_object = Item::get_item($_POST['item-id']);
+        if ($item_object == null) {
+            return json_encode(['ok' => false, 'reason' => 'Oggetto non trovato', 'code' => -1]);
+        } else {
+            return json_encode($item_object->force_delete());
         }
     }
 
     public static function create_item() {
+        if(!User::getCurrent()->can_edit_events())
+            return json_encode(['ok' => false, 'reason' => 'Permessi insufficienti']);
         if(isset($_POST['consumable']))
             $consumable = 1;
         else

@@ -24,10 +24,10 @@ switch($action) {
         ItemController::get_all_items();
         break;
     case 'update_item':
-        ItemController::save_item();
+        echo ItemController::save_item();
         break;
     case 'delete_item':
-        ItemController::delete_item();
+        echo ItemController::delete_item();
         break;
     case 'create_item':
         ItemController::create_item();

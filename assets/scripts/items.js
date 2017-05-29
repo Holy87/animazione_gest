@@ -116,7 +116,7 @@ function eliminaOggetto() {
                 //table.deleteRow(row);
                 $("#itemt").DataTable().ajax.reload();
             } else {
-                alert("Errore nella eliminazione: oggetto non trovato.");
+                alert("Errore nella eliminazione: " + response.reason);
             }
         }
     })
