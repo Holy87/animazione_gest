@@ -65,6 +65,12 @@ switch($action) {
     case 'get_themes':
         echo ThemeController::get_themes();
         break;
+    case 'save_theme':
+        echo ThemeController::edit_theme();
+        break;
+    case 'get_theme_items':
+        echo ThemeController::get_theme_items();
+        break;
     default:
         echo $action."   ".print_r($_GET);
         break;

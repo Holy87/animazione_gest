@@ -99,7 +99,7 @@ class PartyTheme
         $stmt->bindParam(':iid', $item_id);
         $stmt->bindParam(':tid', $this->id);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC)['item_number'];
+        return $stmt->fetch(PDO::FETCH_ASSOC)['item_number'];
     }
 
     /**
