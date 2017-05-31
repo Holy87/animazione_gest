@@ -106,7 +106,7 @@ function renderButtons(id) {
     return '<div class="btn-group" role="group">' + adderButton(id) + subberButton(id) + deleteButton(id) + '</div>';
 }
 
-$(document).ready(function(){
+function setTable() {
     var themeName = $("#theme-name");
     themeName.on("change", aggiornaNome);
     themeName.on("keyup", aggiornaNome);
@@ -121,6 +121,13 @@ $(document).ready(function(){
         ]
 
     });
+}
 
+$(document).ready(function(){
+    // Tabella oggetti tema
+    setTable();
+    // Impostazione submit della form di modifica dati
     $("#master-form").submit(function(e) {save(e)});
+    // Impostazione di configurazione del select
+    $(".selectpicker").selectpicker();
 });

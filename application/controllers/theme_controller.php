@@ -66,4 +66,68 @@ class ThemeController
         } else
             return json_encode(['ok' => false, 'reason' => 'Non hai permessi sufficienti.', 'code' => -1]);
     }
+
+    public static function increase_item_number() {
+        if(User::getCurrent()->access_level <= 0)
+            return json_encode(['ok' => false, 'reason' => 'Non hai permessi sufficienti.', 'code' => -1]);
+        if(isset($_POST['theme_id']) && isset($_POST['item_id'])) {
+            $link = Db::getInstance();
+            $query = "UPDATE oggetti_temi SET item_number = item_number + 1 WHERE item_id = :iid AND theme_id = :tid";
+            $stmt = $link->prepare($query);
+            $stmt->bindParam(':iid', $_POST['item_id']);
+            $stmt->bindParam(':tid', $_POST['theme_id']);
+            if($stmt->execute())
+                return json_encode(['ok' => true]);
+            else
+                return json_encode(['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()]);
+
+        } else
+            return json_encode(['ok' => false, 'reason' => 'Parametri errati', 'code' => -2]);
+    }
+
+    public static function decrease_item_number() {
+        if(User::getCurrent()->access_level <= 0)
+            return json_encode(['ok' => false, 'reason' => 'Non hai permessi sufficienti.', 'code' => -1]);
+        if(isset($_POST['theme_id']) && isset($_POST['item_id'])) {
+            $link = Db::getInstance();
+            $query = "UPDATE oggetti_temi SET item_number = item_number - 1 WHERE item_id = :iid AND theme_id = :tid AND item_number > 1";
+            $stmt = $link->prepare($query);
+            $stmt->bindParam(':iid', $_POST['item_id']);
+            $stmt->bindParam(':tid', $_POST['theme_id']);
+            if($stmt->execute())
+                return json_encode(['ok' => true]);
+            else
+                return json_encode(['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()]);
+
+        } else
+            return json_encode(['ok' => false, 'reason' => 'Parametri errati', 'code' => -2]);
+    }
+
+    public static function add_item() {
+        if(User::getCurrent()->access_level <= 0)
+            return json_encode(['ok' => false, 'reason' => 'Non hai permessi sufficienti.', 'code' => -1]);
+        if(isset($_POST['theme_id']) && isset($_POST['item_id'])) {
+            $theme = PartyTheme::getTheme($_POST['theme_id']);
+            if ($theme == null)
+                return json_encode(['ok' => false, 'reason' => 'Il tema cercato non esiste.', 'code' => 0]);
+            if($theme->get_item_number($_POST['theme_id']) > 0) {
+                $query = "INSERT INTO oggetti_temi (item_id, theme_id, item_number) VALUES (:iid, :tid, :num)";
+            } else {
+                $query = "UPDATE oggetti_temi SET item_number = item_number + :num WHERE item_id = :iid AND theme_id = :tid";
+            }
+            $link = Db::getInstance();
+            $stmt = $link->prepare($query);
+            $theme_id = $_POST['theme_id'];
+            $item_id = $_POST['item_id'];
+            $number = $_POST['item_number'];
+            $stmt->bindParam(':iid', $item_id);
+            $stmt->bindParam(':tid', $theme_id);
+            $stmt->bindParam(':num', $number);
+            if($stmt->execute())
+                return json_encode(['ok' => true]);
+            else
+                return json_encode(['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()]);
+        } else
+            return json_encode(['ok' => false, 'reason' => 'Parametri errati', 'code' => -2]);
+    }
 }

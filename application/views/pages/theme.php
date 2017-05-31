@@ -36,6 +36,19 @@ function mode() {
         echo 'create';
 }
 
+/**
+ * @param PartyTheme $theme
+ */
+function items_select($theme) {
+    $items = $theme->get_items();
+    $output = '';
+    /** @var Item $item */
+    foreach($items as $item) {
+        $output.= '<option value="'.$item->id.'">'.$item->name.'</option>';
+    }
+    echo $output;
+}
+
 ?>
 <br>
 <div class="container">
@@ -73,6 +86,18 @@ function mode() {
                 <p>Nella creazione del tema non puoi aggiungere oggetti.</p>
                 <p class="mb-0">Crea il tema, quindi riaprilo in modifica e potrai inserire gli oggetti del tema per la festa.</p>
             </div>
+            <form id="item-form">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="add-item">Aggiungi oggetto</label>
+                            <select id="add-item" class="selectpicker" name="item-id">
+                                <?php items_select($theme) ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
             <div class="table-responsive" <?php hide_table() ?>>
                 <table class="table" id="items-table" width="100%" cellspacing="0">
                     <thead>

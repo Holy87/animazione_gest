@@ -99,7 +99,14 @@ class PartyTheme
         $stmt->bindParam(':iid', $item_id);
         $stmt->bindParam(':tid', $this->id);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC)['item_number'];
+        if($stmt->rowCount() > 0)
+            return $stmt->fetch(PDO::FETCH_ASSOC)['item_number'];
+        else
+            return 0;
+    }
+
+    public function has_item($item_id) {
+        return $this->get_item_number($item_id) > 0;
     }
 
     /**

@@ -71,6 +71,12 @@ switch($action) {
     case 'get_theme_items':
         echo ThemeController::get_theme_items();
         break;
+    case 'incr_item':
+        echo ThemeController::increase_item_number();
+        break;
+    case 'decr_item':
+        echo ThemeController::decrease_item_number();
+        break;
     default:
         echo $action."   ".print_r($_GET);
         break;
