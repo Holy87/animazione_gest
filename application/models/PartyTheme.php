@@ -85,7 +85,22 @@ class PartyTheme
         $stmt = $link->prepare($query);
         $stmt->bindParam(':iid', $item->id);
         $stmt->bindParam(':tid', $this->id);
-        $stmt->execute();
+        if($stmt->execute())
+            return ['ok' => true];
+        else
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
+    }
+
+    public function delete_item_from_id($item_id) {
+        $link = Db::getInstance();
+        $query = 'DELETE FROM oggetti_temi WHERE item_id = :iid AND theme_id = :tid';
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':iid', $item_id);
+        $stmt->bindParam(':tid', $this->id);
+        if($stmt->execute())
+            return ['ok' => true];
+        else
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
     }
 
     /**

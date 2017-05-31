@@ -77,6 +77,9 @@ switch($action) {
     case 'decr_item':
         echo ThemeController::decrease_item_number();
         break;
+    case 'delete_theme_item':
+        echo ThemeController::remove_item();
+        break;
     default:
         echo $action."   ".print_r($_GET);
         break;

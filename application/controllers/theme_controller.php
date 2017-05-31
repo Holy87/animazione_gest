@@ -130,4 +130,18 @@ class ThemeController
         } else
             return json_encode(['ok' => false, 'reason' => 'Parametri errati', 'code' => -2]);
     }
+
+    public static function remove_item() {
+        if(User::getCurrent()->access_level > 1) {
+            if(isset($_POST['theme-id']) && isset($_POST['item-id']))
+            {
+                $theme = PartyTheme::getTheme($_POST['theme-id']);
+                if($theme == null)
+                    return json_encode(['ok' => false, 'reason' => 'Il tema cercato non esiste.', 'code' => 0]);
+                return $theme->delete_item_from_id($_POST['item-id']);
+            } else
+                return json_encode(['ok' => false, 'reason' => 'Parametri richiesta errati.', 'code' => -2]);
+        } else
+            return json_encode(['ok' => false, 'reason' => 'Non hai permessi sufficienti.', 'code' => -1]);
+    }
 }
