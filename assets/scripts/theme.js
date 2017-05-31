@@ -129,5 +129,5 @@ $(document).ready(function(){
     // Impostazione submit della form di modifica dati
     $("#master-form").submit(function(e) {save(e)});
     // Impostazione di configurazione del select
-    $(".selectpicker").selectpicker();
+    $("#add-item").selectpicker();
 });

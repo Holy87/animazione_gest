@@ -88,7 +88,7 @@ function items_select($theme) {
             </div>
             <form id="item-form">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" <?php hide_table() ?>>
                         <div class="form-group">
                             <label for="add-item">Aggiungi oggetto</label>
                             <select id="add-item" class="selectpicker" name="item-id">
