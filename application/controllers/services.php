@@ -10,6 +10,7 @@ require_once ABS_PATH.'/application/controllers/item_controller.php';
 require_once ABS_PATH.'/application/controllers/user_controller.php';
 require_once ABS_PATH.'/application/controllers/upload_controller.php';
 require_once ABS_PATH.'/application/controllers/theme_controller.php';
+require_once ABS_PATH.'/application/controllers/party_controller.php';
 
 if(!isset($action))
     $action = 'default';
