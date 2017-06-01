@@ -106,20 +106,20 @@ class ThemeController
     public static function add_item() {
         if(User::getCurrent()->access_level <= 0)
             return json_encode(['ok' => false, 'reason' => 'Non hai permessi sufficienti.', 'code' => -1]);
-        if(isset($_POST['theme_id']) && isset($_POST['item_id'])) {
-            $theme = PartyTheme::getTheme($_POST['theme_id']);
+        if(isset($_POST['theme-id']) && isset($_POST['item-id'])) {
+            $theme = PartyTheme::getTheme($_POST['theme-id']);
             if ($theme == null)
                 return json_encode(['ok' => false, 'reason' => 'Il tema cercato non esiste.', 'code' => 0]);
-            if($theme->get_item_number($_POST['theme_id']) > 0) {
+            if($theme->get_item_number($_POST['item-id']) <= 0) {
                 $query = "INSERT INTO oggetti_temi (item_id, theme_id, item_number) VALUES (:iid, :tid, :num)";
             } else {
                 $query = "UPDATE oggetti_temi SET item_number = item_number + :num WHERE item_id = :iid AND theme_id = :tid";
             }
             $link = Db::getInstance();
             $stmt = $link->prepare($query);
-            $theme_id = $_POST['theme_id'];
-            $item_id = $_POST['item_id'];
-            $number = $_POST['item_number'];
+            $theme_id = $_POST['theme-id'];
+            $item_id = $_POST['item-id'];
+            $number = $_POST['item-number'];
             $stmt->bindParam(':iid', $item_id);
             $stmt->bindParam(':tid', $theme_id);
             $stmt->bindParam(':num', $number);
@@ -127,8 +127,14 @@ class ThemeController
                 return json_encode(['ok' => true]);
             else
                 return json_encode(['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()]);
-        } else
-            return json_encode(['ok' => false, 'reason' => 'Parametri errati', 'code' => -2]);
+        } else {
+            $message = 'Parametri errati: ';
+            if(!isset($_POST['theme-id']))
+                $message.= 'theme-id ';
+            if(!isset($_POST['item-id']))
+                $message.= 'item-id';
+            return json_encode(['ok' => false, 'reason' => $message, 'code' => -2]);
+        }
     }
 
     public static function remove_item() {
@@ -138,7 +144,7 @@ class ThemeController
                 $theme = PartyTheme::getTheme($_POST['theme-id']);
                 if($theme == null)
                     return json_encode(['ok' => false, 'reason' => 'Il tema cercato non esiste.', 'code' => 0]);
-                return $theme->delete_item_from_id($_POST['item-id']);
+                return json_encode($theme->delete_item_from_id($_POST['item-id']));
             } else
                 return json_encode(['ok' => false, 'reason' => 'Parametri richiesta errati.', 'code' => -2]);
         } else

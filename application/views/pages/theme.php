@@ -40,7 +40,7 @@ function mode() {
  * @param PartyTheme $theme
  */
 function items_select($theme) {
-    $items = $theme->get_items();
+    $items = Item::get_all();
     $output = '';
     /** @var Item $item */
     foreach($items as $item) {
@@ -65,7 +65,7 @@ function items_select($theme) {
                 </div>
                 <div class="form-group">
                     <label for="theme-description">Descrizione</label>
-                    <textarea placeholder="Inserisci una descrizione che possa ricordare il testo" class="form-control" name="theme-description" id="theme-description"><?php echo $theme->description ?></textarea>
+                    <textarea placeholder="Inserisci una descrizione che possa ricordare il tema" class="form-control" name="theme-description" id="theme-description"><?php echo $theme->description ?></textarea>
                 </div>
                 <div class="form-group">
                     <label for="theme-price">Prezzo (Euro)</label>
@@ -76,36 +76,49 @@ function items_select($theme) {
                 </div>
                 <div class="form-group">
                     <button type="submit" id="save-btn" class="btn btn-primary btn-block">Salva</button>
+                    <button type="button" id="back-btn" class="btn btn-secondary btn-block">Indietro</button>
                 </div>
             </form>
         </div>
-        <div class="col-md-6">
-            <div class="alert alert-info" role="alert" <?php hide_banner() ?>>
+        <div class="col-md-6" <?php hide_banner() ?>>
+            <div class="alert alert-info" role="alert">
                 <h4 class="alert-heading"><i class="fa fa-info-circle" aria-hidden="true"></i> Informazioni</h4>
                 <hr>
                 <p>Nella creazione del tema non puoi aggiungere oggetti.</p>
                 <p class="mb-0">Crea il tema, quindi riaprilo in modifica e potrai inserire gli oggetti del tema per la festa.</p>
             </div>
+        </div>
+        <div class="col-md-6" <?php hide_table() ?>>
             <form id="item-form">
-                <div class="row">
-                    <div class="col-sm-6" <?php hide_table() ?>>
+                <div class="row" >
+                    <div class="col-sm-6">
+                        <input type="hidden" value="<?php echo $theme->id ?>" name="theme-id">
                         <div class="form-group">
                             <label for="add-item">Aggiungi oggetto</label>
-                            <select id="add-item" class="selectpicker" name="item-id">
+                            <select id="add-item" class="form-control" name="item-id" required>
                                 <?php items_select($theme) ?>
                             </select>
                         </div>
                     </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <input type="number" placeholder="N." min="1" class="form-control" id="item-number" value="1" name="item-number" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="submit" id="add-btn" class="btn btn-primary">Aggiungi</button>
+                    </div>
                 </div>
             </form>
-            <div class="table-responsive" <?php hide_table() ?>>
+            <hr>
+            <div class="table-responsive">
                 <table class="table" id="items-table" width="100%" cellspacing="0">
                     <thead>
-                        <tr>
-                            <th>Oggetto</th>
-                            <th>Quantità</th>
-                            <th>Azioni</th>
-                        </tr>
+                    <tr>
+                        <th>Oggetto</th>
+                        <th>Quantità</th>
+                        <th>Azioni</th>
+                    </tr>
                     </thead>
                     <tbody>
                     </tbody>

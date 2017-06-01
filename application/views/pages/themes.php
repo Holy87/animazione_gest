@@ -19,7 +19,7 @@ function buttonDisabled() {
 <br>
 <div class="container">
     <h1>Temi feste</h1>
-    <div class="container"><button type="button" class="btn btn-primary btn-sm"" data-toggle="modal" data-target="#editModal" data-item="0" <?php echo buttonDisabled(); ?>><i class="fa fa-plus" aria-hidden="true"></i> Nuovo tema</button></div>
+    <div class="container"><button type="button" onclick="window.location.href='theme'" class="btn btn-primary btn-sm"" <?php echo buttonDisabled(); ?>><i class="fa fa-plus" aria-hidden="true"></i> Nuovo tema</button></div>
     <br>
     <div class="table-responsive">
         <input type="hidden" onclick="createTheme()" value="<?php buttonDisabled() ?>" id="btn-disabled">

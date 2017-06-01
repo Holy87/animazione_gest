@@ -80,6 +80,9 @@ switch($action) {
     case 'delete_theme_item':
         echo ThemeController::remove_item();
         break;
+    case 'add_theme_item':
+        echo ThemeController::add_item();
+        break;
     default:
         echo $action."   ".print_r($_GET);
         break;

@@ -39,13 +39,15 @@ function subNum(id, button) {
     })
 }
 
+function back() {window.location.href ="themes"}
+
 function deleteItem(id, button) {
     button.disabled = true;
     var theme = $("#theme-id").val();
     $.ajax({
         type: "POST",
         url: "services?action=delete_theme_item",
-        data: 'item_id='+id+'&theme_id='+theme,
+        data: 'item-id='+id+'&theme-id='+theme,
         dataType: "json",
         success: function (response) {
             button.disabled = false;
@@ -85,6 +87,38 @@ function save(e) {
     e.preventDefault();
 }
 
+function addItem(e) {
+    var button = $("#add-btn");
+    var option = $("#add-item");
+    var number = $("#item-number");
+    var form = $("#item-form");
+    data = form.serialize();
+    button.prop("disabled", "disabled");
+    option.prop("disabled", "disabled");
+    number.prop("disabled", "disabled");
+    button.html('<i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Aggiungo...');
+    $.ajax({
+        type: "post",
+        url: 'services?action=add_theme_item',
+        data: data,
+        dataType: 'json',
+        success: function (response) {
+            button.removeAttr('disabled');
+            option.removeAttr('disabled');
+            number.removeAttr('disabled');
+            button.html("Aggiungi");
+            if(response.ok) {
+                $("#items-table").DataTable().ajax.reload();
+                number.val(1);
+                //option.val(null);
+            } else {
+                alert("Errore nell'aggiunta dell'oggetto: " + response.reason);
+            }
+        }
+    });
+    e.preventDefault();
+}
+
 
 function aggiornaNome() {
     $("#theme-title").html("Tema " + $("#theme-name").val());
@@ -95,11 +129,11 @@ function adderButton(id) {
 }
 
 function subberButton(id) {
-    return '<button class="btn btn-secondary btn-sm" data-toggle="tooltip" data-placement="top" title="Aggiungi 1 unità" onclick="subNum('+id+', this)"><i class="fa fa-minus" aria-hidden="true"></i></button>';
+    return '<button class="btn btn-secondary btn-sm" data-toggle="tooltip" data-placement="top" title="Rimuovi 1 unità" onclick="subNum('+id+', this)"><i class="fa fa-minus" aria-hidden="true"></i></button>';
 }
 
 function deleteButton(id) {
-    return '<button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Aggiungi 1 unità" onclick="deleteItem('+id+', this)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
+    return '<button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Rimuovi l\'oggetto" onclick="deleteItem('+id+', this)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
 }
 
 function renderButtons(id) {
@@ -128,6 +162,12 @@ $(document).ready(function(){
     setTable();
     // Impostazione submit della form di modifica dati
     $("#master-form").submit(function(e) {save(e)});
+    // Impostazione submit della form di aggiunta oggetti
+    $("#item-form").submit(function(e) {addItem(e)});
+
+    $("#back-btn").on("click", back);
     // Impostazione di configurazione del select
-    $("#add-item").selectpicker();
+    //$("#add-item").selectpicker();
+    //$('select').select2();
+
 });

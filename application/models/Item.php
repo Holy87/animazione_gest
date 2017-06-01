@@ -78,7 +78,7 @@ class Item
     public static function get_all() {
         $items = [];
         $link = Db::getInstance();
-        $query = 'SELECT item_id, item_name, item_number FROM inventario ORDER BY item_name';
+        $query = 'SELECT item_id, item_name, item_number, item_ward, item_consumable FROM inventario ORDER BY item_name';
         $stmt = $link->prepare($query);
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
