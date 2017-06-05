@@ -51,6 +51,20 @@ class ThemeController
         }
     }
 
+    public static function delete_theme() {
+        if(User::getCurrent()->access_level < 1)
+            return json_encode(['ok' => false, 'reason' => 'Non hai permessi sufficienti.', 'code' => -1]);
+        if(isset($_POST['theme-id'])) {
+            $theme = PartyTheme::getTheme($_POST['theme-id']);
+            if($theme == null) {
+                return json_encode(['ok' => false, 'reason' => 'Non esiste nessun tema per id '.$_POST['theme-id'], 'code' => 0]);
+            } else
+                return json_encode($theme->delete());//
+        } else {
+            return json_encode(['ok' => false, 'reason' => 'Parametri errati', 'code' => -2]);
+        }
+    }
+
     public static function get_theme_items() {
         if(User::getCurrent()->access_level > 0) {
             $theme = PartyTheme::getTheme($_GET['theme_id']);

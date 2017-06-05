@@ -26,6 +26,8 @@ function deleteButton(id, name) {
 }
 
 
+
+
 $(document).ready(function() {
    $("#themes").dataTable({
        "ajax": "services?action=get_themes",
@@ -37,5 +39,31 @@ $(document).ready(function() {
            {"data": "items", "orderable": false},
            {"data": "e_id", "searchable": false, "orderable": false, "type": "html", "render": function(data){return renderButtons(data)}}
        ]
+   });
+
+    $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);// Button that triggered the modal
+        var recipient = button.data('item');// Extract info from data-* attributes
+        var name = button.data("name");
+        var modal = $(this);
+        modal.find(".modmess").text("Sei sicuro di voler eliminare "+name+"? L\'operazione non può essere annullata.");
+        modal.find("#delete-id").val(recipient);
+    });
+
+   $("#delete_button").on("click", function() {
+       $("#deleteModal").modal("hide");
+       $.ajax({
+           type: "post",
+           url: 'services?action=delete_theme',
+           data: $("#form-delete").serialize(),
+           dataType: 'json',
+           success: function(response) {
+               console.log(response);
+               if(response.ok)
+                   $("#themes").DataTable().ajax.reload();
+               else
+                   alert("Errore nella eliminazione: " + response.reason);
+           }
+       })
    })
 });

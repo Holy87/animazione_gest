@@ -173,16 +173,10 @@ class PartyTheme
         $query = "DELETE from temi WHERE theme_id = :id";
         $stmt = $link->prepare($query);
         $stmt->bindParam(':id', $this->id);
-        try {
-            $link->beginTransaction();
-            $stmt->execute();
-            $link->commit();
-            return ['ok' => true];
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-            $link->rollBack();
+        if($stmt->execute())
+            return ['ok' => true, 'id' => $this->id];
+        else
             return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
-        }
     }
 
     /**
