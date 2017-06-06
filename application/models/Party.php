@@ -14,6 +14,7 @@ class Party
     public $theme_id;
     public $customer;
     public $address;
+    public $price;
 
     /**
      * Party constructor.
@@ -25,7 +26,7 @@ class Party
      * @param $address
      * @param $creator
      */
-    public function __construct($id, $theme, $date, $time, $customer, $address, $creator) {
+    public function __construct($id, $theme, $date, $time, $customer, $address, $creator, $price) {
         $this->party_id = $id;
         $this->theme_id = $theme;
         $this->date = strtotime($date);
@@ -33,6 +34,7 @@ class Party
         $this->customer = $customer;
         $this->address = $address;
         $this->creator = $creator;
+        $this->price = $price;
     }
 
     public function get_animators() {
@@ -55,21 +57,32 @@ class Party
      * @param User $user
      */
     public function add_animator($user) {
-       $link = Db::getInstance();
-       $query = 'INSERT INTO animatori_party (user_id, party_id) VALUES (:uid, :pid) ';
-       $stmt = $link->prepare($query);
-       $stmt->bindParam(':uid', $user->id);
-       $stmt->bindParam(':pid', $this->party_id);
-        try {
-            $link->beginTransaction();
-            $stmt->execute();
-            $link->commit();
-            return true;
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-            $link->rollBack();
-            return false;
+        if(!$this->animator_present($user)) {
+            $link = Db::getInstance();
+            $query = 'INSERT INTO animatori_party (user_id, party_id) VALUES (:uid, :pid) ';
+            $stmt = $link->prepare($query);
+            $stmt->bindParam(':uid', $user->id);
+            $stmt->bindParam(':pid', $this->party_id);
+            if($stmt->execute())
+                return ['ok' => true];
+            else
+                return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
         }
+        else
+            return ['ok' => false, 'reason' => 'Animatore già presente', 'code' => 1];
+    }
+
+    /**
+     * @param User $user
+     */
+    public function animator_present($user) {
+        $link = Db::getInstance();
+        $query = "SELECT * FROM animatori_party WHERE party_id = :pid AND user_id = :uid";
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':pid', $this->party_id);
+        $stmt->bindParam(':uid', $user->id);
+        $result = $stmt->execute();
+        return $result == true and $stmt->rowCount() > 0;
     }
 
     /**
@@ -81,16 +94,10 @@ class Party
         $stmt = $link->prepare($query);
         $stmt->bindParam(':uid', $user->id);
         $stmt->bindParam(':pid', $this->party_id);
-        try {
-            $link->beginTransaction();
-            $stmt->execute();
-            $link->commit();
-            return true;
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-            $link->rollBack();
-            return false;
-        }
+        if($stmt->execute())
+            return ['ok' => true];
+        else
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
     }
 
     public function get_animators_names() {
@@ -203,6 +210,23 @@ class Party
         return date_default_timezone_get() > $this->date;
     }
 
+    public function save() {
+        $query = "UPDATE feste SET cliente = :cust, indirizzo = :addr, data = :date, prezzo = :price, theme_id = :theme
+                  WHERE party_id = :id";
+        $link = Db::getInstance();
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':cust', $this->customer);
+        $stmt->bindParam(':addr', $this->address);
+        $stmt->bindParam(':date', $this->date);
+        $stmt->bindParam(':price', $this->price);
+        $stmt->bindParam(':theme', $this->theme_id);
+        $stmt->bindParam(':id', $this->party_id);
+        if($stmt->execute())
+            return ['ok' => true];
+        else
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
+    }
+
     /**
      * @return array
      */
@@ -220,7 +244,7 @@ class Party
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($rows as $row) {
-            $elem = new Party($row['party_id'], $row['tema'], $row['data'], $row['time'], $row['cliente'], $row['indirizzo'], $row['creatore']);
+            $elem = new Party($row['party_id'], $row['tema'], $row['data'], $row['time'], $row['cliente'], $row['indirizzo'], $row['creatore'], $row['prezzo']);
             array_push($list, $elem);
         }
         return $list;
@@ -239,7 +263,7 @@ class Party
         try {
             $stmt->execute();
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            return new Party($row['party_id'], $row['tema'], $row['data'], $row['time'], $row['cliente'], $row['indirizzo'], $row['creatore']);
+            return new Party($row['party_id'], $row['tema'], $row['data'], $row['time'], $row['cliente'], $row['indirizzo'], $row['creatore'], $row['prezzo']);
         } catch (PDOException $e) {
             echo $e->getMessage();
             return null;
@@ -261,7 +285,7 @@ class Party
 
         }
         $link = Db::getInstance();
-        $query = 'INSERT INTO feste (cliente, indirizzo, data, creatore, prezzo, tema, ora)
+        $query = 'INSERT INTO feste (cliente, indirizzo, data, creatore, prezzo, theme_id, ora)
                   VALUES (:customer, :address, :dat, :creator, :price, :theme, :hou)';
         $stmt = $link->prepare($query);
         $stmt->bindParam(':customer', $customer_id);
