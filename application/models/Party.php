@@ -137,7 +137,10 @@ class Party
         $stmt->bindParam(':iid', $item->id);
         $stmt->bindParam(':tid', $this->party_id);
         $stmt->bindParam(':num', $item_number);
-        $stmt->execute();
+        if($stmt->execute())
+            return ['ok' => true];
+        else
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
     }
 
     public function delete_item($item) {
@@ -146,7 +149,10 @@ class Party
         $stmt = $link->prepare($query);
         $stmt->bindParam(':iid', $item->id);
         $stmt->bindParam(':tid', $this->party_id);
-        $stmt->execute();
+        if($stmt->execute())
+            return ['ok' => true];
+        else
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
     }
 
     /**
@@ -175,7 +181,10 @@ class Party
         $stmt->bindParam(':iid', $item->id);
         $stmt->bindParam(':tid', $this->party_id);
         $stmt->bindParam(':num', $number);
-        $stmt->execute();
+        if($stmt->execute())
+            return ['ok' => true];
+        else
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
     }
 
     /**
@@ -220,6 +229,17 @@ class Party
         $stmt->bindParam(':date', $this->date);
         $stmt->bindParam(':price', $this->price);
         $stmt->bindParam(':theme', $this->theme_id);
+        $stmt->bindParam(':id', $this->party_id);
+        if($stmt->execute())
+            return ['ok' => true];
+        else
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
+    }
+
+    public function delete() {
+        $link = Db::getInstance();
+        $query = 'DELETE from feste WHERE party_id = :id';
+        $stmt = $link->prepare($query);
         $stmt->bindParam(':id', $this->party_id);
         if($stmt->execute())
             return ['ok' => true];
@@ -281,9 +301,6 @@ class Party
      */
     public static function create($customer_id, $address, $theme_id, $date, $time, $price) {
         $user = User::getCurrent();
-        if ($user->access_level < 2) {
-
-        }
         $link = Db::getInstance();
         $query = 'INSERT INTO feste (cliente, indirizzo, data, creatore, prezzo, theme_id, ora)
                   VALUES (:customer, :address, :dat, :creator, :price, :theme, :hou)';
@@ -294,17 +311,10 @@ class Party
         $stmt->bindParam(':dat', $date);
         $stmt->bindParam(':hou', $time);
         $stmt->bindParam(':price', $price);
-        $stmt->bindParam(':creator', User::getCurrent()->id);
-
-        try {
-            $link->beginTransaction();
-            $stmt->execute();
-            $link->commit();
-            return self::get_party($link->lastInsertId());
-        } catch (PDOException $e) {
-            $link->rollBack();
-            echo $e->getMessage();
-            return null;
-        }
+        $stmt->bindParam(':creator', $user->id);
+        if($stmt->execute())
+            return ['ok' => true];
+        else
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
     }
 }

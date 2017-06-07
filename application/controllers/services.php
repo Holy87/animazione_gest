@@ -89,6 +89,39 @@ function process_request() {
         case 'add_theme_item':
             echo ThemeController::add_item();
             break;
+        case 'get_active_parties':
+            echo PartyController::get_active_parties();
+            break;
+        case 'get_passed_parties':
+            echo PartyController::get_passed_parties();
+            break;
+        case 'create_party':
+            echo PartyController::create_party();
+            break;
+        case 'delete_party':
+            echo PartyController::delete_party();
+            break;
+        case 'save_party':
+            echo PartyController::save_party_informations();
+            break;
+        case 'add_party_animator':
+            echo PartyController::add_animator();
+            break;
+        case 'remove_party_animator':
+            echo PartyController::remove_animator();
+            break;
+        case 'add_party_item':
+            echo PartyController::add_item();
+            break;
+        case 'remove_party_item':
+            echo PartyController::remove_item();
+            break;
+        case 'incr_party_item_n':
+            echo PartyController::increase_item_number();
+            break;
+        case 'decr_party_item_n':
+            echo PartyController::decrease_item_number();
+            break;
         default:
             echo $action."   ".print_r($_GET);
             break;

@@ -28,6 +28,7 @@
                 <thead>
                 <tr>
                     <th>Data</th>
+                    <th>Indirizzo</th>
                     <th>Tema</th>
                     <th>Animatori</th>
                     <th>Azioni</th>
@@ -43,6 +44,7 @@
                 <thead>
                 <tr>
                     <th>Data</th>
+                    <th>Indirizzo</th>
                     <th>Tema</th>
                     <th>Animatori</th>
                     <th>Azioni</th>
