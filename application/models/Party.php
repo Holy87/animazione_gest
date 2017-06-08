@@ -29,8 +29,8 @@ class Party
     public function __construct($id, $theme, $date, $time, $customer, $address, $creator, $price) {
         $this->party_id = $id;
         $this->theme_id = $theme;
-        $this->date = strtotime($date);
-        $this->time = $time;
+        $this->date = DateTime::createFromFormat('Y-m-d', $date);
+        $this->time = DateTime::createFromFormat('H:i:s', $time);
         $this->customer = $customer;
         $this->address = $address;
         $this->creator = $creator;
@@ -200,7 +200,7 @@ class Party
      * @return false|string
      */
     public function get_printable_date() {
-        return date_format($this->date, "d/m/Y");
+        return date_format($this->date, "d-m-Y");
     }
 
     /**
@@ -208,7 +208,7 @@ class Party
      * @return false|string
      */
     public function get_printable_hour() {
-        return date_format($this->date, "H:i");
+        return date_format($this->time, "H:i");
     }
 
     public function set_date($date_string) {
@@ -264,7 +264,7 @@ class Party
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($rows as $row) {
-            $elem = new Party($row['party_id'], $row['tema'], $row['data'], $row['time'], $row['cliente'], $row['indirizzo'], $row['creatore'], $row['prezzo']);
+            $elem = new Party($row['party_id'], $row['theme_id'], $row['data'], $row['ora'], $row['cliente'], $row['indirizzo'], $row['creatore'], $row['prezzo']);
             array_push($list, $elem);
         }
         return $list;
