@@ -99,8 +99,8 @@ class User
         $stmt = $link->prepare($query);
         $stmt->bindParam(':name', $this->friendly_name);
         $stmt->bindParam(':id', $this->id);
-        $stmt->execute();
-        return $stmt->rowCount() > 0;
+        return $stmt->execute();
+        //return $stmt->rowCount() > 0;
     }
 
     /**

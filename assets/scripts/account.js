@@ -18,7 +18,7 @@ function createUser() {
                 window.location.href = "users";
             } else
             {
-                alert(response.reason);
+                showError(response.reason);
                 btn.html("Crea");
                 btn.removeAttr("disabled");
             }
@@ -46,7 +46,7 @@ function editUser() {
                 setTimeout(function() {$("#actionbtn").html("Modifica");}, 2000);
             } else
             {
-                alert(response.reason);
+                showError(response.reason);
                 btn.html("Aggiorna");
             }
 

@@ -47,7 +47,8 @@ function salvaOggetto() {
                // $("#itemt").ajax.reload();
                 $("#itemt").DataTable().ajax.reload();
             } else {
-                alert("Impossibile modificare: oggetto non trovato");
+                resp = {'reason': "Impossibile modificare: oggetto non trovato", 'code': 0};
+                showError(resp);
             }
         }
     })
@@ -96,7 +97,8 @@ function creaOggeto() {
                 //$("#itemt").ajax.reload();
                 $("#itemt").DataTable().ajax.reload();
             } else {
-                alert("Errore: Impossibile creare");
+                resp = {'reason': "Impossibile creare", 'code': 0};
+                showError(resp);
             }
         }
     })
@@ -116,7 +118,7 @@ function eliminaOggetto() {
                 //table.deleteRow(row);
                 $("#itemt").DataTable().ajax.reload();
             } else {
-                alert("Errore nella eliminazione: " + response.reason);
+                showError(response);
             }
         }
     })

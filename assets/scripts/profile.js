@@ -131,7 +131,7 @@ function changeName(e) {
                 $("#profile-name").html(response.name);
                 $("#dropdown02").html(response.name);
             } else {
-                showMessage("Errore: " + response.reason);
+                showError(response);
             }
         }
     });

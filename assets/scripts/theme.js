@@ -14,7 +14,7 @@ function addNum(id, button) {
             if(response.ok) {
                 $("#items-table").DataTable().ajax.reload();
             } else {
-                alert("Errore: " + response.reason);
+                showError(response);
             }
         }
     })
@@ -33,7 +33,7 @@ function subNum(id, button) {
             if(response.ok) {
                 $("#items-table").DataTable().ajax.reload();
             } else {
-                alert("Errore: " + response.reason);
+                showError(response);
             }
         }
     })
@@ -54,7 +54,7 @@ function deleteItem(id, button) {
             if(response.ok) {
                 $("#items-table").DataTable().ajax.reload();
             } else {
-                alert("Errore: " + response.reason);
+                showError(response);
             }
         }
     })
@@ -75,7 +75,7 @@ function save(e) {
                 if($("#mode").val() === 'create')
                     window.location.href = 'themes';
             } else {
-                alert("Errore: " + response.reason);
+                showError(response);
                 button.html("Errore!");
             }
             setTimeout(function() {
@@ -112,7 +112,7 @@ function addItem(e) {
                 number.val(1);
                 //option.val(null);
             } else {
-                alert("Errore nell'aggiunta dell'oggetto: " + response.reason);
+                showError(response);
             }
         }
     });

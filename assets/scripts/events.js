@@ -10,15 +10,13 @@ function editButton(id) {
 }
 
 function editParty(id) {
-    window.location.href = 'party?party_id='+id;
+    window.location.href = 'eventdetails?id='+id;
 }
 
 $(document).ready(function(){
     $(".nav-tabs a").click(function(){
         $(this).tab('show');
     });
-
-    $("#active").tab('show');
 
     $("#active-parties").dataTable({
         "ajax": "services?action=get_active_parties",
@@ -43,4 +41,6 @@ $(document).ready(function(){
             {"data": "id", "searchable": false, "orderable": false, "type": "html", "render": function(data){return renderButtons(data)}}
         ]
     });
+    $("#active").addClass('show');
+
 });

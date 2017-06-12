@@ -62,7 +62,7 @@ $(document).ready(function() {
                if(response.ok)
                    $("#themes").DataTable().ajax.reload();
                else
-                   alert("Errore nella eliminazione: " + response.reason);
+                   showError(response);
            }
        })
    })

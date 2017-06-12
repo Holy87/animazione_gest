@@ -8,11 +8,11 @@
         <input id="inputUser" name="user" class="form-control" placeholder="Nome utente" required="" autofocus="" type="text">
         <label for="inputPassword" class="sr-only">Password</label>
         <input id="inputPassword" name="password" class="form-control" placeholder="Password" required="" type="password">
-        <!--<div class="checkbox">
+        <div class="checkbox">
             <label>
                 <input value="remember-me" type="checkbox"> Ricordami
             </label>
-        </div>-->
+        </div>
         <div class="alert alert-danger fade show" role="alert" hidden>
             <!--<button id="sendb" type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
