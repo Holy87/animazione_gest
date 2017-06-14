@@ -10,7 +10,7 @@ $party = null;
 if(isset($_GET['id']))
     $party = Party::get_party($_POST['id']);
 else
-    $party = new Party(0, null, null, null, null, null, null, 0);
+    $party = Party::get_party(0);
 
 /**
  * @param Party $party
@@ -39,7 +39,14 @@ function hidden_otion($party) {
             </form>
         </div>
         <div class="col-md-6">
-            <div class="container">
+            <div class="alert alert-info" role="alert" <?php hidden_message($party) ?>>
+                <h4 class="alert-heading"><i class="fa fa-info-circle" aria-hidden="true"></i> Informazioni</h4>
+                <hr>
+                <p>Nella creazione della festa non puoi inserire oggetti e animatori.</p>
+                <p class="mb-0">Crea prima la festa, quindi inserisci gli oggetti.</p>
+            </div>
+            <div class="container" <?php hidden_otion($party) ?>>
+                <h5>Animatori</h5>
 
             </div>
         </div>

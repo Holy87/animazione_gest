@@ -276,6 +276,8 @@ class Party
      * @return Party
      */
     public static function get_party($party_id) {
+        if($party_id == 0)
+            return new Party(0, null, null, null, '', '', null, 0);
         $link = Db::getInstance();
         $query = 'SELECT * FROM feste where party_id = :id';
         $stmt = $link->prepare($query);
