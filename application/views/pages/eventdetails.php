@@ -28,6 +28,7 @@ function hidden_otion($party) {
         echo 'hidden';
 }
 
+
 ?>
 
 <div class="container">
@@ -47,7 +48,13 @@ function hidden_otion($party) {
             </div>
             <div class="container" <?php hidden_otion($party) ?>>
                 <h5>Animatori</h5>
-
+                <div class="form-group">
+                    <label for="add-user">Aggiungi oggetto</label>
+                    <select id="add-user" class="form-control" name="user-id" required>
+                        <!-- JSON users -->
+                    </select>
+                    <button type="submit" id="add-btn" class="btn btn-primary">Aggiungi</button>
+                </div>
             </div>
         </div>
     </div>
