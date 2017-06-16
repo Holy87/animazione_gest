@@ -285,7 +285,7 @@ class Party
         try {
             $stmt->execute();
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            return new Party($row['party_id'], $row['tema'], $row['data'], $row['time'], $row['cliente'], $row['indirizzo'], $row['creatore'], $row['prezzo']);
+            return new Party($row['party_id'], $row['theme_id'], $row['data'], $row['ora'], $row['cliente'], $row['indirizzo'], $row['creatore'], $row['prezzo']);
         } catch (PDOException $e) {
             echo $e->getMessage();
             return null;
