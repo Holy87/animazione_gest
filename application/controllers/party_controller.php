@@ -147,15 +147,12 @@ class PartyController
             return json_encode(['ok' => false, 'reason' => 'ID festa non impostato.', 'code' => -3]);
         if(!isset($_POST['item-id']))
             return json_encode(['ok' => false, 'reason' => 'ID oggetto non impostato.', 'code' => -3]);
-        $query = 'UPDATE oggetti_party SET item_number = item_number + 1 WHERE item_id = :id AND party_id = :pid';
-        $link = Db::getInstance();
-        $stmt = $link->prepare($query);
-        $stmt->bindParam(':id', $_POST['item-id']);
-        $stmt->bindParam(':pid', $_POST['party-id']);
-        if($stmt->execute())
-            return json_encode(['ok' => true]);
-        else
-            return json_encode(['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()]);
+        $party = Party::get_party($_POST['party-id']);
+        if($party) {
+            $item_n = $party->get_own_item_number($_POST['item-id']);
+            return $party->change_item_number_from_id($_POST['item-id'], $item_n + 1);
+        } else
+            return json_encode(['ok' => false, 'reason' => 'Festa non trovata', 'code' => 0]);
     }
 
     public static function decrease_item_number() {
@@ -166,15 +163,33 @@ class PartyController
             return json_encode(['ok' => false, 'reason' => 'ID festa non impostato.', 'code' => -3]);
         if(!isset($_POST['item-id']))
             return json_encode(['ok' => false, 'reason' => 'ID oggetto non impostato.', 'code' => -3]);
-        $query = 'UPDATE oggetti_party SET item_number = item_number - 1 WHERE item_id = :id AND party_id = :pid';
-        $link = Db::getInstance();
-        $stmt = $link->prepare($query);
-        $stmt->bindParam(':id', $_POST['item-id']);
-        $stmt->bindParam(':pid', $_POST['party-id']);
-        if($stmt->execute())
-            return json_encode(['ok' => true]);
-        else
-            return json_encode(['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()]);
+        $party = Party::get_party($_POST['party-id']);
+        if($party) {
+            $item_n = $party->get_own_item_number($_POST['item-id']);
+            return $party->change_item_number_from_id($_POST['item-id'], $item_n - 1);
+        } else
+            return json_encode(['ok' => false, 'reason' => 'Festa non trovata', 'code' => 0]);
+    }
+
+    public static function get_party_items() {
+        $outp = [];
+        if(User::getCurrent()->access_level > 0) {
+            $party = Party::get_party($_GET['party_id']);
+            if($party == null)
+                return json_encode(['ok' => false, 'reason' => 'Il tema cercato non esiste.', 'code' => 0]);
+            $items = $party->get_items();
+            /** @var Item $item */
+            foreach($items as $item) {
+                $outp[] = ['id' => $item->id, 'number' => $party->get_item_number($item->id), 'own' => $party->has_item($item), 'name' => $item->name];
+            }
+        }
+        return json_encode(['data' => $outp]);
+    }
+
+    public static function get_party_animators() {
+        if(User::getCurrent()->access_level > 0) {
+
+        }
     }
 
     public static function delete_party() {

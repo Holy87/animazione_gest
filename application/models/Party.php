@@ -110,25 +110,79 @@ class Party
     }
 
     /**
+     * Restituisce tutti gli oggetti della festa
      * @return array<Item>
      */
     public function get_items() {
-        $list = [];
+        $this->get_all_items();
+    }
+
+    /**
+     * Restituisce solo gli oggetti della festa
+     * @return array<Item>
+     */
+    public function get_own_items() {
+        $query = 'SELECT item_id
+                FROM oggetti_party
+                WHERE party_id = :pid';
         $link = Db::getInstance();
-        $query = 'SELECT inventario.item_id, oggetti_party.item_number FROM inventario INNER JOIN oggetti_party ON inventario.item_id = oggetti_party.item_id WHERE oggetti_party.party_id = :id';
         $stmt = $link->prepare($query);
-        $stmt->bindParam(':id', $this->party_id);
-        $stmt->execute();
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        foreach($rows as $row) {
-            array_push($list, Item::get_item($row['item_id']));
+        $stmt->bindParam(':pid', $this->party_id);
+        $stmt->bindParam(':tid', $this->theme_id);
+        $result = $stmt->execute();
+        if($result) {
+            return $this->get_items_array($stmt->fetchAll(PDO::FETCH_COLUMN, 0));
+        } else
+            return [];
+    }
+
+    /**
+     * Restituisce solo gli oggetti del tema
+     * @return array<Item>
+     */
+    public function get_theme_items() {
+        return $this->get_theme()->get_items();
+    }
+
+    /**
+     * Restituisce tutti gli oggetti della festa
+     * @return array<Item>
+     */
+    public function get_all_items() {
+        $query = 'SELECT item_id
+                FROM oggetti_party
+                WHERE party_id = :pid
+                UNION SELECT item_id
+                FROM oggetti_temi
+                WHERE theme_id = :tid';
+        $link = Db::getInstance();
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':pid', $this->party_id);
+        $stmt->bindParam(':tid', $this->theme_id);
+        $result = $stmt->execute();
+        if($result) {
+            return $this->get_items_array($stmt->fetchAll(PDO::FETCH_COLUMN, 0));
+        } else
+            return [];
+    }
+
+    /**
+     * Restituisce l'array degli oggetti da un array di ID
+     * @param array $items_id
+     * @return array
+     */
+    private function get_items_array($items_id) {
+        $items = [];
+        foreach($items_id as $id) {
+            $items[] = Item::get_item($id);
         }
-        return $list;
+        return $items;
     }
 
     /**
      * @param Item $item
      * @param int $item_number
+     * @return array
      */
     public function add_item($item, $item_number = 1) {
         $link = Db::getInstance();
@@ -143,11 +197,23 @@ class Party
             return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
     }
 
+    /**
+     * @param Item $item
+     * @return array
+     */
     public function delete_item($item) {
+        return $this->delete_item_from_id($item->id);
+    }
+
+    /**
+     * @param int $item_id
+     * @return array
+     */
+    public function delete_item_from_id($item_id) {
         $link = Db::getInstance();
         $query = 'DELETE FROM oggetti_party WHERE item_id = :iid AND party_id = :tid';
         $stmt = $link->prepare($query);
-        $stmt->bindParam(':iid', $item->id);
+        $stmt->bindParam(':iid', $item_id);
         $stmt->bindParam(':tid', $this->party_id);
         if($stmt->execute())
             return ['ok' => true];
@@ -156,29 +222,77 @@ class Party
     }
 
     /**
+     * @param Item $item
+     * @return bool
+     */
+    public function has_item($item) {
+        return $this->get_own_item_number($item->id) > 0;
+    }
+
+    /**
      * @param $item_id
      * @return int
      */
-    public function get_item_number($item_id) {
+    public function get_own_item_number($item_id) {
         $link = Db::getInstance();
-        $query = 'SELECT item_number from oggetti_party WHERE item_id = :iid AND party_id = :tid';
+        $query = 'SELECT item_number from oggetti_party WHERE item_id = :iid AND party_id = :pid';
         $stmt = $link->prepare($query);
         $stmt->bindParam(':iid', $item_id);
-        $stmt->bindParam(':tid', $this->party_id);
+        $stmt->bindParam(':pid', $this->party_id);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC)['item_number'];
+        if($stmt->rowCount() > 0)
+            return $stmt->fetch(PDO::FETCH_ASSOC)['item_number'];
+        else
+            return 0;
+    }
+
+    /**
+     * Ottiene il numero
+     * @param $item_id
+     * @return int
+     */
+    public function get_party_item_number($item_id) {
+        $theme = $this->get_theme();
+        if($theme != null)
+            return $theme->get_item_number($item_id);
+        else
+            return 0;
+    }
+
+    /**
+     * Ottiene il numero totale di un oggetto sommando quelli del tema e quelli aggiunti alla festa
+     * @param int $item_id
+     * @return int
+     */
+    public function get_item_number($item_id) {
+        return $this->get_own_item_number($item_id) + $this->get_party_item_number($item_id);
     }
 
     /**
      * Aggiorna il numero di oggetti
      * @param Item $item
      * @param int $number
+     * @return array
      */
     public function change_item_number($item, $number) {
+        return $this->change_item_number_from_id($item->id, $number);
+    }
+
+    /**
+     * Aggiorna il numero di oggetti
+     * @param int $item_id
+     * @param int $number
+     * @return array
+     */
+    public function change_item_number_from_id($item_id, $number) {
+        if ($number <= 0)
+            return $this->delete_item($item);
+        if (!$this->has_item($item))
+            return $this->add_item($item, $number);
         $link = Db::getInstance();
         $query = 'UPDATE oggetti_party SET item_number = :num WHERE party_id = :tid and item_id = :iid';
         $stmt = $link->prepare($query);
-        $stmt->bindParam(':iid', $item->id);
+        $stmt->bindParam(':iid', $item_id);
         $stmt->bindParam(':tid', $this->party_id);
         $stmt->bindParam(':num', $number);
         if($stmt->execute())
@@ -192,6 +306,8 @@ class Party
      * @return PartyTheme
      */
     public function get_theme() {
+        if($this->theme_id == null)
+            return null;
         return PartyTheme::getTheme($this->theme_id);
     }
 

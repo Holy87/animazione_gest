@@ -79,18 +79,18 @@ class PartyTheme
         return $stmt->execute();
     }
 
+    /**
+     * @param Item $item
+     * @return array
+     */
     public function delete_item($item) {
-        $link = Db::getInstance();
-        $query = 'DELETE FROM oggetti_temi WHERE item_id = :iid AND theme_id = :tid';
-        $stmt = $link->prepare($query);
-        $stmt->bindParam(':iid', $item->id);
-        $stmt->bindParam(':tid', $this->id);
-        if($stmt->execute())
-            return ['ok' => true];
-        else
-            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
+        return $this->delete_item_from_id($item->id);
     }
 
+    /**
+     * @param Item $item
+     * @return array
+     */
     public function delete_item_from_id($item_id) {
         $link = Db::getInstance();
         $query = 'DELETE FROM oggetti_temi WHERE item_id = :iid AND theme_id = :tid';
@@ -130,6 +130,10 @@ class PartyTheme
      * @param int $number
      */
     public function change_item_number($item, $number) {
+        if($number <= 0) {
+            $this->delete_item($item);
+            return;
+        }
         $link = Db::getInstance();
         $query = 'UPDATE oggetti_temi SET item_number = :num WHERE theme_id = :tid and item_id = :iid';
         $stmt = $link->prepare($query);
@@ -203,13 +207,18 @@ class PartyTheme
      * @return PartyTheme
      */
     public static function getTheme($id) {
+        if($id == null)
+            return null;
         $link = Db::getInstance();
         $query = 'SELECT * FROM temi WHERE theme_id = :id';
         $stmt = $link->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        $theme = $stmt->fetch(PDO::FETCH_ASSOC);
-        return new PartyTheme($theme['theme_id'], $theme['theme_name'], $theme['theme_price'], $theme['theme_description']);
+        if($stmt->rowCount() > 0) {
+            $theme = $stmt->fetch(PDO::FETCH_ASSOC);
+            return new PartyTheme($theme['theme_id'], $theme['theme_name'], $theme['theme_price'], $theme['theme_description']);
+        } else
+            return null;
     }
 
     public static function create($name, $description, $price) {
