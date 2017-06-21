@@ -176,7 +176,7 @@ class PartyController
         if(User::getCurrent()->access_level > 0) {
             $party = Party::get_party($_GET['party_id']);
             if($party == null)
-                return json_encode(['ok' => false, 'reason' => 'Il tema cercato non esiste.', 'code' => 0]);
+                return json_encode(['ok' => false, 'reason' => 'La festa cercata non esiste.', 'code' => 0]);
             $items = $party->get_items();
             /** @var Item $item */
             foreach($items as $item) {
@@ -187,9 +187,18 @@ class PartyController
     }
 
     public static function get_party_animators() {
+        $outp = [];
         if(User::getCurrent()->access_level > 0) {
-
+            $party = Party::get_party($_GET['party_id']);
+            if($party == null)
+                return json_encode(['ok' => false, 'reason' => 'La festa cercata non esiste.', 'code' => 0]);
+            $animators = $party->get_animators();
+            /** @var User $animator */
+            foreach($animators as $animator) {
+                $outp[] = ['id' => $animator->id, 'name' => $animator->friendly_name, 'picture' => $animator->get_avatar_url()];
+            }
         }
+        return json_encode(['data' => $outp]);
     }
 
     public static function delete_party() {

@@ -92,7 +92,7 @@ function addItem(e) {
     var option = $("#add-item");
     var number = $("#item-number");
     var form = $("#item-form");
-    data = form.serialize();
+    var data = form.serialize();
     button.prop("disabled", "disabled");
     option.prop("disabled", "disabled");
     number.prop("disabled", "disabled");

@@ -135,4 +135,28 @@ class UserController
         $result = $stmt->execute();
         return json_encode(['ok' => $result, 'code' => $stmt->errorCode(), 'reason' => $stmt->errorInfo()]);
     }
+
+    public static function get_avaiable_animators() {
+        $date = $_GET['date'];
+        $outp = [];
+        if(User::getCurrent()->access_level > 0) {
+            $query = "SELECT * FROM users
+                      WHERE users.user_id NOT IN(
+                        SELECT user_id FROM animatori_party INNER JOIN feste ON animatori_party.party_id = feste.party_id
+                        WHERE feste.data = :date)
+                       ORDER BY users.user_friendlyname";
+            $link = Db::getInstance();
+            $stmt = $link->prepare($query);
+            $stmt->bindParam(':date', $date);
+            if($stmt->execute()) {
+                $result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+                foreach($result as $user_id) {
+                    $user = User::get_user($user_id);
+                    $outp = ['id' => $user->id, 'name' => $user->friendly_name, 'user' => $user->name];
+                }
+            } else
+                return json_encode(['ok' => false, 'code' => $stmt->errorCode(), 'reason' => $stmt->errorInfo()]);
+        }
+        return json_encode(['data' => $outp]);
+    }
 }

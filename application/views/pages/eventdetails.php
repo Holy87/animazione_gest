@@ -69,8 +69,8 @@ function theme_select($party) {
     <div class="row">
         <div class="col-md-6">
             <form id="edit-form">
-                <input type="hidden" name="party-id" value="<?php $party->party_id ?>">
-                <input type="hidden" name="mode" value="<?php echo mode($party) ?>">
+                <input type="hidden" id="party-id" name="party-id" value="<?php $party->party_id ?>">
+                <input type="hidden" id="mode" name="mode" value="<?php echo mode($party) ?>">
                 <div class="form-group">
                     <label for="party-customer">Nome del cliente</label>
                     <input type="text" class="form-control" id="party-customer" name="party-customer" placeholder="Il nome del cliente per ricordare una festa" required>
@@ -84,6 +84,16 @@ function theme_select($party) {
                     <select id="theme-id" class="form-control">
                         <?php theme_select($party) ?>
                     </select>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="party-date">Data</label>
+                        <input id="party-date" type="date" name="party-date" placeholder="aaaa/mm/gg" value="<?php echo $party->date ?>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Ora</label>
+                        <input id="party-hour" type="time" name="party-hour" placeholder="HH:MM" value="<?php echo $party->time ?>" required>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="theme-price">Prezzo</label>
