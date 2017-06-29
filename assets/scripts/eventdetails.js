@@ -87,8 +87,27 @@ function renderPicture(data) {
 
 }
 
-function RenderUsButtons(data) {
+function RenderUsButton(id) {
+    //return '<button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Rimuovi l\'utente" onclick="deleteUser('+id+', this)"><i class="fa-minus-square-o" aria-hidden="true"></i> Rimuovi</button>'
+}
 
+function deleteUser(id, button) {
+    button.disabled = true;
+    var party = $("#party-id").val();
+    $.ajax({
+        type: "POST",
+        url: "services?action=remove_party_animator",
+        data: 'item-id='+id+'&party-id='+party,
+        dataType: "json",
+        success: function (response) {
+            button.disabled = false;
+            if(response.ok) {
+                $("#users-table").DataTable().ajax.reload();
+            } else {
+                showError(response);
+            }
+        }
+    })
 }
 
 function set_animatori() {
@@ -98,7 +117,7 @@ function set_animatori() {
         'columns' : [
             {'data' : 'picture', 'searchable': false, 'orderable': false, 'type': 'html', 'render': function(data){return renderPicture(data)}},
             {'data' : 'name'},
-            {'data' : 'id', 'searchable': false, 'orderable': false, 'type': 'html', 'render': function(data){return RenderUsButtons(data)}}
+            {'data' : 'id', 'searchable': false, 'orderable': false, 'type': 'html', 'render': function(data){return RenderUsButton(data)}}
         ]
     })
 }
