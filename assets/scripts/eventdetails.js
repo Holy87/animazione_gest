@@ -87,8 +87,11 @@ function renderPicture(data) {
 
 }
 
+/**
+ * @return {string}
+ */
 function RenderUsButton(id) {
-    //return '<button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Rimuovi l\'utente" onclick="deleteUser('+id+', this)"><i class="fa-minus-square-o" aria-hidden="true"></i> Rimuovi</button>'
+    return '<button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Rimuovi l\'utente" onclick="deleteUser('+id+', this)"><i class="fa-minus-square-o" aria-hidden="true"></i> Rimuovi</button>'
 }
 
 function deleteUser(id, button) {

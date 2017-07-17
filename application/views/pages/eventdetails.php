@@ -69,15 +69,15 @@ function theme_select($party) {
     <div class="row">
         <div class="col-md-6">
             <form id="edit-form">
-                <input type="hidden" id="party-id" name="party-id" value="<?php $party->party_id ?>">
+                <input type="hidden" id="party-id" name="party-id" value="<?php echo $party->party_id ?>">
                 <input type="hidden" id="mode" name="mode" value="<?php echo mode($party) ?>">
                 <div class="form-group">
                     <label for="party-customer">Nome del cliente</label>
-                    <input type="text" class="form-control" id="party-customer" name="party-customer" placeholder="Il nome del cliente per ricordare una festa" required>
+                    <input type="text" class="form-control" id="party-customer" name="party-customer" placeholder="Il nome del cliente per ricordare una festa" value="<?php echo $party->customer ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="party-address">Indirizzo</label>
-                    <textarea id="party-address" class="form-control" name="party-address"></textarea>
+                    <textarea id="party-address" class="form-control" name="party-address"><?php echo $party->address ?></textarea>
                 </div>
                 <div class="form-group">
                     <label for="theme-id">Tema</label>
@@ -86,22 +86,25 @@ function theme_select($party) {
                     </select>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="party-date">Data</label>
-                        <input id="party-date" type="date" name="party-date" placeholder="aaaa/mm/gg" value="<?php echo $party->date ?>" required>
+                        <input id="party-date" class="form-control" type="date" name="party-date" placeholder="aaaa/mm/gg" value="<?php echo date('Y-m-d', $party->date->getTimestamp()) ?>" required>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label>Ora</label>
-                        <input id="party-hour" type="time" name="party-hour" placeholder="HH:MM" value="<?php echo $party->time ?>" required>
+                        <input id="party-hour" class="form-control" type="time" name="party-hour" placeholder="HH:MM"  value="<?php echo date('H:i', $party->date->getTimestamp()) ?>" required>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="theme-price">Prezzo</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">€</span>
+                                <input type="number" min="0" step="any" class="form-control" id="party-price" name="party-price" placeholder="Prezzo totale" value="<?php echo $party->price ?>" required>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="theme-price">Prezzo</label>
-                    <div class="input-group col-sm-4">
-                        <span class="input-group-addon">€</span>
-                        <input type="number" min="0" step="any" class="form-control" id="party-price" name="party-price" placeholder="Prezzo totale" value="<?php echo $party->price ?>" required>
-                    </div>
-                </div>
+
                 <div class="form-group">
                     <button type="submit" id="save-btn" class="btn btn-primary btn-block">Salva</button>
                     <button type="button" id="back-btn" class="btn btn-secondary btn-block">Indietro</button>

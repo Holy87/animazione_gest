@@ -45,6 +45,7 @@ class ItemController
                 $item->name = $_POST['name'];
                 $item->consumable = $consumable;
                 $item->ward = $_POST['ward'];
+                $item->floor = $_POST['floor'];
                 $item->save();
                 return json_encode(['ok' => true, 'id' => $item->id, 'name' => $item->name, 'number' => $item->number, 'ward' => $item->ward, 'consumable' => $consumable]);
             } else {
@@ -84,16 +85,16 @@ class ItemController
             $consumable = 1;
         else
             $consumable = 0;
-        $item = Item::create($_POST['name'], $_POST['number'], $_POST['ward'], $consumable);
+        $item = Item::create($_POST['name'], $_POST['number'], $_POST['ward'], $consumable, $_POST['floor']);
         if ($item != null) {
-            echo json_encode(['ok' => true, 'id' => $item->id, 'name' => $item->name, 'number' => $item->number]);
+            return json_encode(['ok' => true, 'id' => $item->id, 'name' => $item->name, 'number' => $item->number]);
         } else {
-            echo json_encode(['ok' => false]);
+            return json_encode(['ok' => false]);
         }
     }
 
     public static function get_item() {
         $item = Item::get_item($_GET['id']);
-        echo json_encode(['id' => $item->id, 'name' => $item->name, 'number' => $item->number, 'consumable' => $item->consumable, 'ward' => $item->ward]);
+        echo json_encode(['id' => $item->id, 'name' => $item->name, 'number' => $item->number, 'consumable' => $item->consumable, 'ward' => $item->ward, 'floor' => $item->floor]);
     }
 }

@@ -176,6 +176,7 @@ $(document).ready(function() {
         document.getElementById("item-number").className = "form-control";
         document.getElementById("name-form").className = "form-group";
         document.getElementById("item-name").className = "form-control";
+        document.getElementById("item-floor").className = "form-control";
         var button = $(event.relatedTarget);// Button that triggered the modal
         var recipient = button.data('item');// Extract info from data-* attributes
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
@@ -193,6 +194,7 @@ $(document).ready(function() {
                     modal.find("#item-id").val(response.id);
                     modal.find("#item-name").val(response.name);
                     modal.find("#item-number").val(response.number);
+                    modal.find("#item-floor").val(response.floor);
                     $("div.optioner select").val(response.ward);
                     $("#consumable").prop('checked', parseInt(response.consumable) === 1);
                 }
@@ -202,6 +204,7 @@ $(document).ready(function() {
             modal.find("#item-id").val(0);
             modal.find("#item-name").val("");
             modal.find("#item-number").val(1);
+            modal.find("#item-floor").val(1);
             $("div.optioner select").val("1");
             $("#consumable").prop('checked', false);
         }

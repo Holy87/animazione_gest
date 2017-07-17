@@ -12,6 +12,7 @@ class Item
     public $name;
     public $number;
     public $ward;
+    public $floor;
     public $consumable;
 
     /**
@@ -21,14 +22,16 @@ class Item
      * @param int $number
      * @param int $ward
      * @param int $consumable
+     * @param int $floor
      */
-    public function __construct($id, $name, $number, $ward = 1, $consumable = 0)
+    public function __construct($id, $name, $number, $ward = 1, $floor = null, $consumable = 0)
     {
         $this->name = $name;
         $this->id = $id;
         $this->number = $number;
         $this->consumable = $consumable;
         $this->ward = $ward;
+        $this->floor = $floor;
     }
 
     /**
@@ -37,13 +40,14 @@ class Item
      */
     public function save() {
         $link = Db::getInstance();
-        $query = 'UPDATE inventario SET item_name = :name, item_number = :num, item_ward = :ward, item_consumable = :cons
+        $query = 'UPDATE inventario SET item_name = :name, item_number = :num, item_ward = :ward, item_floor = :floor, item_consumable = :cons
             WHERE item_id = :id';
         $stmt = $link->prepare($query);
         $stmt->bindParam(':id', $this->id);
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':num', $this->number);
         $stmt->bindParam(':ward', $this->ward);
+        $stmt->bindParam(':floor', $this->floor);
         $stmt->bindParam(':cons', $this->consumable);
         try {
             $link->beginTransaction();
@@ -69,7 +73,7 @@ class Item
         $stmt->bindParam(':id', $item_id);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return new Item($row['item_id'], $row['item_name'], $row['item_number'], $row['item_ward'], $row['item_consumable']);
+        return new Item($row['item_id'], $row['item_name'], $row['item_number'], $row['item_ward'], $row['item_floor'], $row['item_consumable']);
     }
 
     /**
@@ -78,13 +82,13 @@ class Item
     public static function get_all() {
         $items = [];
         $link = Db::getInstance();
-        $query = 'SELECT item_id, item_name, item_number, item_ward, item_consumable FROM inventario ORDER BY item_name';
+        $query = 'SELECT item_id, item_name, item_number, item_ward, item_floor, item_consumable FROM inventario ORDER BY item_name';
         $stmt = $link->prepare($query);
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($rows as $row)
         {
-            $items[] = new Item($row['item_id'], $row['item_name'], $row['item_number'], $row['item_ward'], $row['item_consumable']);
+            $items[] = new Item($row['item_id'], $row['item_name'], $row['item_number'], $row['item_ward'], $row['item_floor'], $row['item_consumable']);
         }
         return $items;
     }
@@ -153,16 +157,18 @@ class Item
      * @param int $number
      * @param int $ward
      * @param int $consumable
+     * @param int $floor
      * @return Item|null
      */
-    public static function create($name, $number = 1, $ward = 1, $consumable = 0) {
+    public static function create($name, $number = 1, $ward = 1, $consumable = 0, $floor = null) {
         $link = Db::getInstance();
-        $query = 'INSERT INTO inventario (item_name, item_number, item_ward, item_consumable) VALUES (:name, :number, :ward, :consumable)';
+        $query = 'INSERT INTO inventario (item_name, item_number, item_ward, item_floor, item_consumable) VALUES (:name, :number, :ward, :floor, :consumable)';
         $stmt = $link->prepare($query);
         $stmt->bindParam(':name', $name);
         $stmt->bindParam('number', $number);
         $stmt->bindParam(':ward', $ward);
         $stmt->bindParam(':consumable', $consumable);
+        $stmt->bindParam(':floor', $floor);
         try {
             //$link->beginTransaction();
             $stmt->execute();

@@ -76,15 +76,23 @@ function buttonDisabled() {
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 optioner">
-                        <div class="form-group">
-                            <label for="ward" class="form-control-label">Posizione:</label>
-                            <select class="custom-select" name="ward" id="ward" required>
-                                <option value="1">Reparto 1</option>
-                                <option value="2">Reparto 2</option>
-                                <option value="3">Reparto 3</option>
-                                <option value="4">Reparto 4</option>
-                            </select>
+                    <div class="row form-horizontal">
+                        <div class="col-6 optioner">
+                            <div class="form-group">
+                                <label for="ward" class="form-control-label">Posizione:</label>
+                                <select class="custom-select" name="ward" id="ward" required>
+                                    <option value="1">Reparto 1</option>
+                                    <option value="2">Reparto 2</option>
+                                    <option value="3">Reparto 3</option>
+                                    <option value="4">Reparto 4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group form-horizontal">
+                                <label for="item-floor" class="form-control-label">Piano:</label>
+                                <input type="number" name="floor" id="item-floor" class="form-control" required>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
