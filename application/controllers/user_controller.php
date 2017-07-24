@@ -152,7 +152,7 @@ class UserController
                 $result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
                 foreach($result as $user_id) {
                     $user = User::get_user($user_id);
-                    $outp = ['id' => $user->id, 'name' => $user->friendly_name, 'user' => $user->name];
+                    $outp = ['id' => $user->id, 'name' => $user->friendly_name, 'user' => $user->name, 'picture' => $user->get_avatar_url()];
                 }
             } else
                 return json_encode(['ok' => false, 'code' => $stmt->errorCode(), 'reason' => $stmt->errorInfo()]);

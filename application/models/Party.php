@@ -37,6 +37,9 @@ class Party
         $this->price = $price;
     }
 
+    /**
+     * @return array
+     */
     public function get_animators() {
         $list = [];
         $link = Db::getInstance();
@@ -55,6 +58,7 @@ class Party
 
     /**
      * @param User $user
+     * @return array
      */
     public function add_animator($user) {
         if(!$this->animator_present($user)) {
@@ -74,6 +78,7 @@ class Party
 
     /**
      * @param User $user
+     * @return bool
      */
     public function animator_present($user) {
         $link = Db::getInstance();
@@ -87,6 +92,7 @@ class Party
 
     /**
      * @param User $user
+     * @return array
      */
     public function remove_animator($user) {
         $link = Db::getInstance();
@@ -100,6 +106,9 @@ class Party
             return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
     }
 
+    /**
+     * @return string
+     */
     public function get_animators_names() {
         $names = [];
         /** @var User $animator */
@@ -114,7 +123,7 @@ class Party
      * @return array<Item>
      */
     public function get_items() {
-        $this->get_all_items();
+        return $this->get_all_items();
     }
 
     /**

@@ -106,7 +106,7 @@ function theme_select($party) {
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" id="save-btn" class="btn btn-primary btn-block">Salva</button>
+                    <button id="save-btn" class="btn btn-primary btn-block">Salva</button>
                     <button type="button" id="back-btn" class="btn btn-secondary btn-block">Indietro</button>
                 </div>
             </form>

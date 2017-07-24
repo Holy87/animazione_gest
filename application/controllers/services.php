@@ -104,6 +104,9 @@ function process_request() {
         case 'save_party':
             echo PartyController::save_party_informations();
             break;
+        case 'get_party_animators':
+            echo PartyController::get_party_animators();
+            break;
         case 'add_party_animator':
             echo PartyController::add_animator();
             break;

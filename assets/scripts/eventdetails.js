@@ -11,6 +11,7 @@ function aggiorna_selettore() {
         url: 'services.php?action=get_active_users&date='+$("#party-date").val(),
         dataType: 'json',
         success: function (response) {
+            Console.writeln(response);
             $.each(response, function (i, item) {
                 $('#add-user').append($('<option>', {
                     value: item.id,
@@ -20,6 +21,8 @@ function aggiorna_selettore() {
         }
     })
 }
+
+function back() {window.location.href ="events"}
 
 function aggiorna_animatori() {
     aggiorna_selettore();
@@ -84,7 +87,7 @@ function crea_festa(e) {
 }
 
 function renderPicture(data) {
-
+    return '<div class="avatar-little"> <div class="circle-avatar" style="background-image:url('+data+')"></div></div>';
 }
 
 /**
@@ -116,7 +119,7 @@ function deleteUser(id, button) {
 function set_animatori() {
     var partyId = $("#party-id").val();
     $("#users-table").DataTable({
-        'ajax' : 'services?action=get_party_animators&theme_id='+partyId,
+        'ajax' : 'services?action=get_party_animators&party_id='+partyId,
         'columns' : [
             {'data' : 'picture', 'searchable': false, 'orderable': false, 'type': 'html', 'render': function(data){return renderPicture(data)}},
             {'data' : 'name'},
