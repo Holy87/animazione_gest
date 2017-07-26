@@ -31,10 +31,20 @@ class Db {
         self::$instance->query("CREATE DATABASE `".DB_NAME."`");
         self::$instance->query("use `".DB_NAME."`");
         self::$instance->query(self::creation_string());
+        self::$instance->query(self::data_fill_string());
     }
 
+
     public static function creation_string() {
-        $filename = ABS_PATH."application/db_init.sql";
+        $filename = ABS_PATH."application/sql/db_init.sql";
+        $myfile = fopen($filename, "r") or die("Impossibile aprire il file $filename");
+        $query = fread($myfile,filesize($filename));
+        fclose($myfile);
+        return $query;
+    }
+
+    public static function data_fill_string() {
+        $filename = ABS_PATH."application/sql/dummy_data.sql";
         $myfile = fopen($filename, "r") or die("Impossibile aprire il file $filename");
         $query = fread($myfile,filesize($filename));
         fclose($myfile);
