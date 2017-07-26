@@ -4,13 +4,14 @@
 
 function aggiorna_selettore() {
     var selector = $("#add-user");
-    var date = $("#");
+    var date = $("#party-date").val();
     selector.find('option').remove().end();
     $.ajax({
         type: 'post',
-        url: 'services.php?action=get_active_users&date='+$("#party-date").val(),
+        url: 'services.php?action=get_active_users&date='+date,
         dataType: 'json',
-        success: function (response) {
+        success: function(response) {
+            console.log(response);
             Console.writeln(response);
             $.each(response, function (i, item) {
                 $('#add-user').append($('<option>', {
@@ -94,7 +95,7 @@ function renderPicture(data) {
  * @return {string}
  */
 function RenderUsButton(id) {
-    return '<button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Rimuovi l\'utente" onclick="deleteUser('+id+', this)"><i class="fa-minus-square-o" aria-hidden="true"></i> Rimuovi</button>'
+    return '<button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Rimuovi l\'utente" onclick="deleteUser('+id+', this)"><i class="fa fa-minus-square-o" aria-hidden="true"></i> Rimuovi</button>'
 }
 
 function deleteUser(id, button) {
@@ -103,12 +104,12 @@ function deleteUser(id, button) {
     $.ajax({
         type: "POST",
         url: "services?action=remove_party_animator",
-        data: 'item-id='+id+'&party-id='+party,
+        data: 'animator-id='+id+'&party-id='+party,
         dataType: "json",
         success: function (response) {
             button.disabled = false;
             if(response.ok) {
-                $("#users-table").DataTable().ajax.reload();
+                aggiorna_animatori();
             } else {
                 showError(response);
             }
@@ -119,6 +120,9 @@ function deleteUser(id, button) {
 function set_animatori() {
     var partyId = $("#party-id").val();
     $("#users-table").DataTable({
+        paging: false,
+        info: false,
+        searching: false,
         'ajax' : 'services?action=get_party_animators&party_id='+partyId,
         'columns' : [
             {'data' : 'picture', 'searchable': false, 'orderable': false, 'type': 'html', 'render': function(data){return renderPicture(data)}},
@@ -145,8 +149,8 @@ $(document).ready(function() {
     set_animatori();
     set_oggetti();
 
-    if($("#mode").val() === 'edit') {
+    if($("#mode").val() === 'update') {
         aggiorna_animatori();
-        aggiorna_oggetti();
+        //aggiorna_oggetti();
     }
 });
