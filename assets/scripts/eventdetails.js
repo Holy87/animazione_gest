@@ -8,19 +8,24 @@ function aggiorna_selettore() {
     selector.find('option').remove().end();
     $.ajax({
         type: 'post',
-        url: 'services.php?action=get_active_users&date='+date,
+        url: 'services?action=get_active_users&date='+date,
         dataType: 'json',
         success: function(response) {
-            console.log(response);
-            Console.writeln(response);
-            $.each(response, function (i, item) {
-                $('#add-user').append($('<option>', {
-                    value: item.id,
-                    text : item.name
-                }));
-            });
+            if(response.ok) {
+                var data = response.data;
+                data.forEach(addUserList);
+            } else {
+                showError(response);
+            }
         }
     })
+}
+
+function addUserList(item) {
+    $('#add-user').append($('<option>', {
+        value: item.id,
+        text : item.name
+    }));
 }
 
 function back() {window.location.href ="events"}
@@ -45,7 +50,7 @@ function salva_festa(e) {
         dataType: 'json',
         success: function (response) {
             if(response.ok) {
-                button.html('<i class="fa fa-check" aria-hidden="true"></i> Salvato');
+                button.html('<i class="fa fa-check"></i> Salvato');
                 aggiorna_oggetti();
                 aggiorna_animatori();
             } else {
@@ -72,7 +77,7 @@ function crea_festa(e) {
         dataType: 'json',
         success: function (response) {
             if(response.ok) {
-                button.html('<i class="fa fa-check" aria-hidden="true"></i> Salvato');
+                button.html('<i class="fa fa-check"></i> Salvato');
                 location.reload();
             } else {
                 showError(response);
@@ -95,7 +100,7 @@ function renderPicture(data) {
  * @return {string}
  */
 function RenderUsButton(id) {
-    return '<button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Rimuovi l\'utente" onclick="deleteUser('+id+', this)"><i class="fa fa-minus-square-o" aria-hidden="true"></i> Rimuovi</button>'
+    return '<button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Rimuovi l\'utente" onclick="deleteUser('+id+', this)"><i class="fa fa-minus-square-o"></i> Rimuovi</button>'
 }
 
 function deleteUser(id, button) {
@@ -115,6 +120,26 @@ function deleteUser(id, button) {
             }
         }
     })
+}
+
+function addUser(e) {
+    var btn = $("#add-btn");
+    btn.prop("disabled", "disabled");
+    $.ajax({
+        type: "post",
+        url: "services?action=add_party_animator",
+        data: $("#users-form").serialize(),
+        dataType: 'json',
+        success: function (response) {
+            btn.removeAttr('disabled');
+            if(response.ok) {
+                aggiorna_animatori();
+            } else {
+                showError(response);
+            }
+        }
+    });
+    e.preventDefault();
 }
 
 function set_animatori() {
@@ -142,6 +167,10 @@ $(document).ready(function() {
             crea_festa(e);
         else
             salva_festa(e);
+    });
+
+    $("#users-form").submit(function (e) {
+        addUser(e);
     });
 
     $("#back-btn").on("click", back);

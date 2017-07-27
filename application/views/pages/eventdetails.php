@@ -122,6 +122,7 @@ function theme_select($party) {
                 <h5>Animatori</h5>
                 <div class="form-group" <?php hidden_users() ?>>
                     <form id="users-form">
+                        <input type="hidden" id="party-id2" name="party-id" value="<?php echo $party->party_id ?>">
                         <div class="row">
                             <div class="col-lg-8">
                                 <select title="Seleziona un animatore" id="add-user" class="form-control" name="user-id" required>

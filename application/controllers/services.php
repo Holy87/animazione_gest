@@ -65,6 +65,9 @@ function process_request() {
         case 'delete_user':
             echo UserController::delete_user();
             break;
+        case 'get_active_users':
+            echo UserController::get_avaiable_animators();
+            break;
         case 'get_themes':
             echo ThemeController::get_themes();
             break;

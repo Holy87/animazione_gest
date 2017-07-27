@@ -75,12 +75,12 @@ class PartyController
             return json_encode(['ok' => false, 'reason' => 'Non hai i permessi per eseguire questa azione.', 'code' => -2]);
         if(!isset($_POST['party-id']))
             return json_encode(['ok' => false, 'reason' => 'ID festa non impostato.', 'code' => -3]);
-        if(!isset($_POST['animator-id']))
+        if(!isset($_POST['user-id']))
             return json_encode(['ok' => false, 'reason' => 'ID animatore non impostato.', 'code' => -3]);
-        $party = Party::get_party($_POST['animator-id']);
+        $party = Party::get_party($_POST['party-id']);
         if($party == null)
             return json_encode(['ok' => false, 'reason' => 'Festa non trovata.', 'code' => 0]);
-        $animator = User::get_user($_POST['animator-id']);
+        $animator = User::get_user($_POST['user-id']);
         if($animator == null)
             return json_encode(['ok' => false, 'reason' => 'Animatore non trovato.', 'code' => 0]);
         return json_encode($party->add_animator($animator));
