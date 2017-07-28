@@ -402,7 +402,7 @@ class Party
      */
     public static function get_party($party_id) {
         if($party_id == 0)
-            return new Party(0, null, null, null, '', '', null, 0);
+            return new Party(0, null, date("Y-m-d", time()), null, '', '', null, 0);
         $link = Db::getInstance();
         $query = 'SELECT * FROM feste where party_id = :id';
         $stmt = $link->prepare($query);
@@ -417,6 +417,11 @@ class Party
         }
     }
 
+    public static function dummy_date() {
+
+
+    }
+
     /**
      * Crea nel DB una festa
      * @param integer $customer_id
@@ -425,6 +430,7 @@ class Party
      * @param DateTime $date
      * @param DateTime $time
      * @param float $price
+     * @return array
      */
     public static function create($customer_id, $address, $theme_id, $date, $time, $price) {
         $user = User::getCurrent();
