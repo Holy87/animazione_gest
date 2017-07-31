@@ -13,6 +13,7 @@ class User
     public $friendly_name;
     public $mail;
     public $access_level;   //0: non loggato
+    public $phone;
     
     
     /**
@@ -20,14 +21,18 @@ class User
      * @param int $id
      * @param string $name
      * @param string $mail
+     * @param string $friendly_name
+     * @param int $access
+     * @param string $phone
      **/
-    public function __construct($id, $name, $friendly_name, $mail, $access)
+    public function __construct($id, $name, $friendly_name, $mail, $access, $phone = null)
     {
         $this->id = $id;
         $this->name = $name;
         $this->friendly_name = $friendly_name;
         $this->mail = $mail;
         $this->access_level = $access;
+        $this->phone = $phone;
     }
 
     /**
@@ -75,7 +80,8 @@ class User
         user_mail = :mail,
         user_access = :access,
         user_friendlyname = :name,
-        user_name = :nick
+        user_name = :nick,
+        user_phone = :phone
         WHERE user_id = :id";
         $stmt = $link->prepare($query);
         $stmt->bindParam(':mail', $this->mail);
@@ -83,6 +89,7 @@ class User
         $stmt->bindParam(':name', $this->friendly_name);
         $stmt->bindParam(':nick', $this->name);
         $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':phone', $this->phone);
         if($stmt->execute())
         {
             return ['ok' => true];
@@ -140,6 +147,7 @@ class User
 
     /**
      * Ottiene l'oggetto utente
+     * @param int $id
      * @return User
      */
     public static function get_user($id) {
@@ -176,7 +184,7 @@ class User
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($rows as $row)
         {
-            $items[] = new User($row['user_id'], $row['user_name'], $row['user_friendlyname'], $row['user_mail'], $row['user_access']);
+            $items[] = new User($row['user_id'], $row['user_name'], $row['user_friendlyname'], $row['user_mail'], $row['user_access'], $row['user_phone']);
         }
         return $items;
     }
@@ -205,16 +213,17 @@ class User
     }
 
     /**
-     * @param $user
-     * @param $name
-     * @param $mail
-     * @param $password
-     * @param $access_level
+     * @param string $user
+     * @param string $name
+     * @param string $mail
+     * @param string $password
+     * @param int $access_level
+     * @param string $phone
      * @return array
      */
-    public static function create($user, $name, $mail, $password, $access_level) {
+    public static function create($user, $name, $mail, $password, $access_level, $phone = null) {
         $pass = sha1($password);
-        $query = "INSERT INTO users (user_name, user_mail, user_access, user_password, user_friendlyname) VALUES (:user, :mail, :access, :pass, :name)";
+        $query = "INSERT INTO users (user_name, user_mail, user_access, user_password, user_friendlyname, user_phone) VALUES (:user, :mail, :access, :pass, :name, :phone)";
         $link = Db::getInstance();
         $stmt = $link->prepare($query);
         $stmt->bindParam(':user', $user);
@@ -222,6 +231,7 @@ class User
         $stmt->bindParam(':pass', $pass);
         $stmt->bindParam(':access', $access_level);
         $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':phone', $phone);
         if ($stmt->execute())
             return ['id' => $link->lastInsertId('user_id'), 'ok' => true];
         else

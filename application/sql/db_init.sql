@@ -126,6 +126,7 @@ CREATE TABLE `users` (
   `user_name` varchar(50) NOT NULL,
   `user_friendlyname` varchar(100) NOT NULL,
   `user_mail` varchar(100) NOT NULL,
+  `user_phone` VARCHAR(20) DEFAULT NULL,
   `user_access` int(11) NOT NULL DEFAULT '1',
   `user_password` char(40) NOT NULL,
   `pw_recovery_token` char(40) DEFAULT NULL

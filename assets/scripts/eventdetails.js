@@ -36,7 +36,7 @@ function aggiorna_animatori() {
 }
 
 function aggiorna_oggetti() {
-    $("#items-table").DataTable().ajax.reload();
+    //$("#items-table").DataTable().ajax.reload();
 }
 
 function salva_festa(e) {
@@ -60,7 +60,7 @@ function salva_festa(e) {
             setTimeout(function() {
                 button.html('Salva');
                 button.removeAttr('disabled');
-            }, 2000);
+            }, 1000);
         }
     });
     e.preventDefault();
@@ -89,6 +89,12 @@ function crea_festa(e) {
             }, 2000);
         }
     });
+    e.preventDefault();
+}
+
+function elimina_festa(e) {
+    var button = $("#delete-btn");
+    button.prop('disabled', 'disabled');
     e.preventDefault();
 }
 
@@ -174,12 +180,13 @@ $(document).ready(function() {
     });
 
     $("#back-btn").on("click", back);
+    $("#delete-btn").on("click", function (e) {elimina_festa(e)});
 
     set_animatori();
     set_oggetti();
 
     if($("#mode").val() === 'update') {
         aggiorna_animatori();
-        //aggiorna_oggetti();
+        aggiorna_oggetti();
     }
 });

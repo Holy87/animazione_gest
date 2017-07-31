@@ -104,10 +104,20 @@ function theme_select($party) {
                         </div>
                     </div>
                 </div>
-
+                <hr>
                 <div class="form-group">
-                    <button id="save-btn" class="btn btn-primary btn-block">Salva</button>
-                    <button type="button" id="back-btn" class="btn btn-secondary btn-block">Indietro</button>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button id="save-btn" class="btn btn-primary btn-block">Salva</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" id="back-btn" class="btn btn-secondary btn-block">Indietro</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button id="delete-btn" class="btn btn-danger btn-block">Elimina</button>
+                        </div>
+                    </div>
+
                 </div>
             </form>
         </div>

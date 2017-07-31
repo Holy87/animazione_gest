@@ -22,7 +22,9 @@ class PartyController
         foreach ($parties as $party) {
             if(!$party->is_done()) {
                 $id = $party->party_id;
-                $theme = $party->get_theme()->name;
+                $theme = '';
+                if($party->theme_id != null)
+                    $theme = $party->get_theme()->name;
                 $animators = $party->get_animators_names();
                 $address = $party->address;
                 $date = $party->get_printable_date();
@@ -64,7 +66,7 @@ class PartyController
         $party->time = $_POST['party-hour'];
         $party->address = $_POST['party-address'];
         $party->customer = $_POST['party-customer'];
-        $party->theme_id = $_POST['party-theme'];
+        $party->theme_id = $_POST['theme-id'];
         $party->price = $_POST['party-price'];
         return json_encode($party->save());
     }
