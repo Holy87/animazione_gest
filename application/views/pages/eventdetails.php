@@ -51,7 +51,7 @@ function mode($party) {
 function theme_select($party) {
     $themes = PartyTheme::getAllThemes();
     /** @var PartyTheme $theme */
-    $outp = '';
+    $outp = '<option value="">Scegli un tema</option>';
     foreach($themes as $theme) {
         $sel = '';
         if ($theme->id == $party->theme_id)
@@ -81,7 +81,7 @@ function theme_select($party) {
                 </div>
                 <div class="form-group">
                     <label for="theme-id">Tema</label>
-                    <select id="theme-id" class="form-control">
+                    <select id="theme-id" name="theme-id" class="form-control">
                         <?php theme_select($party) ?>
                     </select>
                 </div>

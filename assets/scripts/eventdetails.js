@@ -45,7 +45,7 @@ function salva_festa(e) {
     button.html('<i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Salvataggio...');
     $.ajax({
         type: "post",
-        url: 'services.php?action=save_party',
+        url: 'services?action=save_party',
         data: $("#edit-form").serialize(),
         dataType: 'json',
         success: function (response) {
@@ -72,7 +72,7 @@ function crea_festa(e) {
     button.html('<i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Creazione...');
     $.ajax({
         type: "post",
-        url: 'services.php?action=create_party',
+        url: 'services?action=create_party',
         data: $("#edit-form").serialize(),
         dataType: 'json',
         success: function (response) {

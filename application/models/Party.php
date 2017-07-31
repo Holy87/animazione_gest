@@ -423,7 +423,7 @@ class Party
     }
 
     /**
-     * Crea nel DB una festa
+     * Crea nel DB una festa. Restituisce array con errore o ID di inserimento
      * @param integer $customer_id
      * @param string $address
      * @param integer $theme_id
@@ -446,7 +446,7 @@ class Party
         $stmt->bindParam(':price', $price);
         $stmt->bindParam(':creator', $user->id);
         if($stmt->execute())
-            return ['ok' => true];
+            return ['ok' => true, 'id' => $link->lastInsertId()];
         else
             return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
     }

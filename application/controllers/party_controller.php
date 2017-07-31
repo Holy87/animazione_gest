@@ -57,7 +57,7 @@ class PartyController
         $user = User::getCurrent();
         if(!$user->can_edit_events())
             return json_encode(['ok' => false, 'reason' => 'Non hai i permessi per eseguire questa azione.', 'code' => -2]);
-        if(!isset($_POST['party-id']) || !isset($_POST['party-date']) || !isset($_POST['party-hour']) || !isset($_POST['party-price']) || !isset($_POST['party-theme']))
+        if(!isset($_POST['party-id']) || !isset($_POST['party-date']) || !isset($_POST['party-hour']) || !isset($_POST['party-price']) || !isset($_POST['theme-id']))
             return json_encode(['ok' => false, 'reason' => 'Parametri richiesta errati.', 'code' => -2]);
         $party = Party::get_party($_POST['party-id']);
         $party->date = $_POST['party-date'];
@@ -214,10 +214,11 @@ class PartyController
     }
 
     public static function create_party() {
+        //return json_encode(['ok' => false, 'code' => 0, 'reason' => print_r($_POST)]);
         $user = User::getCurrent();
         if(!$user->can_edit_events())
             return json_encode(['ok' => false, 'reason' => 'Non hai i permessi per eseguire questa azione.', 'code' => -2]);
-        if(!isset($_POST['party-date']) || !isset($_POST['party-hour']) || !isset($_POST['party-price']) || !isset($_POST['party-theme']))
+        if(!isset($_POST['party-date']) || !isset($_POST['party-hour']) || !isset($_POST['party-price']) || !isset($_POST['theme-id']))
             return json_encode(['ok' => false, 'reason' => 'Parametri richiesta errati.', 'code' => -2]);
         $customer = $_POST['party-customer'];
         $theme = $_POST['theme-id'];
