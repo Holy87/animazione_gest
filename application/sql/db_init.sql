@@ -42,6 +42,7 @@ CREATE TABLE `feste` (
   `party_id` int(11) NOT NULL,
   `cliente` varchar(100) NOT NULL,
   `indirizzo` text NOT NULL,
+  `telefono` VARCHAR(20) DEFAULT NULL,
   `data` date NOT NULL,
   `ora` time NOT NULL,
   `creatore` int(11) DEFAULT NULL,
