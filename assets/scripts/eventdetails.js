@@ -97,7 +97,7 @@ function elimina_festa(e) {
     e.preventDefault();
 }
 
-function conferma_elimina() {
+function conferma_elimina(e) {
     $.ajax({
         type: "post",
         url: 'services?action=delete_party',
@@ -110,7 +110,8 @@ function conferma_elimina() {
                 showError(response);
             }
         }
-    })
+    });
+    e.preventDefault();
 }
 
 function renderPicture(data) {
@@ -195,7 +196,7 @@ $(document).ready(function() {
     });
 
     $("#back-btn").on("click", back);
-    $("#delete_button").on("click", conferma_elimina);
+    $("#delete_button").on("click", function (e) {conferma_elimina(e)});
     $("#delete-btn").on("click", function (e) {elimina_festa(e)});
 
     set_animatori();
