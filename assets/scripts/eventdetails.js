@@ -78,7 +78,7 @@ function crea_festa(e) {
         success: function (response) {
             if(response.ok) {
                 button.html('<i class="fa fa-check"></i> Salvato');
-                location.reload();
+                window.location.href = 'eventedails?id='+response.id;
             } else {
                 showError(response);
                 button.html("Errore!");
@@ -93,9 +93,24 @@ function crea_festa(e) {
 }
 
 function elimina_festa(e) {
-    var button = $("#delete-btn");
-    button.prop('disabled', 'disabled');
+    $("#deleteModal").modal();
     e.preventDefault();
+}
+
+function conferma_elimina() {
+    $.ajax({
+        type: "post",
+        url: 'services?action=delete_party',
+        data: $("#edit-form").serialize(),
+        dataType: 'json',
+        success: function(response) {
+            if(response.ok) {
+                back();
+            } else {
+                showError(response);
+            }
+        }
+    })
 }
 
 function renderPicture(data) {
@@ -180,6 +195,7 @@ $(document).ready(function() {
     });
 
     $("#back-btn").on("click", back);
+    $("#delete_button").on("click", conferma_elimina);
     $("#delete-btn").on("click", function (e) {elimina_festa(e)});
 
     set_animatori();
