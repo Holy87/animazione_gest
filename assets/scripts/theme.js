@@ -73,7 +73,7 @@ function save(e) {
             if(response.ok) {
                 button.html('<i class="fa fa-check" aria-hidden="true"></i> Salvato');
                 if($("#mode").val() === 'create')
-                    window.location.href = 'themes';
+                    window.location.href = 'theme?theme_id='+response.id;
             } else {
                 showError(response);
                 button.html("Errore!");

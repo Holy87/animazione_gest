@@ -20,12 +20,23 @@ class ThemeController
         return json_encode(["data" => $data]);
     }
 
+    public static function get_theme_price() {
+        if(User::getCurrent()->access_level > 0) {
+            $theme = PartyTheme::getTheme($_GET['theme']);
+            if($theme != null) {
+                return json_encode(['ok' => true, 'value' => $theme->price]);
+            } else
+                return json_encode(['ok' => false, 'reason' => 'Tema non trovato', 'code' => 0]);
+        } else
+            return json_encode(['ok' => false, 'reason' => 'Non hai i permessi per accedere alla risorsa', 'code' => -1]);
+    }
+
     public static function create_theme() {
         if(User::getCurrent()->can_edit_events()) {
             $name = $_POST['theme-name'];
             $price = $_POST['theme-price'];
             $description = $_POST['theme-description'];
-            return PartyTheme::create($name, $description, $price);
+            return json_encode(PartyTheme::create($name, $description, $price));
         } else
             return json_encode(['ok' => false, 'reason' => 'Non hai i permessi per creare e modificare temi.']);
     }

@@ -235,7 +235,15 @@ class Party
      * @return bool
      */
     public function has_item($item) {
-        return $this->get_own_item_number($item->id) > 0;
+        return $this->has_item_id($item->id);
+    }
+
+    /**
+     * @param int $item_id
+     * @return bool
+     */
+    public function has_item_id($item_id) {
+        return $this->get_own_item_number($item_id) > 0;
     }
 
     /**
@@ -260,7 +268,7 @@ class Party
      * @param $item_id
      * @return int
      */
-    public function get_party_item_number($item_id) {
+    public function get_theme_item_number($item_id) {
         $theme = $this->get_theme();
         if($theme != null)
             return $theme->get_item_number($item_id);
@@ -274,7 +282,7 @@ class Party
      * @return int
      */
     public function get_item_number($item_id) {
-        return $this->get_own_item_number($item_id) + $this->get_party_item_number($item_id);
+        return $this->get_own_item_number($item_id) + $this->get_theme_item_number($item_id);
     }
 
     /**
@@ -294,6 +302,7 @@ class Party
      * @return array
      */
     public function change_item_number_from_id($item_id, $number) {
+        $item = Item::get_item($item_id);
         if ($number <= 0)
             return $this->delete_item($item);
         if (!$this->has_item($item))

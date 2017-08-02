@@ -33,7 +33,7 @@ function process_request() {
             echo ItemController::delete_item();
             break;
         case 'create_item':
-            ItemController::create_item();
+            echo ItemController::create_item();
             break;
         case 'get_item':
             ItemController::get_item();
@@ -92,6 +92,9 @@ function process_request() {
         case 'add_theme_item':
             echo ThemeController::add_item();
             break;
+        case 'theme_price':
+            echo ThemeController::get_theme_price();
+            break;
         case 'get_active_parties':
             echo PartyController::get_active_parties();
             break;
@@ -115,6 +118,9 @@ function process_request() {
             break;
         case 'remove_party_animator':
             echo PartyController::remove_animator();
+            break;
+        case 'get_party_items':
+            echo PartyController::get_party_items();
             break;
         case 'add_party_item':
             echo PartyController::add_item();

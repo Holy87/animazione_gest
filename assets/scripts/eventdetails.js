@@ -92,6 +92,24 @@ function crea_festa(e) {
     e.preventDefault();
 }
 
+function aggiornaPrezzo() {
+    console.log('eseguo');
+    var priceInput = $("#party-price");
+    //var prezzo = parseInt(priceInput.val());
+    $.ajax({
+        type: 'post',
+        url: 'services?action=theme_price&theme='+$("#theme-id").val(),
+        dataType: 'json',
+        success: function (response) {
+            if(response.ok) {
+                priceInput.val(response.value);
+            } else {
+                console.log(response.reason);
+            }
+        }
+    })
+}
+
 function elimina_festa(e) {
     $("#deleteModal").modal();
     e.preventDefault();
@@ -182,7 +200,16 @@ function set_animatori() {
 }
 
 function set_oggetti() {
-
+    var partyId = $("#party-id").val();
+    $("#items-table").DataTable({
+        paging: false,
+        info: false,
+        searching: false,
+        ajax: 'services?action=get_party_items&party_id='+partyId,
+        columns: [
+            {'data' : ''}
+        ]
+    })
 }
 
 $(document).ready(function() {
@@ -192,6 +219,8 @@ $(document).ready(function() {
         else
             salva_festa(e);
     });
+
+    $("#theme-id").on('change', aggiornaPrezzo);
 
     $("#users-form").submit(function (e) {
         addUser(e);
