@@ -78,7 +78,7 @@ function crea_festa(e) {
         success: function (response) {
             if(response.ok) {
                 button.html('<i class="fa fa-check"></i> Salvato');
-                window.location.href = 'eventedails?id='+response.id;
+                window.location.href = 'eventdetails?id='+response.id;
             } else {
                 showError(response);
                 button.html("Errore!");
@@ -98,6 +98,7 @@ function elimina_festa(e) {
 }
 
 function conferma_elimina(e) {
+    $("#deleteModal").modal("toggle");
     $.ajax({
         type: "post",
         url: 'services?action=delete_party',
@@ -174,6 +175,7 @@ function set_animatori() {
         'columns' : [
             {'data' : 'picture', 'searchable': false, 'orderable': false, 'type': 'html', 'render': function(data){return renderPicture(data)}},
             {'data' : 'name'},
+            {'data' : 'phone'},
             {'data' : 'id', 'searchable': false, 'orderable': false, 'type': 'html', 'render': function(data){return RenderUsButton(data)}}
         ]
     })

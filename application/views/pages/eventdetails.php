@@ -59,7 +59,7 @@ function mode($party) {
 function theme_select($party) {
     $themes = PartyTheme::getAllThemes();
     /** @var PartyTheme $theme */
-    $outp = '<option value="">Scegli un tema</option>';
+    $outp = '<option value="null">Scegli un tema</option>';
     foreach($themes as $theme) {
         $sel = '';
         if ($theme->id == $party->theme_id)
@@ -67,6 +67,18 @@ function theme_select($party) {
         $outp.= "<option value=\"$theme->id\" $sel>$theme->name</option>";
     }
     echo $outp;
+}
+
+function get_all_items() {
+    $items = Item::get_all();
+    /** @var Item $item */
+    $out = '';
+    foreach($items as $item) {
+        $id = $item->id;
+        $name = $item->name;
+        $out.= '<option value="'.$id.'">'.$name.'</option>';
+    }
+    echo $out;
 }
 
 
@@ -176,7 +188,7 @@ function theme_select($party) {
                             <div class="form-group">
                                 <label for="add-item">Aggiungi oggetto</label>
                                 <select id="add-item" class="form-control" name="item-id" required>
-                                    <!-- OGGETTI -->
+                                    <?php get_all_items() ?>
                                 </select>
                             </div>
                         </div>

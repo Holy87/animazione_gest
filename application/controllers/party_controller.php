@@ -66,7 +66,10 @@ class PartyController
         $party->time = $_POST['party-hour'];
         $party->address = $_POST['party-address'];
         $party->customer = $_POST['party-customer'];
-        $party->theme_id = $_POST['theme-id'];
+        if(intval($_POST['theme-id']))
+            $party->theme_id = $_POST['theme-id'];
+        else
+            $party->theme_id = null;
         $party->price = $_POST['party-price'];
         return json_encode($party->save());
     }
@@ -197,7 +200,7 @@ class PartyController
             $animators = $party->get_animators();
             /** @var User $animator */
             foreach($animators as $animator) {
-                $outp[] = ['id' => $animator->id, 'name' => $animator->friendly_name, 'picture' => $animator->get_avatar_url()];
+                $outp[] = ['id' => $animator->id, 'name' => $animator->friendly_name, 'phone' => $animator->phone, 'picture' => $animator->get_avatar_url()];
             }
         }
         return json_encode(['data' => $outp]);
@@ -212,7 +215,7 @@ class PartyController
         $party = Party::get_party($_POST['party-id']);
         if($party == null)
             return json_encode(['ok' => false, 'reason' => 'Festa non trovata.', 'code' => 0]);
-        return $party->delete();
+        return json_encode($party->delete());
     }
 
     public static function create_party() {
