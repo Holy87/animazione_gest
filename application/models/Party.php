@@ -118,6 +118,14 @@ class Party
         return implode(", ", $names);
     }
 
+    public function set_date($date_string) {
+        $this->date = date_create_from_format('d-m-Y', $date_string);
+    }
+
+    public function set_time($time_string) {
+        $this->time = date_create_from_format('H:i', $time_string);
+    }
+
     /**
      * Restituisce tutti gli oggetti della festa
      * @return array<Item>
@@ -352,22 +360,21 @@ class Party
         return date_format($this->time, "H:i");
     }
 
-    public function set_date($date_string) {
-        $this->date = strtotime($date_string);
-    }
-
     public function is_done() {
         return date_default_timezone_get() > $this->date;
     }
 
     public function save() {
-        $query = "UPDATE feste SET cliente = :cust, indirizzo = :addr, data = :date, prezzo = :price, theme_id = :theme
+        $query = "UPDATE feste SET cliente = :cust, indirizzo = :addr, data = :date, prezzo = :price, theme_id = :theme, ora = :hour
                   WHERE party_id = :id";
         $link = Db::getInstance();
         $stmt = $link->prepare($query);
+        $date = $this->date->format('Y-m-d');
+        $hour = $this->time->format('H:i:s');
         $stmt->bindParam(':cust', $this->customer);
         $stmt->bindParam(':addr', $this->address);
-        $stmt->bindParam(':date', $this->date);
+        $stmt->bindParam(':date', $date);
+        $stmt->bindParam(':hour', $hour);
         $stmt->bindParam(':price', $this->price);
         $stmt->bindParam(':theme', $this->theme_id);
         $stmt->bindParam(':id', $this->party_id);

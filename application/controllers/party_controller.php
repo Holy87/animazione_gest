@@ -62,15 +62,15 @@ class PartyController
         if(!isset($_POST['party-id']) || !isset($_POST['party-date']) || !isset($_POST['party-hour']) || !isset($_POST['party-price']) || !isset($_POST['theme-id']))
             return json_encode(['ok' => false, 'reason' => 'Parametri richiesta errati.', 'code' => -2]);
         $party = Party::get_party($_POST['party-id']);
-        $party->date = $_POST['party-date'];
-        $party->time = $_POST['party-hour'];
+        $party->set_date($_POST['party-date']);
+        $party->set_time($_POST['party-hour']);
         $party->address = $_POST['party-address'];
         $party->customer = $_POST['party-customer'];
+        $party->price = $_POST['party-price'];
         if(intval($_POST['theme-id']))
             $party->theme_id = $_POST['theme-id'];
         else
             $party->theme_id = null;
-        $party->price = $_POST['party-price'];
         return json_encode($party->save());
     }
 
