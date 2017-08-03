@@ -108,6 +108,23 @@ class PartyController
         return json_encode($party->remove_animator($animator));
     }
 
+    public static function get_items() {
+        $user = User::getCurrent();
+        if($user->access_level <= 0)
+            return json_encode(['ok' => false, 'reason' => 'Non hai i permessi per eseguire questa azione.', 'code' => -2]);
+        if(!isset($_GET['party-id']))
+            return json_encode(['ok' => false, 'reason' => 'ID festa non impostato.', 'code' => -3]);
+        $party = Party::get_party($_GET['party-id']);
+        if($party == null)
+            return json_encode(['ok' => false, 'reason' => 'Festa non trovata.', 'code' => 0]);
+        $items = [];
+        /** @var Item $item */
+        foreach($party->get_all_items() as $item) {
+            $items[] = ['name' => $item->name, 'number' => $party->get_item_number($item->id), 'info' => ['id' => $item->id, 'own' => $party->has_item($item)]];
+        }
+        return json_encode(['ok' => true, 'data' => $items]);
+    }
+
     public static function add_item() {
         $user = User::getCurrent();
         if(!$user->can_edit_events())
@@ -155,7 +172,7 @@ class PartyController
         $party = Party::get_party($_POST['party-id']);
         if($party) {
             $item_n = $party->get_own_item_number($_POST['item-id']);
-            return $party->change_item_number_from_id($_POST['item-id'], $item_n + 1);
+            return json_encode($party->change_item_number_from_id($_POST['item-id'], $item_n + 1));
         } else
             return json_encode(['ok' => false, 'reason' => 'Festa non trovata', 'code' => 0]);
     }
@@ -171,7 +188,7 @@ class PartyController
         $party = Party::get_party($_POST['party-id']);
         if($party) {
             $item_n = $party->get_own_item_number($_POST['item-id']);
-            return $party->change_item_number_from_id($_POST['item-id'], $item_n - 1);
+            return json_encode($party->change_item_number_from_id($_POST['item-id'], $item_n - 1));
         } else
             return json_encode(['ok' => false, 'reason' => 'Festa non trovata', 'code' => 0]);
     }

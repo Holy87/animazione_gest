@@ -36,7 +36,7 @@ function aggiorna_animatori() {
 }
 
 function aggiorna_oggetti() {
-    //$("#items-table").DataTable().ajax.reload();
+    $("#items-table").DataTable().ajax.reload();
 }
 
 function salva_festa(e) {
@@ -93,12 +93,14 @@ function crea_festa(e) {
 }
 
 function aggiornaPrezzo() {
-    console.log('eseguo');
     var priceInput = $("#party-price");
+    var themeId = $("#theme-id").val();
+    if(themeId === 'null')
+        return;
     //var prezzo = parseInt(priceInput.val());
     $.ajax({
         type: 'post',
-        url: 'services?action=theme_price&theme='+$("#theme-id").val(),
+        url: 'services?action=theme_price&theme='+themeId,
         dataType: 'json',
         success: function (response) {
             if(response.ok) {
@@ -144,6 +146,58 @@ function RenderUsButton(id) {
     return '<button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Rimuovi l\'utente" onclick="deleteUser('+id+', this)"><i class="fa fa-minus-square-o"></i> Rimuovi</button>'
 }
 
+function renderItemButton(info) {
+    var id = info.id;
+    var disabled = '';
+    var description;
+    if(!info.own) {
+        disabled = 'disabled';
+        description = "L'oggetto fa parte del tema della festa, quindi non è possibile rimuoverlo.";
+    } else
+        description = "Rimuovi l'oggetto";
+    var html = '';
+    html += '<button class="btn btn-secondary btn-sm" onclick="increaseItem('+id+', this)"><i class="fa fa-plus-square"></i></button>';
+    html += '<button class="btn btn-secondary btn-sm" onclick="decreaseItem('+id+', this)" '+disabled+'><i class="fa fa-minus-square"></i></button>';
+    html += '<button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="'+description+'" onclick="deleteItem('+id+', this)" '+disabled+'><i class="fa fa-trash"></i> Rimuovi</button>';
+    return html;
+}
+
+function decreaseItem(id, button) {
+    button.disabled = true;
+    var party = $("#party-id").val();
+    $.ajax({
+        type: 'post',
+        url: 'services?action=decr_party_item_n',
+        data: 'item-id='+id+'&party-id='+party,
+        dataType: 'json',
+        success: function (response) {
+            button.disabled = false;
+            if(response.ok)
+                aggiorna_oggetti();
+            else
+                showError(response);
+        }
+    })
+}
+
+function increaseItem(id, button) {
+    button.disabled = true;
+    var party = $("#party-id").val();
+    $.ajax({
+        type: 'post',
+        url: 'services?action=incr_party_item_n',
+        data: 'item-id='+id+'&party-id='+party,
+        dataType: 'json',
+        success: function (response) {
+            button.disabled = false;
+            if(response.ok)
+                aggiorna_oggetti();
+            else
+                showError(response);
+        }
+    })
+}
+
 function deleteUser(id, button) {
     button.disabled = true;
     var party = $("#party-id").val();
@@ -183,6 +237,45 @@ function addUser(e) {
     e.preventDefault();
 }
 
+function addItem(e) {
+    var button = $("#add-btn");
+    button.prop("disabled", "disabled");
+    $.ajax({
+        type: 'post',
+        url: 'services?action=add_party_item',
+        data: $("#item-form").serialize(),
+        dataType: 'json',
+        success: function(response) {
+            button.removeAttr('disabled');
+            if(response.ok) {
+                aggiorna_oggetti();
+            } else {
+                showError(response);
+            }
+        }
+    });
+    e.preventDefault();
+}
+
+function deleteItem(id, button) {
+    button.disabled = true;
+    var party = $("#party-id").val();
+    $.ajax({
+        type: "POST",
+        url: "services?action=remove_party_item",
+        data: 'item-id='+id+'&party-id='+party,
+        dataType: "json",
+        success: function (response) {
+            button.disabled = false;
+            if(response.ok) {
+                aggiorna_oggetti();
+            } else {
+                showError(response);
+            }
+        }
+    })
+}
+
 function set_animatori() {
     var partyId = $("#party-id").val();
     $("#users-table").DataTable({
@@ -205,9 +298,11 @@ function set_oggetti() {
         paging: false,
         info: false,
         searching: false,
-        ajax: 'services?action=get_party_items&party_id='+partyId,
+        ajax: 'services?action=get_party_items&party-id='+partyId,
         columns: [
-            {'data' : ''}
+            {'data' : 'name'},
+            {'data' : 'number', 'searchable': false, 'orderable': false},
+            {'data' : 'info', 'searchable': false, 'orderable': false, 'type': 'html', 'render': function(data){return renderItemButton(data)}}
         ]
     })
 }
@@ -224,6 +319,10 @@ $(document).ready(function() {
 
     $("#users-form").submit(function (e) {
         addUser(e);
+    });
+
+    $("#item-form").submit(function (e) {
+        addItem(e);
     });
 
     $("#back-btn").on("click", back);

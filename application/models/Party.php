@@ -194,6 +194,13 @@ class Party
      * @return array
      */
     public function add_item($item, $item_number = 1) {
+        if ($this->has_item($item))
+            return $this->change_item_number($item, $this->get_item_number($item->id) + $item_number);
+        else
+            return $this->insert_item($item, $item_number);
+    }
+
+    public function insert_item($item, $item_number = 1) {
         $link = Db::getInstance();
         $query = 'INSERT INTO oggetti_party (item_id, party_id, item_number) VALUES (:iid, :tid, :num)';
         $stmt = $link->prepare($query);

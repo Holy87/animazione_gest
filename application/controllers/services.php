@@ -120,7 +120,7 @@ function process_request() {
             echo PartyController::remove_animator();
             break;
         case 'get_party_items':
-            echo PartyController::get_party_items();
+            echo PartyController::get_items();
             break;
         case 'add_party_item':
             echo PartyController::add_item();

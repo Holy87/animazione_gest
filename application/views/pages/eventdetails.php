@@ -223,7 +223,7 @@ function get_all_items() {
     </div>
 </div>
 
-<!-- Modal DI ELIMINAZIONE -->
+<!-- Modal DI ELIMINAZIONE FESTA -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
