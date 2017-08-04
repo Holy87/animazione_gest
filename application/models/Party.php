@@ -8,13 +8,14 @@
  */
 class Party
 {
-    public $date;
-    public $time;
+    private $date;
+    private $time;
     public $party_id;
     public $theme_id;
     public $customer;
     public $address;
     public $price;
+    private $creator;
 
     /**
      * Party constructor.
@@ -25,6 +26,7 @@ class Party
      * @param $customer
      * @param $address
      * @param $creator
+     * @param $price
      */
     public function __construct($id, $theme, $date, $time, $customer, $address, $creator, $price) {
         $this->party_id = $id;
@@ -119,11 +121,26 @@ class Party
     }
 
     public function set_date($date_string) {
-        $this->date = date_create_from_format('d-m-Y', $date_string);
+        //$this->date = date_create('Y-m-d', str_replace('/','-',$date_string));
+        $this->date = date_create(str_replace('/','-',$date_string));
     }
 
     public function set_time($time_string) {
-        $this->time = date_create_from_format('H:i', $time_string);
+        $this->time = date_create(str_replace('.',':',$time_string));
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function get_date() {
+        return $this->date;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function get_time() {
+        return $this->time;
     }
 
     /**
@@ -159,6 +176,13 @@ class Party
      */
     public function get_theme_items() {
         return $this->get_theme()->get_items();
+    }
+
+    /**
+     * @return User
+     */
+    public function get_creator() {
+        return User::get_user($this->creator);
     }
 
     /**
@@ -361,7 +385,7 @@ class Party
     }
 
     public function is_done() {
-        return date_default_timezone_get() > $this->date;
+        return new DateTime() > $this->date;
     }
 
     public function save() {
@@ -371,6 +395,7 @@ class Party
         $stmt = $link->prepare($query);
         $date = $this->date->format('Y-m-d');
         $hour = $this->time->format('H:i:s');
+        //return ['ok' => false, 'reason' => $date, 'code' => 0];
         $stmt->bindParam(':cust', $this->customer);
         $stmt->bindParam(':addr', $this->address);
         $stmt->bindParam(':date', $date);

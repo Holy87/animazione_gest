@@ -112,11 +112,11 @@ function hour_selector() {
                 <div class="row">
                     <div class="col-md-4">
                         <label for="party-date">Data</label>
-                        <input id="party-date" class="form-control" type="date" name="party-date" placeholder="aaaa/mm/gg" value="<?php echo date('Y-m-d', $party->date->getTimestamp()) ?>" required>
+                        <input id="party-date" class="form-control" type="date" name="party-date" placeholder="aaaa/mm/gg" value="<?php echo date('Y-m-d', $party->get_date()->getTimestamp()) ?>" required>
                     </div>
                     <div class="col-md-4">
                         <label>Ora</label>
-                        <input id="party-hour" class="form-control" type="time" name="party-hour" placeholder="HH:MM"  value="<?php echo date('H:i', $party->date->getTimestamp()) ?>" required>
+                        <input id="party-hour" class="form-control" type="time" name="party-hour" placeholder="HH:MM"  value="<?php echo date('H:i', $party->get_time()->getTimestamp()) ?>" required>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">

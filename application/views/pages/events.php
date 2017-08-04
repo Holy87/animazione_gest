@@ -9,6 +9,7 @@
 ?>
 
 <div class="container">
+    <input type="hidden" id="#user-access" value="<?php echo User::getCurrent()->can_edit_events() ?>">
     <div class="row">
         <div class="col-lg-4">
             <h1>Feste</h1>

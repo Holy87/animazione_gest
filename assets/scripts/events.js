@@ -6,11 +6,19 @@ function renderButtons(id) {
 }
 
 function editButton(id) {
-    return '<button class="btn btn-primary btn-sm" data-toggle="tooltip" onclick="editParty('+id+')" data-placement="top" title="Dettagli festa"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></button>';
+    var ret = '';
+    if($("#user-access").val() === '1') {
+        ret += '<button class="btn btn-primary btn-sm" data-toggle="tooltip" onclick="editParty('+id+')" data-placement="top" title="Dettagli festa"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
+    }
+    return ret + '<button class="btn btn-primary btn-sm" data-toggle="tooltip" onclick="viewParty('+id+')" data-placement="top" title="Dettagli festa"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></button>';
 }
 
 function editParty(id) {
     window.location.href = 'eventdetails?id='+id;
+}
+
+function viewParty(id) {
+    window.location.href = 'eventpage?party='+id;
 }
 
 $(document).ready(function(){

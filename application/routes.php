@@ -59,6 +59,8 @@ function permit_access($action, $user) {
         'theme' => 2,
         'themes' => 2,
         'users' => 2,
+        'eventdetails' => 2,
+        'eventpage' => 1
     ];
     if(!in_array($action, $access_required))
     {
