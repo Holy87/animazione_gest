@@ -58,24 +58,23 @@ function buttonDisabled() {
                     <div id="name-form" class="form-group">
                         <input type="hidden" name="item-id" id="item-id">
                         <label for="item-name" class="form-control-label">Nome:</label>
-                        <input placeholder="Nome oggetto" type="text" name="name" class="form-control" id="item-name" required>
+                        <input placeholder="Nome oggetto" maxlength="100" type="text" name="name" class="form-control" id="item-name" required>
                     </div>
                     <div class="form-group" id="num-form">
-                        <div class="row">
-                            <label for="item-number" class="form-control-label">Numero:</label>
-                            <div class="col-lg-offset-3 col-lg-6">
-                                <div class="input-group">
-                                    <input type="number" name="number" class="form-control" id="item-number" required>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-secondary" id="plus-btn" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                                    </span>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-secondary" id="minus-btn" type="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                                    </span>
-                                </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Quantità</span>
+                                <input placeholder="123" type="number" name="number" class="form-control" id="item-number" required>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-secondary" id="plus-btn" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                </span>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-secondary" id="minus-btn" type="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                                </span>
                             </div>
                         </div>
                     </div>
+                    <!--
                     <div class="row form-horizontal">
                         <div class="col-6 optioner">
                             <div class="form-group">
@@ -93,6 +92,15 @@ function buttonDisabled() {
                                 <label for="item-floor" class="form-control-label">Piano:</label>
                                 <input type="number" name="floor" id="item-floor" class="form-control" required>
                             </div>
+                        </div>
+                    </div>-->
+                    <div class="form-group">
+                        <p>Posizione</p>
+                        <div class="input-group">
+                            <span class="input-group-addon">Reparto</span>
+                            <input type="text" class="form-control" name="ward" placeholder="XXX" id="ward" required maxlength="3">
+                            <span class="input-group-addon">Piano</span>
+                            <input type="number" placeholder="" class="form-control" name="floor" id="item-floor" required>
                         </div>
                     </div>
                     <div class="form-group">

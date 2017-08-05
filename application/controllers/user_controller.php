@@ -44,6 +44,21 @@ class UserController
             return $mail_used;
     }
 
+    public static function changePhone() {
+        $user = User::getCurrent();
+        if($user->id != intval($_POST['id']) && $user->access_level < 2)
+            return json_encode(['ok' => false, 'reason' => 'Non hai i diritti per modificare il telefono.', 'code' => -3]);
+        $link = Db::getInstance();
+        $query = "UPDATE users SET user_phone = :phone WHERE user_id = :id";
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':phone', $_POST['phone']);
+        $stmt->bindParam(':id', $_POST['id']);
+        if($stmt->execute())
+            return json_encode(['ok' => true]);
+        else
+            return json_encode(['ok' => false, 'reason' => $link->errorInfo(), 'code' => $link->errorCode()]);
+    }
+
     public static function changeName() {
         $user = User::get_user($_POST['id']);
         if($user == null) {
@@ -97,25 +112,30 @@ class UserController
         $pass = $_POST['password'];
         $role = $_POST['role'];
         $name = $_POST['userfriendly'];
-        $response = User::create($user, $name, $mail, $pass, $role);
+        $phone = $_POST['phone'];
+        $response = User::create($user, $name, $mail, $pass, $role, $phone);
         return json_encode($response);
     }
 
     public static function edit_user() {
+
         if(!User::getCurrent()->can_create_users())
         {
             return json_encode(['ok' => false, 'reason' => 'Diritti insufficienti']);
         }
-        if(isset($_POST['username']))
-            $nick = $_POST['username'];
+        $user = User::get_user($_POST['id']);
+        if(isset($_POST['username'])) {
+            $user->name = $_POST['username'];
+        }
         $mail = $_POST['mail'];
         $pass = $_POST['password'];
         $role = $_POST['role'];
         $name = $_POST['userfriendly'];
-        $user = User::get_user($_POST['id']);
-        if(isset($_POST['username'])) $user->name = $nick;
+        $tel = $_POST['phone'];
+        if(isset($_POST['username']))
         $user->mail = $mail;
         $user->access_level = $role;
+        $user->phone = $tel;
         $user->friendly_name = $name;
         if(strlen($pass) > 0) $user->change_password_unsafe($pass);
         return json_encode($user->save());

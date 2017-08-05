@@ -7,8 +7,9 @@ function renderButtons(id) {
 
 function editButton(id) {
     var ret = '';
-    if($("#user-access").val() === '1') {
-        ret += '<button class="btn btn-primary btn-sm" data-toggle="tooltip" onclick="editParty('+id+')" data-placement="top" title="Dettagli festa"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
+    if(parseInt($("#user-access").val()) >= 1) {
+        console.log('ok');
+        ret += '<button class="btn btn-secondary btn-sm" data-toggle="tooltip" onclick="editParty('+id+')" data-placement="top" title="Modifica festa"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
     }
     return ret + '<button class="btn btn-primary btn-sm" data-toggle="tooltip" onclick="viewParty('+id+')" data-placement="top" title="Dettagli festa"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></button>';
 }

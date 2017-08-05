@@ -42,10 +42,35 @@ function changeMailAddress(e) {
                 mailButton.html('<i class="fa fa-check" aria-hidden="true"></i> Salvato');
                 setTimeout(function() {
                     mailButton.html("Salva");
-                }, 2000);
+                }, 1000);
                 $("#mail-input").addClass("has-success");
                 $("#mail-state").html("Email salvata.");
                 //showMessage("Indirizzo email modificato con successo");
+            }
+        }
+    });
+    e.preventDefault();
+}
+
+function changePhone(e) {
+    var button = $("#telbtn");
+    button.prop("disabled", "disabled");
+    button.html('Salvataggio...');
+    $.ajax({
+        type: "POST",
+        url: "services?action=change_phone",
+        data: $("#phoneedit").serialize(),
+        dataType: "json",
+        success: function(response) {
+            button.removeAttr("disabled");
+            if(!response.ok) {
+                showError(response);
+                button.html("Salva");
+            } else {
+                button.html('<i class="fa fa-check" aria-hidden="true"></i> Salvato');
+                setTimeout(function() {
+                    button.html("Salva");
+                }, 1000);
             }
         }
     });
@@ -64,7 +89,7 @@ function checkPasswordMatch() {
     var passwordCheck = $("#password-check");
     passwordCheck.removeClass("has-success");
     passwordCheck.removeClass("has-danger");
-    passwordCheck.html("");
+    //passwordCheck.html("");
     if(passwordMatchFilled()) {
         if(passwordMatch()) {
             passwordCheck.addClass("has-success");
@@ -150,4 +175,5 @@ $(document).ready(function() {
     $("#mailedit").on("submit", function(e) {changeMailAddress(e)});
     $("#passedit").on("submit", function(e) {changePassword(e)});
     $("#profileedit").on("submit", function (e) {changeName(e)});
+    $("#phoneedit").on("submit", function(e) {changePhone(e)});
 });

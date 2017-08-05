@@ -59,15 +59,19 @@ function hidden_button() {
             <div class="col-md-6">
                 <div class="form-group-row">
                     <label class="col-2 col-form-label" for="username">Username</label>
-                    <input type="text" name="username" id="username" class="form-control" <?php disable() ?> placeholder="user" value="<?php echo $o_user->name ?>" required>
+                    <input type="text" name="username" id="username" class="form-control" <?php disable() ?> maxlength="50" placeholder="user" value="<?php echo $o_user->name ?>" required>
                 </div>
                 <div class="form-group-row">
                     <label class="col-2 col-form-label" for="userfriendly">Nome</label>
-                    <input type="text" name="userfriendly" id="userfriendly" class="form-control" placeholder="Inserisci un nome di riconoscimento" value="<?php echo $o_user->friendly_name ?>" required>
+                    <input type="text" name="userfriendly" id="userfriendly" class="form-control" maxlength="100" placeholder="Inserisci un nome di riconoscimento" value="<?php echo $o_user->friendly_name ?>" required>
                 </div>
                 <div class="form-group-row">
                     <label class="col-2 col-form-label" for="mail">Email</label>
-                    <input type="email" name="mail" id="mail" class="form-control" placeholder="esempio@gmail.com" value="<?php echo $o_user->mail ?>" required>
+                    <input type="email" name="mail" id="mail" class="form-control" placeholder="esempio@gmail.com" maxlength="100" value="<?php echo $o_user->mail ?>" required>
+                </div>
+                <div class="form-group-row">
+                    <label class="col-2 col-form-label" for="phone">Telefono</label>
+                    <input type="tel" name="phone" id="phone" class="form-control" maxlength="20" value="<?php echo $o_user->phone ?>">
                 </div>
                 <div class="form-group-row">
                     <label class="col-2 col-form-label" for="password">Password</label>

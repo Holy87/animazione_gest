@@ -1,0 +1,1 @@
+Qui vanno le immagini degli avatar utenti

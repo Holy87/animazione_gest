@@ -11,8 +11,8 @@ class MenuContainer
         $this->menu_elements = [
             new MenuElement('Home', 'home', 1, 'home', 'fa-home'),
             new MenuElement('Eventi', 'events', 1, 'events', 'fa-calendar'),
-            new MenuElement('Temi Feste', 'themes', 1, 'themes', 'fa-magic'),
-            new MenuElement('Inventario', 'items', 1,'items', 'fa-archive'),
+            new MenuElement('Temi Feste', 'themes', 2, 'themes', 'fa-magic'),
+            new MenuElement('Inventario', 'items', 2,'items', 'fa-archive'),
             new MenuElement('Utenti', 'users', 3, 'users', 'fa-users')
         ];
     }

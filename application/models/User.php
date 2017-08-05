@@ -157,7 +157,7 @@ class User
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        return new User($user['user_id'], $user['user_name'], $user['user_friendlyname'], $user['user_mail'], $user['user_access']);
+        return new User($user['user_id'], $user['user_name'], $user['user_friendlyname'], $user['user_mail'], $user['user_access'], $user['user_phone']);
     }
 
     /**
@@ -221,7 +221,7 @@ class User
      * @param string $phone
      * @return array
      */
-    public static function create($user, $name, $mail, $password, $access_level, $phone = null) {
+    public static function create($user, $name, $mail, $password, $access_level, $phone) {
         $pass = sha1($password);
         $query = "INSERT INTO users (user_name, user_mail, user_access, user_password, user_friendlyname, user_phone) VALUES (:user, :mail, :access, :pass, :name, :phone)";
         $link = Db::getInstance();

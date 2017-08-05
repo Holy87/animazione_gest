@@ -97,11 +97,11 @@ function hour_selector() {
                 <input type="hidden" id="mode" name="mode" value="<?php echo mode($party) ?>">
                 <div class="form-group">
                     <label for="party-customer">Nome del cliente</label>
-                    <input type="text" class="form-control" id="party-customer" name="party-customer" placeholder="Il nome del cliente per ricordare una festa" value="<?php echo $party->customer ?>" required>
+                    <input type="text" class="form-control" id="party-customer" maxlength="100" name="party-customer" placeholder="Il nome del cliente per ricordare una festa" value="<?php echo $party->customer ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="party-address">Indirizzo</label>
-                    <textarea id="party-address" class="form-control" name="party-address"><?php echo $party->address ?></textarea>
+                    <textarea id="party-address" class="form-control" maxlength="200" name="party-address"><?php echo $party->address ?></textarea>
                 </div>
                 <div class="form-group">
                     <label for="theme-id">Tema</label>
@@ -141,9 +141,9 @@ function hour_selector() {
                             <button id="delete-btn" class="btn btn-danger btn-block" <?php disabled_delete($party) ?>>Elimina</button>
                         </div>
                     </div>
-
                 </div>
             </form>
+            <p>*Creato da <?php echo $party->get_creator()->friendly_name ?></p>
         </div>
         <div class="col-md-6">
             <div class="alert alert-info" role="alert" <?php hidden_message($party) ?>>

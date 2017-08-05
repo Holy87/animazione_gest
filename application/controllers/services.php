@@ -44,6 +44,9 @@ function process_request() {
         case 'change_mail':
             echo UserController::changeMail();
             break;
+        case 'change_phone':
+            echo UserController::changePhone();
+            break;
         case 'change_password':
             echo UserController::changePassword();
             break;

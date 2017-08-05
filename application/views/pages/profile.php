@@ -42,12 +42,12 @@ function check_disabled() {
                 <div class="col-md-4">
                     <input type="hidden" id="user-id" name="id" value="<?php echo $user->id ?>">
                     <label for="user-name" class="form-control-label">Nome utente (per il login)</label>
-                    <input id="user-name" type="text" class="form-control" value="<?php echo $user->name ?>" disabled>
+                    <input id="user-name" type="text" class="form-control" value="<?php echo $user->name ?>" maxlength="50"  disabled>
                 </div>
                 <div class="col-md-6">
                     <label for="friendly-name" class="form-control-label">Nome mostrato</label>
                     <div class="input-group">
-                        <input id="friendly-name" type="text" name="name" class="form-control" value="<?php echo $user->friendly_name ?>" <?php check_disabled() ?> required>
+                        <input id="friendly-name" type="text" name="name" maxlength="100" class="form-control" value="<?php echo $user->friendly_name ?>" <?php check_disabled() ?> required>
                         <span class="input-group-btn">
                             <button class="btn btn-primary" id="namebtn" type="submit" <?php check_disabled() ?>>Salva</button>
                         </span>
@@ -64,7 +64,7 @@ function check_disabled() {
                     <div class="form-group" id="mail-input">
                         <label for="user-mail" class="form-control-label">Email</label>
                         <div class="input-group">
-                            <input id="user-mail" type="email" name="user-mail" class="form-control" value="<?php echo $user->mail ?>" required>
+                            <input id="user-mail" type="email" name="user-mail" class="form-control" maxlength="100" value="<?php echo $user->mail ?>" required>
                             <span class="input-group-btn">
                                 <button class="btn btn-primary" id="mailbtn" type="submit">Salva</button>
                             </span>
@@ -72,7 +72,20 @@ function check_disabled() {
                         <div class="form-control-feedback" id="mail-state"></div>
                     </div>
                 </form>
+                <h2>Telefono</h2>
+                <form id="phoneedit">
+                    <input type="hidden" name="id" value="<?php echo $user->id ?>">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="tel" placeholder="123 45 67 89" name="phone" id="phone" class="form-control" maxlength="20" value="<?php echo $user->phone ?>">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" id="telbtn" type="submit">Salva</button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
                 <h3>Immagine del profilo</h3>
+                <!--suppress HtmlUnknownTarget -->
                 <form id="imageedit" enctype="multipart/form-data" method="post" action="services?action=photo-upload">
                     <div class="form-group">
                         <input type="hidden" name="id" value="<?php echo $user->id ?>">

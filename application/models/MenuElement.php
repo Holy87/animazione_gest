@@ -27,5 +27,5 @@ class MenuElement
 
     public function get_url() {return $this->url;}
 
-    public function get_access() {return 1;}
+    public function get_access() {return $this->access;}
 }
