@@ -95,26 +95,68 @@ function hour_selector() {
             <form id="edit-form">
                 <input type="hidden" id="party-id" name="party-id" value="<?php echo $party->party_id ?>">
                 <input type="hidden" id="mode" name="mode" value="<?php echo mode($party) ?>">
-                <div class="form-group">
-                    <label for="party-customer">Nome del cliente</label>
-                    <input type="text" class="form-control" id="party-customer" maxlength="100" name="party-customer" placeholder="Il nome del cliente per ricordare una festa" value="<?php echo $party->customer ?>" required>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="form-group">
+                            <label for="party-customer">Nome del cliente</label>
+                            <input type="text" class="form-control" id="party-customer" maxlength="100" name="party-customer" placeholder="Il nome del cliente per ricordare una festa" value="<?php echo $party->customer ?>" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="phone">Telefono</label>
+                            <input type="tel" class="form-control" id="phone" maxlength="20" name="phone" placeholder="+39 123 456 78" value="<?php echo $party->phone ?>">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label for="guest">Nome del festeggiato</label>
+                            <input type="text" class="form-control" id="guest" maxlength="100" name="party-guest" value="<?php echo $party->guest_of_honor ?>">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="guest_age">Età</label>
+                            <input type="number" class="form-control" id="guest_age" min="0" maxlength="2" name="guest_age" value="<?php echo $party->guest_age ?>">
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="party-address">Indirizzo</label>
                     <textarea id="party-address" class="form-control" maxlength="200" name="party-address"><?php echo $party->address ?></textarea>
                 </div>
-                <div class="form-group">
-                    <label for="theme-id">Tema</label>
-                    <select id="theme-id" name="theme-id" class="form-control">
-                        <?php theme_select($party) ?>
-                    </select>
-                </div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="theme-id">Tema</label>
+                            <select id="theme-id" name="theme-id" class="form-control">
+                                <?php theme_select($party) ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="mid_age">Età med</label>
+                            <input type="number" class="form-control" id="mid_age" name="mid_age" min="0" value="<?php echo $party->generic_age ?>">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="children">N.Bambini</label>
+                        <input type="number" min="1" class="form-control" name="children" id="children" value="<?php echo $party->child_number ?>">
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="hours">N. Ore</label>
+                        <input id="hours" min="1" class="form-control" type="number" name="hours" value="<?php echo $party->hours ?>" required>
+                    </div>
+                    <div class="col-sm-3">
                         <label for="party-date">Data</label>
                         <input id="party-date" class="form-control" type="date" name="party-date" placeholder="aaaa/mm/gg" value="<?php echo date('Y-m-d', $party->get_date()->getTimestamp()) ?>" required>
                     </div>
-                    <div class="col-md-4">
+
+                    <div class="col-sm-2">
                         <label>Ora</label>
                         <input id="party-hour" class="form-control" type="time" name="party-hour" placeholder="HH:MM"  value="<?php echo date('H:i', $party->get_time()->getTimestamp()) ?>" required>
                     </div>
@@ -127,6 +169,18 @@ function hour_selector() {
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="fuel">Carburante</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">€</span>
+                                <input type="number" min="0" step="any" class="form-control" id="fuel" name="fuel" value="<?php echo $party->fuel ?>">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <textarea name="notes" placeholder="Note..." class="form-control" maxlength="300"><?php echo $party->notes ?></textarea>
                 </div>
                 <hr>
                 <div class="form-group">
@@ -143,7 +197,7 @@ function hour_selector() {
                     </div>
                 </div>
             </form>
-            <p>*Creato da <?php echo $party->get_creator()->friendly_name ?></p>
+            <p <?php hidden_users() ?>>*Creato da <?php echo $party->get_creator()->friendly_name ?></p>
         </div>
         <div class="col-md-6">
             <div class="alert alert-info" role="alert" <?php hidden_message($party) ?>>

@@ -32,6 +32,8 @@ function load_page($user) {
     global $controller;
     global $action;
     if(isset($controller) and isset($action)) {
+        //if($action != 'login')
+            //$_SESSION['prev_action'] = null;
         if(permit_access($action, $user))
             call($controller, $action);
         else
@@ -39,8 +41,10 @@ function load_page($user) {
     } else {
         if($user->access_level > 0)
             call('pages', 'error');
-        else
+        else {
+            $_SESSION['prev_action'] = $action;
             call('pages', 'login');
+        }
     }
 }
 

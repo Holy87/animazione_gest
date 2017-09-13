@@ -23,4 +23,8 @@
     </form>
     <!-- Per precaricare la ruota di attesa -->
     <p hidden><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></p>
+    <input type="hidden" id="old_url" value="<?php if(isset($_SESSION['prev_action']))
+        echo $_SESSION['prev_action'];
+    else
+        echo '';?>">
 </div> <!-- /container -->

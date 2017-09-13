@@ -76,6 +76,14 @@ class PartyController
         else
             $party->theme_id = null;
         $party->price = $_POST['party-price'];
+        $party->guest_of_honor = $_POST['party-guest'];
+        $party->guest_age = $_POST['guest_age'];
+        $party->child_number = $_POST['children'];
+        $party->phone = $_POST['phone'];
+        $party->fuel = $_POST['fuel'];
+        $party->notes = $_POST['notes'];
+        $party->generic_age = $_POST['mid_age'];
+        $party->hours = $_POST['hours'];
         return json_encode($party->save());
     }
 
@@ -253,7 +261,15 @@ class PartyController
         $date = $_POST['party-date'];
         $price = $_POST['party-price'];
         $time = $_POST['party-hour'];
-        $response = Party::create($customer, $address, $theme, $date, $time, $price);
+        $guest = $_POST['party-guest'];
+        $guest_age = $_POST['guest_age'];
+        $mid_age = $_POST['mid_age'];
+        $children = $_POST['children'];
+        $hours = $_POST['hours'];
+        $notes = $_POST['notes'];
+        $fuel = $_POST['fuel'];
+        $phone = $_POST['phone'];
+        $response = Party::create($customer, $address, $theme, $date, $time, $price, $guest, $guest_age, $mid_age, $children, $hours, $notes, $fuel, $phone);
         return json_encode($response);
     }
 

@@ -40,5 +40,8 @@ if(isset($_SESSION['user_id']) || in_array($_GET['page'], PUBLIC_PAGES))
     } else {
         header('location:home');
     }
-} else
+} else {
+    if(isset($_GET['page']))
+        $_SESSION['prev_action'] = $_GET['page'].'?'.$_SERVER['QUERY_STRING'];
     header('location:login');
+}

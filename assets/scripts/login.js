@@ -17,7 +17,11 @@ $(document).ready(function() {
             success: function(response) {
                 if(response.ok) {
                     $(".btn-primary").html("Login confermato");
-                    window.location.href = "home";
+                    var action = $("#old_url").val();
+                    if(action !== null && action.length > 0)
+                        window.location.href = action;
+                    else
+                        window.location.href = "home";
                 } else {
                     $(".alert").prop("hidden", false);
                     var btn = $(".btn-primary");

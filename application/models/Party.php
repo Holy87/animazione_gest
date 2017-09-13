@@ -15,28 +15,37 @@ class Party
     public $customer;
     public $address;
     public $price;
+    public $notes;
+    public $phone;
+    public $hours;
+    public $guest_of_honor;
+    public $guest_age;
+    public $generic_age;
+    public $child_number;
+    public $fuel;
     private $creator;
 
     /**
      * Party constructor.
-     * @param $id
-     * @param $theme
-     * @param $date
-     * @param $time
-     * @param $customer
-     * @param $address
-     * @param $creator
-     * @param $price
+     * @param array $row
      */
-    public function __construct($id, $theme, $date, $time, $customer, $address, $creator, $price) {
-        $this->party_id = $id;
-        $this->theme_id = $theme;
-        $this->date = DateTime::createFromFormat('Y-m-d', $date);
-        $this->time = DateTime::createFromFormat('H:i:s', $time);
-        $this->customer = $customer;
-        $this->address = $address;
-        $this->creator = $creator;
-        $this->price = $price;
+    public function __construct($row) {
+        $this->party_id = $row['party_id'];
+        $this->theme_id = $row['theme_id'];
+        $this->date = DateTime::createFromFormat('Y-m-d', $row['data']);
+        $this->time = DateTime::createFromFormat('H:i:s', $row['ora']);
+        $this->customer = $row['cliente'];
+        $this->address = $row['indirizzo'];
+        $this->creator = $row['creatore'];
+        $this->price = $row['prezzo'];
+        $this->notes = $row['note'];
+        $this->phone = $row['telefono'];
+        $this->hours = $row['ore'];
+        $this->guest_of_honor = $row['festeggiato'];
+        $this->guest_age = $row['eta_festeggiato'];
+        $this->generic_age = $row['eta_media'];
+        $this->child_number = $row['numero_bambini'];
+        $this->fuel = $row['carburante'];
     }
 
     /**
@@ -384,12 +393,44 @@ class Party
         return date_format($this->time, "H:i");
     }
 
+    /**
+     * Determina se la festa è finita
+     * @return bool
+     */
     public function is_done() {
-        return new DateTime() > $this->date;
+        return new DateTime() > $this->get_end_date();
+    }
+
+    /**
+     * Restituisce data e ora di fine della festa
+     * @return DateTime
+     */
+    public function get_end_date() {
+        $date = $this->get_date_time();
+        $date->add(new DateInterval('PT'.$this->hours.'H'));
+        return $date;
+    }
+
+    /**
+     * Restituisce data e ora dell'inizio della festa
+     * @return DateTime
+     */
+    public function get_date_time() {
+        $time = new DateTime();
+        $year = intval($this->date->format('Y'));
+        $month = intval($this->date->format('m'));
+        $day = intval($this->date->format('d'));
+        $hour = intval($this->time->format('H'));
+        $minute = intval($this->time->format('i'));
+        $time->setDate($year, $month, $day);
+        $time->setTime($hour, $minute, 0);
+        return $time;
     }
 
     public function save() {
-        $query = "UPDATE feste SET cliente = :cust, indirizzo = :addr, data = :date, prezzo = :price, theme_id = :theme, ora = :hour
+        $query = "UPDATE feste SET cliente = :cust, indirizzo = :addr, data = :date, prezzo = :price, theme_id = :theme, ora = :hour,
+                  festeggiato = :guest, eta_festeggiato = :guest_age, eta_media = :mid_age, numero_bambini = :children, ore = :hours,
+                  note = :notes, carburante = :fuel, telefono = :phone
                   WHERE party_id = :id";
         $link = Db::getInstance();
         $stmt = $link->prepare($query);
@@ -403,6 +444,14 @@ class Party
         $stmt->bindParam(':price', $this->price);
         $stmt->bindParam(':theme', $this->theme_id);
         $stmt->bindParam(':id', $this->party_id);
+        $stmt->bindParam(':guest', $this->guest_of_honor);
+        $stmt->bindParam(':guest_age', $this->guest_age);
+        $stmt->bindParam(':mid_age', $this->generic_age);
+        $stmt->bindParam(':children', $this->child_number);
+        $stmt->bindParam(':hours', $this->hours);
+        $stmt->bindParam(':notes', $this->notes);
+        $stmt->bindParam(':fuel', $this->fuel);
+        $stmt->bindParam(':phone', $this->phone);
         if($stmt->execute())
             return ['ok' => true];
         else
@@ -437,7 +486,7 @@ class Party
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($rows as $row) {
-            $elem = new Party($row['party_id'], $row['theme_id'], $row['data'], $row['ora'], $row['cliente'], $row['indirizzo'], $row['creatore'], $row['prezzo']);
+            $elem = new Party($row);
             array_push($list, $elem);
         }
         return $list;
@@ -450,7 +499,7 @@ class Party
      */
     public static function get_party($party_id) {
         if($party_id == 0)
-            return new Party(0, null, date("Y-m-d", time()), null, '', '', null, 0);
+            return self::empty_party();
         $link = Db::getInstance();
         $query = 'SELECT * FROM feste where party_id = :id';
         $stmt = $link->prepare($query);
@@ -458,11 +507,32 @@ class Party
         try {
             $stmt->execute();
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            return new Party($row['party_id'], $row['theme_id'], $row['data'], $row['ora'], $row['cliente'], $row['indirizzo'], $row['creatore'], $row['prezzo']);
+            return new Party($row);
         } catch (PDOException $e) {
             echo $e->getMessage();
             return null;
         }
+    }
+
+    public static function empty_party() {
+        $row = [];
+        $row['party_id'] = 0;
+        $row['theme_id'] = null;
+        $row['data'] = date("Y-m-d", time());
+        $row['ora'] = date("H:i:s", time());
+        $row['cliente'] = '';
+        $row['indirizzo'] = '';
+        $row['creatore'] = null;
+        $row['prezzo'] = 0;
+        $row['festeggiato'] = '';
+        $row['eta_festeggiato'] = null;
+        $row['eta_media'] = null;
+        $row['numero_bambini'] = null;
+        $row['note'] = '';
+        $row['carburante'] = null;
+        $row['telefono'] = '';
+        $row['ore'] = 2;
+        return new Party($row);
     }
 
     public static function dummy_date() {
@@ -478,13 +548,22 @@ class Party
      * @param DateTime $date
      * @param DateTime $time
      * @param float $price
+     * @param $guest
+     * @param $guest_age
+     * @param $mid_age
+     * @param $children
+     * @param $hours
+     * @param $notes
+     * @param $fuel
+     * @param $phone
      * @return array
      */
-    public static function create($customer_id, $address, $theme_id, $date, $time, $price) {
+    public static function create($customer_id, $address, $theme_id, $date, $time, $price, $guest, $guest_age, $mid_age,
+            $children, $hours, $notes, $fuel, $phone) {
         $user = User::getCurrent();
         $link = Db::getInstance();
-        $query = 'INSERT INTO feste (cliente, indirizzo, data, creatore, prezzo, theme_id, ora)
-                  VALUES (:customer, :address, :dat, :creator, :price, :theme, :hou)';
+        $query = 'INSERT INTO feste (cliente, indirizzo, data, creatore, prezzo, theme_id, ora, festeggiato, eta_festeggiato, eta_media, numero_bambini, ore, note, carburante, telefono)
+                  VALUES (:customer, :address, :dat, :creator, :price, :theme, :hou, :guest, :guest_age, :mid_age, :children, :hours, :notes, :fuel, :phone)';
         $stmt = $link->prepare($query);
         $stmt->bindParam(':customer', $customer_id);
         $stmt->bindParam(':address', $address);
@@ -493,6 +572,14 @@ class Party
         $stmt->bindParam(':hou', $time);
         $stmt->bindParam(':price', $price);
         $stmt->bindParam(':creator', $user->id);
+        $stmt->bindParam(':guest', $guest);
+        $stmt->bindParam(':guest_age', $guest_age);
+        $stmt->bindParam(':mid_age', $mid_age);
+        $stmt->bindParam(':children', $children);
+        $stmt->bindParam(':hours', $hours);
+        $stmt->bindParam(':notes', $notes);
+        $stmt->bindParam(':fuel', $fuel);
+        $stmt->bindParam(':phone', $phone);
         if($stmt->execute())
             return ['ok' => true, 'id' => $link->lastInsertId()];
         else
