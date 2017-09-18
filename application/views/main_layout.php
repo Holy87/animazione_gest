@@ -50,6 +50,9 @@ $user = User::getCurrent();
 <!-- Fixed navbar -->
 <?php require_once  ABS_PATH.'/application/views/templates/navbar.php'; ?>
 
+<!-- NEW VERSION BADGE -->
+<?php require_once ABS_PATH.'/application/views/templates/news_banner.php' ?>
+
 <!-- MAIN DYNAMIC CONTNET -->
 <?php load_page($user) ?>
 

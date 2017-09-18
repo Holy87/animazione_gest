@@ -26,11 +26,17 @@ define('AUTHOR', 'Francesco Bosso');
 // Application name
 define ('APP_NAME', 'Gestionale A.S.P.');
 
+// Application version
+define ('VERSION', 101);
+
 // Favicon
 define('FAVICON', '');
 
 // Web Root
 define('W_ROOT', $_SERVER['SERVER_NAME'].'/animazione');
+
+// Contact mail
+define('CONTACT_MAIL', 'info@'.$_SERVER['SERVER_NAME']);
 
 // Assets folder
 define ('ASSETS', W_ROOT.'/assets');

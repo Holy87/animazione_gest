@@ -179,4 +179,12 @@ class UserController
         }
         return json_encode(['ok' => true, 'data' => $outp]);
     }
+
+    /**
+     * Aggiorna la versione utente
+     * @return string
+     */
+    public static function update_user_version() {
+        return json_encode(User::getCurrent()->update_last_version());
+    }
 }

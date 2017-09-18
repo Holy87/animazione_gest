@@ -72,6 +72,40 @@ class User
     }
 
     /**
+     * Restituisce l'ultima versione usata dall'utente
+     * @return int
+     */
+    public function get_last_version() {
+        $link = Db::getInstance();
+        $query = 'SELECT user_version FROM users where user_id = :id';
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':id', $this->id);
+        if($stmt->execute()) {
+            return $stmt->fetch(PDO::FETCH_ASSOC)['user_version'];
+        } else
+            return 0;
+    }
+
+    /**
+     * Aggiorna all'ultima versione
+     * @return array
+     */
+    public function update_last_version() {
+        $link = Db::getInstance();
+        $version = VERSION;
+        $query = 'UPDATE users
+        SET user_version = :version
+        WHERE user_id = :id';
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam('version', $version);
+        if($stmt->execute())
+            return ['ok' => true];
+        else
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
+    }
+
+    /**
      * @return array
      */
     public function save() {
@@ -223,15 +257,17 @@ class User
      */
     public static function create($user, $name, $mail, $password, $access_level, $phone) {
         $pass = sha1($password);
-        $query = "INSERT INTO users (user_name, user_mail, user_access, user_password, user_friendlyname, user_phone) VALUES (:user, :mail, :access, :pass, :name, :phone)";
+        $query = "INSERT INTO users (user_name, user_mail, user_access, user_password, user_friendlyname, user_phone, user_version) VALUES (:user, :mail, :access, :pass, :name, :phone, :ver)";
         $link = Db::getInstance();
         $stmt = $link->prepare($query);
+        $version = VERSION;
         $stmt->bindParam(':user', $user);
         $stmt->bindParam(':mail', $mail);
         $stmt->bindParam(':pass', $pass);
         $stmt->bindParam(':access', $access_level);
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':phone', $phone);
+        $stmt->bindParam('ver', $version);
         if ($stmt->execute())
             return ['id' => $link->lastInsertId('user_id'), 'ok' => true];
         else

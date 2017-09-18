@@ -59,7 +59,7 @@ function mode($party) {
 function theme_select($party) {
     $themes = PartyTheme::getAllThemes();
     /** @var PartyTheme $theme */
-    $outp = '<option value="null">Scegli un tema</option>';
+    $outp = '<option value="0">Scegli un tema</option>';
     foreach($themes as $theme) {
         $sel = '';
         if ($theme->id == $party->theme_id)

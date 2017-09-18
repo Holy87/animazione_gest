@@ -256,7 +256,10 @@ class PartyController
         if(!isset($_POST['party-date']) || !isset($_POST['party-hour']) || !isset($_POST['party-price']) || !isset($_POST['theme-id']))
             return json_encode(['ok' => false, 'reason' => 'Parametri richiesta errati.', 'code' => -2]);
         $customer = $_POST['party-customer'];
-        $theme = $_POST['theme-id'];
+        if (intval($_POST['theme-id'] > 0))
+            $theme = $_POST['theme-id'];
+        else
+            $theme = null;
         $address = $_POST['party-address'];
         $date = $_POST['party-date'];
         $price = $_POST['party-price'];

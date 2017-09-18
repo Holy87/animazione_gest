@@ -137,6 +137,9 @@ function process_request() {
         case 'decr_party_item_n':
             echo PartyController::decrease_item_number();
             break;
+        case 'update_user_version':
+            echo UserController::update_user_version();
+            break;
         default:
             echo $action."   ".print_r($_GET);
             break;
