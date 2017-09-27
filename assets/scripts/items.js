@@ -153,7 +153,7 @@ $(document).ready(function() {
        "ajax": "services?action=get_items",
 
         "columns": [
-            {"data": "id", "searchable": false, "orderable": false},
+            {"data": "id"},
             {"data": "name"},
             {"data": "number"},
             {"data": "ward"},

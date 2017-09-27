@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Lug 20, 2017 alle 11:26
+-- Creato il: Set 18, 2017 alle 11:05
 -- Versione del server: 10.1.21-MariaDB
 -- Versione PHP: 7.1.1
 
@@ -42,12 +42,20 @@ CREATE TABLE `feste` (
   `party_id` int(11) NOT NULL,
   `cliente` varchar(100) NOT NULL,
   `indirizzo` text NOT NULL,
-  `telefono` VARCHAR(20) DEFAULT NULL,
+  `telefono` varchar(20) DEFAULT NULL,
   `data` date NOT NULL,
   `ora` time NOT NULL,
   `creatore` int(11) DEFAULT NULL,
   `prezzo` float NOT NULL,
-  `theme_id` int(11) DEFAULT NULL
+  `theme_id` int(11) DEFAULT NULL,
+  `festeggiato` varchar(100) NOT NULL,
+  `eta_festeggiato` int(11) NOT NULL,
+  `eta_media` int(11) NOT NULL,
+  `numero_bambini` int(11) NOT NULL,
+  `dummy` int(11) NOT NULL,
+  `ore` int(11) NOT NULL DEFAULT '4',
+  `note` text NOT NULL,
+  `carburante` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -127,9 +135,10 @@ CREATE TABLE `users` (
   `user_name` varchar(50) NOT NULL,
   `user_friendlyname` varchar(100) NOT NULL,
   `user_mail` varchar(100) NOT NULL,
-  `user_phone` VARCHAR(20) DEFAULT NULL,
+  `user_phone` varchar(20) DEFAULT NULL,
   `user_access` int(11) NOT NULL DEFAULT '1',
   `user_password` char(40) NOT NULL,
+  `user_version` int(11) NOT NULL DEFAULT '0',
   `pw_recovery_token` char(40) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -206,12 +215,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT per la tabella `animatori_party`
 --
 ALTER TABLE `animatori_party`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT per la tabella `feste`
 --
 ALTER TABLE `feste`
-  MODIFY `party_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `party_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT per la tabella `inventario`
 --
@@ -226,7 +235,7 @@ ALTER TABLE `login_tokens`
 -- AUTO_INCREMENT per la tabella `oggetti_party`
 --
 ALTER TABLE `oggetti_party`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT per la tabella `oggetti_temi`
 --

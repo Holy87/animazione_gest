@@ -41,4 +41,13 @@ class AccountController {
         } else
             return null;
     }
+
+    public static function token_is_valid($token) {
+        $link = Db::getInstance();
+        $query = "SELECT * FROM users WHERE pw_recovery_token = :token";
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':token', $token);
+        $result = $stmt->execute();
+        return $result and $stmt->rowCount() > 0;
+    }
 }

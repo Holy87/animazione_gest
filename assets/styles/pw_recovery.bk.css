@@ -1,0 +1,21 @@
+body {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    /*background-color: #eee;*/
+    background-image: url("../images/profile-wallpaper.jpg");
+    background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center;
+}
+
+p, h1, h2 {
+    color: white;
+}
+
+a {
+    color: deepskyblue;
+}
+
+label {
+    color: whitesmoke;
+}

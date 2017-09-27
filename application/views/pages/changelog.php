@@ -1,6 +1,21 @@
 <div class="container">
     <h1>Log delle modifiche</h1>
     <hr>
+    <h3>V 1.0.2</h3>
+    <p>L'aggiornamento migliora l'usabilità del gestionale ed introduce funzioni di sicurezza.</p>
+    <h4>Aggiunta la funzione di recupero password</h4>
+    <p>Ora un animatore può recuperare la sua password senza dover scomodare gli amministratori. Ho introdotto anche il ReCapcha di Google per aumentare la sicurezza contro bot. La funzione di recupero password è la stessa di tanti siti web: viene inviata all'email dell'utente registrato il link per resettare la password e crearne una nuova.</p>
+    <h4>Miglioramento della tabella oggetti</h4>
+    <ul>
+        <li>Ora nella tabella viene correttamente visualizzato lo scompartimento ed il piano.</li>
+        <li>Ora puoi cercare oggetti per codice</li>
+        <li>Ora puoi ordinare gli oggetti per codice</li>
+    </ul>
+    <h4>Miglioramenti grafici</h4>
+    <ul>
+        <li>Se scollegati, nella pagina di login non viene visualizzata la barra dei menu</li>
+        <li>Aggiunta l'icona del telefono nel telefono del contatto della festa</li>
+    </ul>
     <h3>V 1.0.1</h3>
     <p>Questo aggiornamento introduce nuove voci per le feste:</p>
     <ul>

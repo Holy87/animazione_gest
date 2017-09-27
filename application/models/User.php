@@ -180,6 +180,35 @@ class User
     }
 
     /**
+     * genera un token di recupero password per l'utente
+     * @return array
+     */
+    public function create_pw_token() {
+        $token = $this->generateRandomString(40);
+        $link = Db::getInstance();
+        $query = 'UPDATE users
+        SET pw_recovery_token = :token
+        WHERE user_id = :id';
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':token', $token);
+        $stmt->bindParam('id', $this->id);
+        if($stmt->execute())
+            return ['ok' => true, 'token' => $token];
+        else
+            return ['ok' => false, 'reason' => $stmt->errorInfo(), 'code' => $stmt->errorCode()];
+    }
+
+    function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    /**
      * Ottiene l'oggetto utente
      * @param int $id
      * @return User

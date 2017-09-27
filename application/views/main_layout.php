@@ -46,19 +46,17 @@ $user = User::getCurrent();
 </head>
 
 <body>
-
 <!-- Fixed navbar -->
-<?php require_once  ABS_PATH.'/application/views/templates/navbar.php'; ?>
-
+<?php
+    if (MainView::page_with_menu())
+        require_once  ABS_PATH.'/application/views/templates/navbar.php';
+?>
 <!-- NEW VERSION BADGE -->
 <?php require_once ABS_PATH.'/application/views/templates/news_banner.php' ?>
-
 <!-- MAIN DYNAMIC CONTNET -->
 <?php load_page($user) ?>
-
 <!-- FOOTER -->
 <?php require_once  ABS_PATH.'/application/views/templates/footer.php'; ?>
-
 <!-- MODAL ERRORE -->
 <?php require_once ABS_PATH.'/application/views/templates/error_modal.php' ?>
 
@@ -76,6 +74,7 @@ $user = User::getCurrent();
 <script type="text/javascript" src="assets/scripts/defaults-it_IT.min.js"></script>-->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script type="text/javascript" src="assets/scripts/main.js"></script>
+<script src="https://www.google.com/recaptcha/api.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <!--<script src="assets/scripts/ie10-viewport-bug-workaround.js"></script>-->
 <svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500" preserveAspectRatio="none" style="display: none; visibility: hidden; position: absolute; top: -100%; left: -100%;"><defs><style type="text/css"></style></defs><text x="0" y="25" style="font-weight:bold;font-size:25pt;font-family:Arial, Helvetica, Open Sans, sans-serif">500x500</text></svg>

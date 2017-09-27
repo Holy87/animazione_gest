@@ -12,6 +12,10 @@ require_once ABS_PATH.'/application/models/User.php';
 
 class PartyController
 {
+    /**
+     * Ottiene le feste ancora non passate
+     * @return string
+     */
     public static function get_active_parties() {
         $user = User::getCurrent();
         if($user->access_level <= 0)
@@ -22,9 +26,10 @@ class PartyController
         foreach ($parties as $party) {
             if(!$party->is_done()) {
                 $id = $party->party_id;
-                $theme = '';
                 if($party->theme_id != null)
                     $theme = $party->get_theme()->name;
+                else
+                    $theme = 'Nessuno';
                 $animators = $party->get_animators_names();
                 $address = $party->address;
                 $date = $party->get_printable_date();
@@ -35,6 +40,10 @@ class PartyController
         return json_encode(['data' => $ret]);
     }
 
+    /**
+     * Ottiene le feste passate (data/ora + durata minore di tempo attuale)
+     * @return string
+     */
     public static function get_passed_parties() {
         $user = User::getCurrent();
         if($user->access_level <= 0)
@@ -45,7 +54,10 @@ class PartyController
         foreach ($parties as $party) {
             if($party->is_done()) {
                 $id = $party->party_id;
-                $theme = $party->get_theme()->name;
+                if($party->theme_id != null)
+                    $theme = $party->get_theme()->name;
+                else
+                    $theme = 'Nessuno';
                 $animators = $party->get_animators_names();
                 $address = $party->address;
                 $date = $party->get_printable_date();
@@ -56,6 +68,10 @@ class PartyController
         return json_encode(['data' => $ret]);
     }
 
+    /**
+     * Salva le informazioni della festa dalla richiesta POST
+     * @return string
+     */
     public static function save_party_informations() {
         $user = User::getCurrent();
         if(!$user->can_edit_events())
@@ -87,6 +103,10 @@ class PartyController
         return json_encode($party->save());
     }
 
+    /**
+     * Aggiunge un animatore dalla richiesta POST
+     * @return string
+     */
     public static function add_animator() {
         $user = User::getCurrent();
         if(!$user->can_edit_events())
@@ -104,6 +124,10 @@ class PartyController
         return json_encode($party->add_animator($animator));
     }
 
+    /**
+     * Rimuove un animatore dalla richiesta POST
+     * @return string
+     */
     public static function remove_animator() {
         $user = User::getCurrent();
         if(!$user->can_edit_events())
@@ -121,6 +145,10 @@ class PartyController
         return json_encode($party->remove_animator($animator));
     }
 
+    /**
+     * Ottiene gli oggetti della festa
+     * @return string
+     */
     public static function get_items() {
         $user = User::getCurrent();
         if($user->access_level <= 0)
@@ -138,6 +166,10 @@ class PartyController
         return json_encode(['ok' => true, 'data' => $items]);
     }
 
+    /**
+     * Aggiunge gli oggetti della festa da richiesta POST
+     * @return string
+     */
     public static function add_item() {
         $user = User::getCurrent();
         if(!$user->can_edit_events())
@@ -157,6 +189,10 @@ class PartyController
         return json_encode($party->add_item($item, $_POST['item-number']));
     }
 
+    /**
+     * Rimuove un oggetto dalla festa
+     * @return string
+     */
     public static function remove_item() {
         $user = User::getCurrent();
         if(!$user->can_edit_events())
@@ -174,6 +210,10 @@ class PartyController
         return json_encode($party->delete_item($item));
     }
 
+    /**
+     * Aumenta il numero degli oggetti della festa di 1
+     * @return string
+     */
     public static function increase_item_number() {
         $user = User::getCurrent();
         if(!$user->can_edit_events())
@@ -190,6 +230,10 @@ class PartyController
             return json_encode(['ok' => false, 'reason' => 'Festa non trovata', 'code' => 0]);
     }
 
+    /**
+     * Decrementa il numero di oggetti della festa
+     * @return string
+     */
     public static function decrease_item_number() {
         $user = User::getCurrent();
         if(!$user->can_edit_events())
@@ -206,6 +250,10 @@ class PartyController
             return json_encode(['ok' => false, 'reason' => 'Festa non trovata', 'code' => 0]);
     }
 
+    /**
+     * Ottiene gli oggetti della festa
+     * @return string
+     */
     public static function get_party_items() {
         $outp = [];
         if(User::getCurrent()->access_level > 0) {
@@ -221,6 +269,10 @@ class PartyController
         return json_encode(['data' => $outp]);
     }
 
+    /**
+     * Ottiene gli animatori della festa
+     * @return string
+     */
     public static function get_party_animators() {
         $outp = [];
         if(User::getCurrent()->access_level > 0) {
@@ -236,6 +288,10 @@ class PartyController
         return json_encode(['data' => $outp]);
     }
 
+    /**
+     * Cancella una festa da richiesta POST
+     * @return string
+     */
     public static function delete_party() {
         $user = User::getCurrent();
         if(!$user->can_edit_events())
@@ -248,6 +304,10 @@ class PartyController
         return json_encode($party->delete());
     }
 
+    /**
+     * Aggiunge una nuova festa al database
+     * @return string
+     */
     public static function create_party() {
         //return json_encode(['ok' => false, 'code' => 0, 'reason' => print_r($_POST)]);
         $user = User::getCurrent();

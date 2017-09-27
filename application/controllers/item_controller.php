@@ -20,13 +20,14 @@ class ItemController
     public static function get_all_items() {
         $items = [];
         $link = Db::getInstance();
-        $query = 'SELECT item_id, item_name, item_number, item_ward, item_consumable FROM inventario ORDER BY item_name';
+        $query = 'SELECT item_id, item_name, item_number, item_ward, item_floor, item_consumable FROM inventario ORDER BY item_name';
         $stmt = $link->prepare($query);
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($rows as $row)
         {
-            $items[] = ['id' => $row['item_id'], 'name' => $row['item_name'], 'number' => $row['item_number'], 'e_id' => $row['item_id'], 'ward' => $row['item_ward'], 'consumable' => $row['item_consumable']];
+            $loc = $row['item_ward'].' - '.$row['item_floor'].'°p';
+            $items[] = ['id' => $row['item_id'], 'name' => $row['item_name'], 'number' => $row['item_number'], 'e_id' => $row['item_id'], 'ward' => $loc, 'consumable' => $row['item_consumable']];
         }
         echo json_encode(["data" =>$items]);
     }

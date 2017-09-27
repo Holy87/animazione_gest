@@ -187,4 +187,70 @@ class UserController
     public static function update_user_version() {
         return json_encode(User::getCurrent()->update_last_version());
     }
+
+    public static function request_recovery_password() {
+        if(self::ask_google_recapcha()) {
+            $user_id = self::getUserIdFromMail($_POST['mail']);
+            if($user_id == null)
+                return json_encode(['ok'=>false,'reason'=>'Non esiste un utente con questa email.','code'=>0]);
+            $token = self::create_reset_token($user_id);
+            if($token == null)
+                return json_encode(['ok'=>false,'reason'=>'Errore nella procedura di recupero.','code'=>1]);
+            $params = ['recipients' => $_POST['mail'], 'token' => $token];
+            return json_encode(MailController::send(PW_RECOVERY_MAIL, $params));
+        } else
+            return json_encode(['ok'=>false, 'code'=>999,'reason'=>'Recapcha non valido.']);
+    }
+
+    /**
+     * Determina se il recapcha di Google è valido
+     * @return bool
+     */
+    public static function ask_google_recapcha() {
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $data = array(
+            'secret' => '6LcMZTEUAAAAALUbXAxC1_Dr10n3w-jWjSb6iUCS',
+            'response' => $_POST['g-recaptcha-response'],
+            'remoteip' => $_SERVER['REMOTE_ADDR']
+        );
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query($data)
+            )
+        );
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        $response = json_decode($result);
+        return $response->success;
+    }
+
+    /**
+     * @param string $mail
+     * @return int
+     */
+    public static function getUserIdFromMail($mail) {
+        $link = Db::getInstance();
+        $query = 'SELECT user_id FROM users WHERE user_mail = :mail';
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':mail', $mail);
+        $result = $stmt->execute();
+        if($stmt->rowCount() > 0 and $result) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row['user_id'];
+        } else
+            return null;
+    }
+
+    public static function create_reset_token($user_id) {
+        $user = User::get_user($user_id);
+        if ($user == null)
+            return null;
+        $token = $user->create_pw_token();
+        if($token['ok'])
+            return $token['token'];
+        else
+            return null;
+    }
 }

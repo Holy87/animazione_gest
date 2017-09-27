@@ -51,4 +51,12 @@ class MainView
             echo $result;
         }
     }
+
+    public static function page_with_menu() {
+        global $action;
+        if(User::getCurrent()->access_level == 0 and $action == 'login')
+            return false;
+        else
+            return true;
+    }
 }

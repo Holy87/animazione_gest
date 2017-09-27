@@ -66,7 +66,7 @@ function google_maps_url($party) {
         <p>Mettiti in contatto con <?php echo $party->customer ?></p>
         <?php
         if(User::getCurrent()->can_edit_events() and $party->phone != null) {
-            echo '<p>Telefono: <a href="tel:'.$party->phone.'">'.$party->phone.'</a></p>';
+            echo '<p><i class="fa fa-phone" aria-hidden="true"></i> Telefono: <a href="tel:'.$party->phone.'">'.$party->phone.'</a></p>';
         }
         ?>
         <a href="<?php google_maps_url($party) ?>"><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $party->address ?></a>

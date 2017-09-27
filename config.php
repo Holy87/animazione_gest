@@ -42,7 +42,7 @@ define('CONTACT_MAIL', 'info@'.$_SERVER['SERVER_NAME']);
 define ('ASSETS', W_ROOT.'/assets');
 
 // Pagine che sono permesse senza effettuare il login
-define ('PUBLIC_PAGES', ['login', 'logout', 'services']);
+define ('PUBLIC_PAGES', ['login', 'logout', 'services','error','404','changelog','pw_recovery', 'pw_reset']);
 
 if ( !defined('ABS_PATH') )
     define('ABS_PATH', dirname(__FILE__) . '/');

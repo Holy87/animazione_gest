@@ -20,6 +20,7 @@
             <strong>Errore:</strong><br> Nome utente o password errati.
         </div>
         <button id="sendb" class="btn btn-lg btn-primary btn-block" type="submit" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Verifica...">Entra</button>
+        <a class="text-help" href="pw_recovery">Non riesci ad accedere?</a>
     </form>
     <!-- Per precaricare la ruota di attesa -->
     <p hidden><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></p>

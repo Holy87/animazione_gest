@@ -5,6 +5,8 @@
  * Date: 13/05/2017
  * Time: 12:35
  */
+
+require_once ABS_PATH.'/application/controllers/mail_controller.php';
 require_once ABS_PATH.'/application/controllers/account_controller.php';
 require_once ABS_PATH.'/application/controllers/item_controller.php';
 require_once ABS_PATH.'/application/controllers/user_controller.php';
@@ -49,6 +51,9 @@ function process_request() {
             break;
         case 'change_password':
             echo UserController::changePassword();
+            break;
+        case 'recover_passeord':
+            echo UserController::request_recovery_password();
             break;
         case 'change_name':
             echo UserController::changeName();
