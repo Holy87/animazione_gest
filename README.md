@@ -10,7 +10,7 @@
 Per configurare il programma, apri il file config.php.
 In particolare, assicurati che il parametro Web Root per il percorso sia corretto.
 Per cambiare il livello d'accesso alle voci del menu, al momento l'unico modo è cambiare l'inizializzazione della clase MenuContainer
-
+```
 public function __construct()
     {
         $this->menu_elements = [
@@ -21,9 +21,14 @@ public function __construct()
             new MenuElement('Utenti', 'users', 3, 'users', 'fa-users')
         ];
     }
-    
+``` 
 Cambia il terzo parametro a seconda del livello d'accesso richiesto. Ricordati che:
 0: bannato
 1: normale animatore
 2: gestione e segreteria (può modificare l'inventario, le feste ecc...)
 3: amministratore (può anche gestire utenti)
+
+**Convenction Over Configuration**
+Molte parti dell'applicazione usano le convenzioni. Ad esempio, i file javascript e css vengono automaticamente aggiunti alla pagina s ehanno lo stesso nome.
+Ad esempio, se in view ho home.php,
+in assets/scripts aggiungerò home.js, ed in assets/styles home.css
